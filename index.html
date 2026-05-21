@@ -6,852 +6,146 @@
 <title>SSI Landscape — Interactive Reference 2025</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after {
-  box-sizing: border-box;
-  margin:0;
-  padding:0;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg1:#f8fafc;--bg2:#f1f5f9;--bg3:#e8eef6;--bg4:#dde6f0;
+  --blue:#2563eb;--blue-lt:#1d4ed8;--blue-dim:rgba(37,99,235,.09);
+  --green:#059669;--green-dim:rgba(5,150,105,.1);
+  --amber:#d97706;--amber-dim:rgba(217,119,6,.1);
+  --red:#dc2626;--cyan:#0891b2;--violet:#7c3aed;
+  --slate:#64748b;--ink:#0f172a;
+  --border:rgba(0,0,0,.08);--border2:rgba(0,0,0,.13);
+  --sans:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+  --r:6px;--r-lg:10px;
 }
-
-:root {
-  --bg: #fff;
-  --bg1: #f8fafc;
-  --bg2: #f1f5f9;
-  --bg3: #e8eef6;
-  --bg4: #dde6f0;
-  --blue: #2563eb;
-  --blue-lt: #1d4ed8;
-  --blue-dim: rgba(37,99,235,.09);
-  --green: #059669;
-  --green-dim: rgba(5,150,105,.1);
-  --amber: #d97706;
-  --amber-dim: rgba(217,119,6,.1);
-  --red: #dc2626;
-  --cyan: #0891b2;
-  --violet: #7c3aed;
-  --slate: #64748b;
-  --ink: #0f172a;
-  --border: rgba(0,0,0,.08);
-  --border2: rgba(0,0,0,.13);
-  --sans: 'IBM Plex Sans',sans-serif;
-  --mono: 'IBM Plex Mono',monospace;
-  --r:6px;
-  --r-lg:10px;
-}
-
-html,body {
-  min-height:100vh;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size:14px;
-  line-height:1.6;
-  overflow-x: hidden;
-}
-
+html,body{min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;overflow-x:hidden}
 /* TOPBAR */
-.topbar {
-  padding:1rem 2rem;
-  background: var(--bg1);
-  border-bottom:1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top:0;
-  z-index:60;
-  backdrop-filter: blur(12px);
-}
-
-.logo {
-  font-family: var(--mono);
-  font-size: .85rem;
-  font-weight:600;
-  color: var(--blue);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-
-.topbar-meta {
-  font-size: .78rem;
-  color: var(--slate);
-  display: flex;
-  align-items: center;
-  gap:1rem;
-}
-
-.topbar-badge {
-  font-family: var(--mono);
-  font-size: .62rem;
-  padding: .2rem .55rem;
-  border-radius:100px;
-  background: rgba(5,150,105,.1);
-  color: #059669;
-  border:1px solid rgba(5,150,105,.25);
-}
-
+.topbar{padding:1rem 2rem;background:var(--bg1);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:60;backdrop-filter:blur(12px)}
+.logo{font-family:var(--mono);font-size:.85rem;font-weight:600;color:var(--blue);letter-spacing:.12em;text-transform:uppercase}
+.topbar-meta{font-size:.78rem;color:var(--slate);display:flex;align-items:center;gap:1rem}
+.topbar-badge{font-family:var(--mono);font-size:.62rem;padding:.2rem .55rem;border-radius:100px;background:rgba(5,150,105,.1);color:#059669;border:1px solid rgba(5,150,105,.25)}
 /* PRIMARY NAV */
-.primary-nav {
-  display: flex;
-  border-bottom:2px solid var(--border2);
-  background: var(--bg1);
-  padding:0 2rem;
-  position: sticky;
-  top:57px;
-  z-index:55;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.primary-nav: :-webkit-scrollbar { display: none; }
-
-.pnav-btn {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  padding: .9rem 1.5rem;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: var(--sans);
-  font-size: .82rem;
-  font-weight:600;
-  color: var(--slate);
-  white-space: nowrap;
-  border-bottom:2px solid transparent;
-  position: relative;
-  bottom: -2px;
-  transition: color .15s,border-color .15s;
-}
-
-.pnav-btn: hover { color: var(--ink); }
-
-.pnav-btn.active {
-  color: var(--blue);
-  border-bottom-color: var(--blue);
-}
-
-.pnav-count {
-  font-family: var(--mono);
-  font-size: .6rem;
-  padding: .1rem .38rem;
-  border-radius:100px;
-  background: var(--bg3);
-  color: var(--slate);
-  font-weight:600;
-}
-
-.pnav-btn.active .pnav-count {
-  background: var(--blue-dim);
-  color: var(--blue);
-}
-
+.primary-nav{display:flex;border-bottom:2px solid var(--border2);background:var(--bg1);padding:0 2rem;position:sticky;top:57px;z-index:55;overflow-x:auto;scrollbar-width:none}
+.primary-nav::-webkit-scrollbar{display:none}
+.pnav-btn{display:flex;align-items:center;gap:.5rem;padding:.9rem 1.5rem;background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:.82rem;font-weight:600;color:var(--slate);white-space:nowrap;border-bottom:2px solid transparent;position:relative;bottom:-2px;transition:color .15s,border-color .15s}
+.pnav-btn:hover{color:var(--ink)}
+.pnav-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.pnav-count{font-family:var(--mono);font-size:.6rem;padding:.1rem .38rem;border-radius:100px;background:var(--bg3);color:var(--slate);font-weight:600}
+.pnav-btn.active .pnav-count{background:var(--blue-dim);color:var(--blue)}
 /* SHELL & PANELS */
-.shell {
-  max-width:1440px;
-  margin:0 auto;
-  padding:0 2rem 4rem;
-}
-
-.primary-panel {
-  display: none;
-  padding-top:2rem;
-  animation: fadeUp .18s ease;
-}
-
-.primary-panel.active { display: block; }
-
-@keyframes fadeUp {
-  from{opacity:0;
-  transform: translateY(4px);
-}
-
-to {
-  opacity:1;
-  transform: translateY(0);
-}
-
+.shell{max-width:1440px;margin:0 auto;padding:0 2rem 4rem}
+.primary-panel{display:none;padding-top:2rem;animation:fadeUp .18s ease}
+.primary-panel.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 /* SUB-FILTER BAR */
-.sub-filter {
-  display: flex;
-  align-items: center;
-  gap: .45rem;
-  flex-wrap: wrap;
-  background: var(--bg1);
-  border:1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: .7rem 1rem;
-  margin-bottom:1.6rem;
-}
-
-.sf-label {
-  font-family: var(--mono);
-  font-size: .65rem;
-  font-weight:700;
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color: var(--slate);
-  white-space: nowrap;
-  margin-right: .2rem;
-}
-
-.sf-divider {
-  width:1px;
-  height:22px;
-  background: var(--border2);
-  margin:0 .4rem;
-  flex-shrink:0;
-}
-
-.sf-btn {
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .32rem 1rem;
-  border-radius:100px;
-  font-size: .8rem;
-  font-weight:600;
-  border:1px solid transparent;
-  background: transparent;
-  color: var(--slate);
-  cursor: pointer;
-  transition: all .15s;
-  font-family: var(--sans);
-  white-space: nowrap;
-}
-
-.sf-btn: hover {
-  background: var(--bg2);
-  color: var(--ink);
-  border-color: var(--border2);
-}
-
-.sf-btn.sf-all.active {
-  background: var(--ink);
-  color: #fff;
-  border-color: var(--ink);
-}
-
-.sf-btn.sf-agnostic.active {
-  background: #ecfdf5;
-  color: #065f46;
-  border-color: rgba(5,150,105,.4);
-}
-
-.sf-btn.sf-specific.active {
-  background: #fffbeb;
-  color: #92400e;
-  border-color: rgba(217,119,6,.4);
-}
-
-.sf-dot {
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  flex-shrink:0;
-}
-
-.sf-count {
-  margin-left: auto;
-  font-family: var(--mono);
-  font-size: .7rem;
-  color: var(--slate);
-}
-
-.sf-count strong { color: var(--blue); }
-
-.sf-search {
-  padding: .35rem .8rem;
-  border-radius: var(--r);
-  border:1px solid var(--border2);
-  background: #fff;
-  font-family: var(--sans);
-  font-size: .78rem;
-  color: var(--ink);
-  outline: none;
-  width:195px;
-  transition: border-color .15s;
-}
-
-.sf-search: focus { border-color: var(--blue); }
-
-/* FILTER STACK (2-level) */
-.filter-stack { margin-bottom:1.6rem; }
-
-.filter-stack .sub-filter { margin-bottom:0; }
-
-/* COLUMN FILTER STRIP */
-.col-filter {
-  display: flex;
-  align-items: center;
-  gap: .35rem;
-  flex-wrap: wrap;
-  background: var(--bg);
-  border:1px solid var(--border);
-  border-top: none;
-  border-radius:0 0 var(--r-lg) var(--r-lg);
-  padding: .55rem 1rem;
-}
-
-.cf-group { display: contents; }
-
-.cf-btn {
-  padding: .24rem .75rem;
-  border-radius:100px;
-  font-size: .72rem;
-  font-weight:500;
-  border:1px solid var(--border2);
-  background: white;
-  color: #475569;
-  cursor: pointer;
-  transition: all .14s;
-  font-family: var(--sans);
-  white-space: nowrap;
-}
-
-.cf-btn: hover {
-  border-color: rgba(37,99,235,.35);
-  color: var(--blue);
-}
-
-.cf-label {
-  font-family: var(--mono);
-  font-size: .62rem;
-  font-weight:700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: var(--slate);
-  white-space: nowrap;
-  margin-right: .2rem;
-}
-
-.cf-btn.active {
-  background: var(--blue-dim);
-  border-color: rgba(37,99,235,.35);
-  color: #1e40af;
-  font-weight:600;
-}
-
+.sub-filter{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;background:var(--bg1);border:1px solid var(--border);border-radius:var(--r-lg);padding:.7rem 1rem;margin-bottom:1.6rem}
+.sf-label{font-family:var(--mono);font-size:.65rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--slate);white-space:nowrap;margin-right:.2rem}
+.sf-divider{width:1px;height:22px;background:var(--border2);margin:0 .4rem;flex-shrink:0}
+.sf-btn{display:flex;align-items:center;gap:.4rem;padding:.32rem 1rem;border-radius:100px;font-size:.8rem;font-weight:600;border:1px solid transparent;background:transparent;color:var(--slate);cursor:pointer;transition:all .15s;font-family:var(--sans);white-space:nowrap}
+.sf-btn:hover{background:var(--bg2);color:var(--ink);border-color:var(--border2)}
+.sf-btn.sf-all.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sf-btn.sf-agnostic.active{background:#ecfdf5;color:#065f46;border-color:rgba(5,150,105,.4)}
+.sf-btn.sf-specific.active{background:#fffbeb;color:#92400e;border-color:rgba(217,119,6,.4)}
+.sf-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.sf-count{margin-left:auto;font-family:var(--mono);font-size:.7rem;color:var(--slate)}
+.sf-count strong{color:var(--blue)}
+.sf-search{padding:.35rem .8rem;border-radius:var(--r);border:1px solid var(--border2);background:#fff;font-family:var(--sans);font-size:.78rem;color:var(--ink);outline:none;width:195px;transition:border-color .15s}
+.sf-search:focus{border-color:var(--blue)}
 /* SECTION HEADER */
-.section-header { margin-bottom:1.4rem; }
-
-.eyebrow {
-  font-family: var(--mono);
-  font-size: .63rem;
-  font-weight:600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--blue);
-  margin-bottom: .3rem;
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-}
-
-.eyebrow: :before {
-  content: '';
-  width:14px;
-  height:1px;
-  background: var(--blue);
-}
-
-.sec-title {
-  font-size:1.15rem;
-  font-weight:700;
-  letter-spacing: -.02em;
-  color: var(--ink);
-}
-
-.sec-desc {
-  font-size: .8rem;
-  color: var(--slate);
-  margin-top: .3rem;
-  max-width:700px;
-  line-height:1.65;
-}
-
+.section-header{margin-bottom:1.4rem}
+.eyebrow{font-family:var(--mono);font-size:.63rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:.3rem;display:flex;align-items:center;gap:.4rem}
+.eyebrow::before{content:'';width:14px;height:1px;background:var(--blue)}
+.sec-title{font-size:1.15rem;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.sec-desc{font-size:.8rem;color:var(--slate);margin-top:.3rem;max-width:700px;line-height:1.65}
 /* TABLE */
-.tbl-wrap {
-  overflow-x: auto;
-  border-radius: var(--r-lg);
-  border:1px solid var(--border);
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-  margin-bottom:2rem;
-}
-
-table {
-  width:100%;
-  border-collapse: collapse;
-  font-size: .78rem;
-}
-
-thead tr { background: var(--bg3); }
-
-th {
-  padding: .65rem 1rem;
-  text-align: left;
-  color: #475569;
-  font-weight:600;
-  font-size: .64rem;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  border-bottom:1px solid var(--border2);
-  font-family: var(--mono);
-}
-
-td {
-  padding: .65rem 1rem;
-  border-top:1px solid var(--border);
-  vertical-align: top;
-  line-height:1.5;
-  color: #334155;
-}
-
-tr: hover td { background: rgba(37,99,235,.03); }
-
-td: first-child {
-  font-weight:600;
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-td.notes {
-  font-size: .74rem;
-  color: var(--slate);
-  max-width:260px;
-}
-
+.tbl-wrap{overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:2rem}
+table{width:100%;border-collapse:collapse;font-size:.78rem}
+thead tr{background:var(--bg3)}
+th{padding:.65rem 1rem;text-align:left;color:#475569;font-weight:600;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;border-bottom:1px solid var(--border2);font-family:var(--mono)}
+td{padding:.65rem 1rem;border-top:1px solid var(--border);vertical-align:top;line-height:1.5;color:#334155}
+tr:hover td{background:rgba(37,99,235,.03)}
+td:first-child{font-weight:600;color:var(--ink);white-space:nowrap}
+td.notes{font-size:.74rem;color:var(--slate);max-width:260px}
 /* BADGES */
-.b {
-  display: inline-flex;
-  align-items: center;
-  padding: .14rem .48rem;
-  border-radius:100px;
-  font-size: .62rem;
-  font-weight:600;
-  font-family: var(--mono);
-  white-space: nowrap;
-  letter-spacing: .03em;
-  line-height:1.4;
-}
-
-.b+.b { margin-top: .18rem; }
-
-.b-green {
-  background: rgba(5,150,105,.1);
-  color: #065f46;
-  border:1px solid rgba(5,150,105,.25);
-}
-
-.b-amber {
-  background: rgba(217,119,6,.1);
-  color: #92400e;
-  border:1px solid rgba(217,119,6,.25);
-}
-
-.b-blue {
-  background: rgba(37,99,235,.09);
-  color: #1e40af;
-  border:1px solid rgba(37,99,235,.2);
-}
-
-.b-cyan {
-  background: rgba(8,145,178,.1);
-  color: #164e63;
-  border:1px solid rgba(8,145,178,.2);
-}
-
-.b-slate {
-  background: rgba(100,116,139,.1);
-  color: #334155;
-  border:1px solid rgba(100,116,139,.2);
-}
-
-.b-red {
-  background: rgba(220,38,38,.09);
-  color: #991b1b;
-  border:1px solid rgba(220,38,38,.2);
-}
-
-.b-violet {
-  background: rgba(124,58,237,.1);
-  color: #4c1d95;
-  border:1px solid rgba(124,58,237,.2);
-}
-
-a.lnk {
-  display: inline-flex;
-  align-items: center;
-  color: #1e40af;
-  text-decoration: none;
-  font-size: .72rem;
-  font-family: var(--mono);
-  padding: .14rem .45rem;
-  border-radius:4px;
-  background: var(--blue-dim);
-  border:1px solid rgba(37,99,235,.18);
-  transition: all .15s;
-  white-space: nowrap;
-}
-
-a.lnk: hover {
-  background: rgba(37,99,235,.14);
-  border-color: rgba(37,99,235,.3);
-}
-
-.lp {
-  font-family: var(--mono);
-  font-size: .6rem;
-  padding: .1rem .4rem;
-  border-radius:3px;
-  background: rgba(124,58,237,.08);
-  color: #4c1d95;
-  border:1px solid rgba(124,58,237,.18);
-  white-space: nowrap;
-  display: inline-block;
-  margin-top: .15rem;
-}
-
+.b{display:inline-flex;align-items:center;padding:.14rem .48rem;border-radius:100px;font-size:.62rem;font-weight:600;font-family:var(--mono);white-space:nowrap;letter-spacing:.03em;line-height:1.4}
+.b+.b{margin-top:.18rem}
+.b-green{background:rgba(5,150,105,.1);color:#065f46;border:1px solid rgba(5,150,105,.25)}
+.b-amber{background:rgba(217,119,6,.1);color:#92400e;border:1px solid rgba(217,119,6,.25)}
+.b-blue{background:rgba(37,99,235,.09);color:#1e40af;border:1px solid rgba(37,99,235,.2)}
+.b-cyan{background:rgba(8,145,178,.1);color:#164e63;border:1px solid rgba(8,145,178,.2)}
+.b-slate{background:rgba(100,116,139,.1);color:#334155;border:1px solid rgba(100,116,139,.2)}
+.b-red{background:rgba(220,38,38,.09);color:#991b1b;border:1px solid rgba(220,38,38,.2)}
+.b-violet{background:rgba(124,58,237,.1);color:#4c1d95;border:1px solid rgba(124,58,237,.2)}
+a.lnk{display:inline-flex;align-items:center;color:#1e40af;text-decoration:none;font-size:.72rem;font-family:var(--mono);padding:.14rem .45rem;border-radius:4px;background:var(--blue-dim);border:1px solid rgba(37,99,235,.18);transition:all .15s;white-space:nowrap}
+a.lnk:hover{background:rgba(37,99,235,.14);border-color:rgba(37,99,235,.3)}
+.lp{font-family:var(--mono);font-size:.6rem;padding:.1rem .4rem;border-radius:3px;background:rgba(124,58,237,.08);color:#4c1d95;border:1px solid rgba(124,58,237,.18);white-space:nowrap;display:inline-block;margin-top:.15rem}
 /* STAT CARDS */
-.dash-grid {
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap:1rem;
-  margin-bottom:2rem;
-}
-
-.stat-card {
-  background: var(--bg1);
-  border:1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding:1.25rem 1.5rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.stat-card: :before {
-  content: '';
-  position: absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:3px;
-  background: var(--accent,var(--blue));
-}
-
-.stat-num {
-  font-size:2rem;
-  font-weight:700;
-  font-family: var(--mono);
-  letter-spacing: -.03em;
-  color: var(--ink);
-  line-height:1;
-}
-
-.stat-label {
-  font-size: .7rem;
-  color: var(--slate);
-  text-transform: uppercase;
-  letter-spacing: .09em;
-  margin-top: .35rem;
-  font-weight:600;
-}
-
-.stat-sub {
-  font-size: .68rem;
-  color: #94a3b8;
-  margin-top: .2rem;
-}
-
-.dash-two {
-  display: grid;
-  grid-template-columns:1fr 1fr;
-  gap:1rem;
-  margin-bottom:2rem;
-}
-
-.dash-card {
-  background: var(--bg1);
-  border:1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding:1.4rem;
-}
-
-.dash-card-title {
-  font-size: .65rem;
-  font-weight:700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--slate);
-  margin-bottom:1rem;
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-  font-family: var(--mono);
-}
-
-.dash-card-title: :before {
-  content: '';
-  width:12px;
-  height:1px;
-  background: currentColor;
-  opacity: .5;
-}
-
-.legend-grid {
-  display: flex;
-  flex-direction: column;
-  gap: .55rem;
-}
-
-.legend-row {
-  display: flex;
-  align-items: center;
-  gap: .65rem;
-  font-size: .78rem;
-  color: #334155;
-}
-
-.legend-dot {
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  flex-shrink:0;
-}
-
-.legend-count {
-  font-family: var(--mono);
-  font-size: .68rem;
-  color: #94a3b8;
-  margin-left: auto;
-}
-
-.pb-row {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  font-size: .77rem;
-  margin-bottom: .5rem;
-}
-
-.pb-bar-wrap {
-  flex:1;
-  height:4px;
-  background: var(--bg4);
-  border-radius:2px;
-  overflow: hidden;
-}
-
-.pb-bar {
-  height:100%;
-  border-radius:2px;
-}
-
-.pb-val {
-  font-family: var(--mono);
-  font-size: .68rem;
-  color: var(--slate);
-  min-width:20px;
-  text-align: right;
-}
-
-.insight-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: .6rem;
-}
-
-.insight-li {
-  display: flex;
-  gap: .65rem;
-  align-items: flex-start;
-  font-size: .79rem;
-  color: #334155;
-  line-height:1.55;
-}
-
-.ins-icon {
-  width:16px;
-  height:16px;
-  min-width:16px;
-  border-radius:3px;
-  background: var(--blue-dim);
-  color: var(--blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .6rem;
-  margin-top:2px;
-  border:1px solid rgba(37,99,235,.15);
-}
-
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.25rem 1.5rem;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,var(--blue))}
+.stat-num{font-size:2rem;font-weight:700;font-family:var(--mono);letter-spacing:-.03em;color:var(--ink);line-height:1}
+.stat-label{font-size:.7rem;color:var(--slate);text-transform:uppercase;letter-spacing:.09em;margin-top:.35rem;font-weight:600}
+.stat-sub{font-size:.68rem;color:#94a3b8;margin-top:.2rem}
+.dash-two{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
+.dash-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.4rem}
+.dash-card-title{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:1rem;display:flex;align-items:center;gap:.4rem;font-family:var(--mono)}
+.dash-card-title::before{content:'';width:12px;height:1px;background:currentColor;opacity:.5}
+.legend-grid{display:flex;flex-direction:column;gap:.55rem}
+.legend-row{display:flex;align-items:center;gap:.65rem;font-size:.78rem;color:#334155}
+.legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.legend-count{font-family:var(--mono);font-size:.68rem;color:#94a3b8;margin-left:auto}
+.pb-row{display:flex;align-items:center;gap:.6rem;font-size:.77rem;margin-bottom:.5rem}
+.pb-bar-wrap{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.pb-bar{height:100%;border-radius:2px}
+.pb-val{font-family:var(--mono);font-size:.68rem;color:var(--slate);min-width:20px;text-align:right}
+.insight-list{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.insight-li{display:flex;gap:.65rem;align-items:flex-start;font-size:.79rem;color:#334155;line-height:1.55}
+.ins-icon{width:16px;height:16px;min-width:16px;border-radius:3px;background:var(--blue-dim);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:.6rem;margin-top:2px;border:1px solid rgba(37,99,235,.15)}
 /* MATRIX */
-.cmp-controls {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  flex-wrap: wrap;
-  margin-bottom:1.1rem;
+.cmp-controls{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1.1rem}
+.cmp-search{padding:.35rem .8rem;border-radius:var(--r);border:1px solid var(--border2);background:#fff;font-family:var(--sans);font-size:.78rem;color:var(--ink);outline:none;width:220px;transition:border-color .15s}
+.cmp-search:focus{border-color:var(--blue)}
+.cmp-toggle{display:flex;align-items:center;gap:.35rem;font-size:.75rem;color:var(--slate);cursor:pointer}
+.cmp-toggle input{accent-color:var(--blue)}
+.cmp-legend{display:flex;align-items:center;gap:.85rem;margin-left:auto;font-size:.7rem;color:var(--slate);flex-wrap:wrap}
+.cml-item{display:flex;align-items:center;gap:.3rem}
+.matrix-wrap{overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.matrix-table{border-collapse:collapse;font-size:.72rem;width:100%}
+.matrix-table th,.matrix-table td{border:1px solid var(--border)}
+.frow-label{padding:.5rem .85rem;background:var(--bg1);font-weight:600;color:var(--ink);white-space:nowrap;min-width:210px;position:sticky;left:0;z-index:3;border-right:2px solid var(--border2)}
+.fcat-header{padding:.38rem .85rem;background:var(--bg3);font-weight:700;color:#1e293b;font-size:.64rem;letter-spacing:.09em;text-transform:uppercase;font-family:var(--mono);position:sticky;left:0;z-index:3;border-right:2px solid var(--border2)}
+.prov-head{padding:.4rem .3rem;text-align:center;background:var(--bg2);font-weight:600;color:#1e293b;font-size:.62rem;writing-mode:vertical-lr;transform:rotate(180deg);min-width:44px;max-width:56px;position:sticky;top:0;z-index:2;white-space:nowrap}
+.prov-head.agnostic{border-top:3px solid var(--green)}
+.prov-head.specific{border-top:3px solid var(--amber)}
+.cell{padding:.38rem;text-align:center;vertical-align:middle}
+.cell-yes{background:rgba(5,150,105,.07)}
+.cell-no{background:rgba(0,0,0,.015)}
+.cell-partial{background:rgba(217,119,6,.07)}
+.icon-yes{color:#059669;font-size:.85rem}
+.icon-no{color:#d1d5db;font-size:.85rem}
+.icon-partial{color:#d97706;font-size:.82rem}
+.matrix-corner{background:var(--bg2);position:sticky;left:0;top:0;z-index:6;border-right:2px solid var(--border2);padding:.5rem .85rem;font-size:.62rem;font-weight:700;color:var(--slate);font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em}
+/* ROW NUMBERING */
+.num-col { width: 32px; text-align: center; }
+tbody { counter-reset: row-num; }
+tbody tr { counter-increment: row-num; }
+tbody tr[style*="display: none"] { counter-increment: none; }
+tbody tr td.num { 
+  text-align: center; font-family: var(--mono); font-size: .65rem;
+  color: #94a3b8; font-weight: 500; width: 32px; padding: .65rem .5rem;
 }
-
-.cmp-search {
-  padding: .35rem .8rem;
-  border-radius: var(--r);
-  border:1px solid var(--border2);
-  background: #fff;
-  font-family: var(--sans);
-  font-size: .78rem;
-  color: var(--ink);
-  outline: none;
-  width:220px;
-  transition: border-color .15s;
-}
-
-.cmp-search: focus { border-color: var(--blue); }
-
-.cmp-toggle {
-  display: flex;
-  align-items: center;
-  gap: .35rem;
-  font-size: .75rem;
-  color: var(--slate);
-  cursor: pointer;
-}
-
-.cmp-toggle input { accent-color: var(--blue); }
-
-.cmp-legend {
-  display: flex;
-  align-items: center;
-  gap: .85rem;
-  margin-left: auto;
-  font-size: .7rem;
-  color: var(--slate);
-  flex-wrap: wrap;
-}
-
-.cml-item {
-  display: flex;
-  align-items: center;
-  gap: .3rem;
-}
-
-.matrix-wrap {
-  overflow-x: auto;
-  border-radius: var(--r-lg);
-  border:1px solid var(--border);
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-
-.matrix-table {
-  border-collapse: collapse;
-  font-size: .72rem;
-  width:100%;
-}
-
-.matrix-table th,.matrix-table td { border:1px solid var(--border); }
-
-.frow-label {
-  padding: .5rem .85rem;
-  background: var(--bg1);
-  font-weight:600;
-  color: var(--ink);
-  white-space: nowrap;
-  min-width:210px;
-  position: sticky;
-  left:0;
-  z-index:3;
-  border-right:2px solid var(--border2);
-}
-
-.fcat-header {
-  padding: .38rem .85rem;
-  background: var(--bg3);
-  font-weight:700;
-  color: #1e293b;
-  font-size: .64rem;
-  letter-spacing: .09em;
-  text-transform: uppercase;
-  font-family: var(--mono);
-  position: sticky;
-  left:0;
-  z-index:3;
-  border-right:2px solid var(--border2);
-}
-
-.prov-head {
-  padding: .4rem .3rem;
-  text-align: center;
-  background: var(--bg2);
-  font-weight:600;
-  color: #1e293b;
-  font-size: .62rem;
-  writing-mode: vertical-lr;
-  transform: rotate(180deg);
-  min-width:44px;
-  max-width:56px;
-  position: sticky;
-  top:0;
-  z-index:2;
-  white-space: nowrap;
-}
-
-.prov-head.agnostic { border-top:3px solid var(--green); }
-
-.prov-head.specific { border-top:3px solid var(--amber); }
-
-.cell {
-  padding: .38rem;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.cell-yes { background: rgba(5,150,105,.07); }
-
-.cell-no { background: rgba(0,0,0,.015); }
-
-.cell-partial { background: rgba(217,119,6,.07); }
-
-.icon-yes {
-  color: #059669;
-  font-size: .85rem;
-}
-
-.icon-no {
-  color: #d1d5db;
-  font-size: .85rem;
-}
-
-.icon-partial {
-  color: #d97706;
-  font-size: .82rem;
-}
-
-.matrix-corner {
-  background: var(--bg2);
-  position: sticky;
-  left:0;
-  top:0;
-  z-index:6;
-  border-right:2px solid var(--border2);
-  padding: .5rem .85rem;
-  font-size: .62rem;
-  font-weight:700;
-  color: var(--slate);
-  font-family: var(--mono);
-  text-transform: uppercase;
-  letter-spacing: .07em;
-}
-
-@media(max-width:1024px) { .dash-grid{grid-template-columns:1fr 1fr; }
-
-.dash-two { grid-template-columns:1fr; }
-
-@media(max-width:640px) { .dash-grid{grid-template-columns:1fr; }
-
-.shell { padding:0 1rem 3rem; }
-
+tbody tr td.num::before { content: counter(row-num); }
+/* FILTER STACK */
+.filter-stack{margin-bottom:1.6rem}
+.filter-stack>.sub-filter{border-radius:var(--r-lg) var(--r-lg) 0 0;margin-bottom:0}
+/* COLUMN FILTER STRIP */
+.col-filter{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;background:var(--bg);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--r-lg) var(--r-lg);padding:.55rem 1rem;margin-bottom:1.6rem}
+.cf-label{font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);white-space:nowrap;margin-right:.2rem}
+.cf-btn{padding:.24rem .75rem;border-radius:100px;font-size:.72rem;font-weight:500;border:1px solid var(--border2);background:white;color:#475569;cursor:pointer;transition:all .14s;font-family:var(--sans);white-space:nowrap}
+.cf-btn:hover{border-color:rgba(37,99,235,.35);color:var(--blue)}
+.cf-btn.active{background:var(--blue-dim);border-color:rgba(37,99,235,.35);color:#1e40af;font-weight:600}
+@media(max-width:1024px){.dash-grid{grid-template-columns:1fr 1fr}.dash-two{grid-template-columns:1fr}}
+@media(max-width:640px){.dash-grid{grid-template-columns:1fr}.shell{padding:0 1rem 3rem}}
 </style>
 </head>
 <body>
@@ -924,283 +218,95 @@ a.lnk: hover {
     <div class="sec-title">Complete Reference at a Glance</div>
   </div>
 
-  <div class="sub-filter" id="sf-summary">
-    <span class="sf-label">Category</span>
-    <button class="sf-btn sf-all active" id="sfsum-all" onclick="summaryFilter('all',this)">All <span style="font-family:var(--mono);font-size:.6rem;opacity:.5;margin-left:.1rem">33</span></button>
-    <button class="sf-btn sf-all" id="sfsum-product" onclick="summaryFilter('product',this)">&#128230; Products <span style="font-family:var(--mono);font-size:.6rem;opacity:.5;margin-left:.1rem">15</span></button>
-    <button class="sf-btn sf-all" id="sfsum-devtool" onclick="summaryFilter('devtool',this)">&#128295; Dev Tools <span style="font-family:var(--mono);font-size:.6rem;opacity:.5;margin-left:.1rem">17</span></button>
-    <div class="sf-divider"></div>
-    <button class="sf-btn sf-agnostic" id="sfsum-agnostic" onclick="summaryFilter('agnostic',this)"><span class="sf-dot" style="background:#059669"></span>Ledger-Agnostic</button>
-    <button class="sf-btn sf-specific" id="sfsum-specific" onclick="summaryFilter('specific',this)"><span class="sf-dot" style="background:#d97706"></span>Specific Ledger</button>
-    <div class="sf-divider"></div>
-    <input class="sf-search" id="sfsum-search" type="text" placeholder="&#128269;  Search by name…" oninput="summarySearch(this.value)"/>
-    <span class="sf-count" id="sf-summary-count">Showing <strong>33</strong> of 33</span>
+    <!-- SUMMARY FILTER: Row 1 = Ledger · Row 2 = Column attributes -->
+  <div class="filter-stack">
+    <div class="sub-filter" id="sf-summary">
+      <span class="sf-label">Ledger</span>
+      <button class="sf-btn sf-agnostic active" id="sfsum-ag" onclick="summaryLedger('agnostic',this)">
+        <span class="sf-dot" style="background:#059669"></span>Ledger-Agnostic
+        <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">18</span>
+      </button>
+      <button class="sf-btn sf-specific" id="sfsum-sp" onclick="summaryLedger('specific',this)">
+        <span class="sf-dot" style="background:#d97706"></span>Specific Ledger
+        <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">15</span>
+      </button>
+      <div class="sf-divider"></div>
+      <input class="sf-search" id="sfsum-q" type="text"
+        placeholder="&#128269;  Search by name&hellip;"
+        oninput="summaryRunFilter()" />
+      <span class="sf-count" id="sf-summary-count">Showing <strong>18</strong> of 18</span>
+    </div>
+    <div class="col-filter" id="cf-summary">
+      <span class="cf-label">Filter by</span>
+      <button class="cf-btn active" onclick="summaryCol('all',this)">All</button>
+      <span id="cfs-ag">
+        <button class="cf-btn" onclick="summaryCol('type-product',this)">&#128230; Products</button>
+        <button class="cf-btn" onclick="summaryCol('type-devtool',this)">&#128295; Dev Tools</button>
+        <button class="cf-btn" onclick="summaryCol('oid4vc',this)">OID4VC</button>
+        <button class="cf-btn" onclick="summaryCol('eidas',this)">eIDAS 2.0</button>
+        <button class="cf-btn" onclick="summaryCol('anoncreds',this)">AnonCreds</button>
+        <button class="cf-btn" onclick="summaryCol('didcomm',this)">DIDComm</button>
+        <button class="cf-btn" onclick="summaryCol('free',this)">Free / OSS</button>
+        <button class="cf-btn" onclick="summaryCol('quote',this)">Quote Only</button>
+        <button class="cf-btn" onclick="summaryCol('wallet',this)">Holder Wallet</button>
+        <button class="cf-btn" onclick="summaryCol('mobile',this)">Mobile SDK</button>
+      </span>
+      <span id="cfs-sp" style="display:none">
+        <button class="cf-btn" onclick="summaryCol('type-product',this)">&#128230; Products</button>
+        <button class="cf-btn" onclick="summaryCol('type-devtool',this)">&#128295; Dev Tools</button>
+        <button class="cf-btn" onclick="summaryCol('zkp',this)">ZKP / ZK</button>
+        <button class="cf-btn" onclick="summaryCol('onchain',this)">On-Chain</button>
+        <button class="cf-btn" onclick="summaryCol('anoncreds',this)">AnonCreds</button>
+        <button class="cf-btn" onclick="summaryCol('blockchain',this)">Blockchain</button>
+        <button class="cf-btn" onclick="summaryCol('eu',this)">EU / EBSI</button>
+        <button class="cf-btn" onclick="summaryCol('government',this)">Government</button>
+        <button class="cf-btn" onclick="summaryCol('free',this)">Free / OSS</button>
+        <button class="cf-btn" onclick="summaryCol('quote',this)">Quote Only</button>
+      </span>
+    </div>
   </div>
 
   <div class="tbl-wrap">
   <table id="summary-table">
-    <thead><tr><th>Company / Tool</th><th>Type</th><th>Ledger Model</th><th>Pricing</th><th>Pricing Page</th><th>Website</th></tr></thead>
+    <thead><tr><th class="num-col">#</th><th>Company / Tool</th><th>Type</th><th>Ledger Model</th><th>Pricing</th><th>Pricing Page</th><th>Website</th></tr></thead>
     <tbody>
-      <tr data-ledger="agnostic" data-cat="product" data-name="trinsic" data-col="oid4vc wallet free">
-        <td>Trinsic</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-blue">Free · $99/mo · Enterprise</span></td>
-        <td><a class="lnk" href="https://trinsic.id/pricing/" target="_blank">trinsic.id/pricing ↗</a></td>
-        <td><a class="lnk" href="https://trinsic.id" target="_blank">trinsic.id ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="walt.id">
-        <td>walt.id</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-blue">Free OSS · Managed paid</span></td>
-        <td><a class="lnk" href="https://walt.id/pricing" target="_blank">walt.id/pricing ↗</a></td>
-        <td><a class="lnk" href="https://walt.id" target="_blank">walt.id ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="paradym animo" data-col="oid4vc anoncreds selfhosted free wallet">
-        <td>Paradym (Animo)</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-blue">Free trial · Paid tiers</span></td>
-        <td><a class="lnk" href="https://paradym.id/pricing" target="_blank">paradym.id/pricing ↗</a></td>
-        <td><a class="lnk" href="https://paradym.id" target="_blank">paradym.id ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="mattr global" data-col="oid4vc eidas wallet quote">
-        <td>MATTR Global</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-slate">Quote only</span></td>
-        <td><a class="lnk" href="https://mattr.global/contact" target="_blank">mattr.global/contact ↗</a></td>
-        <td><a class="lnk" href="https://mattr.global" target="_blank">mattr.global ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="microsoft entra verified id" data-col="oid4vc eidas wallet mdl free">
-        <td>Microsoft Entra Verified ID</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-blue">Free tier · Pay-per-use</span></td>
-        <td><a class="lnk" href="https://azure.microsoft.com/en-us/pricing/" target="_blank">azure pricing ↗</a></td>
-        <td><a class="lnk" href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-verified-id" target="_blank">microsoft.com ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="lissi cloud agent" data-col="anoncreds wallet quote">
-        <td>Lissi Cloud Agent</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-slate">Quote only</span></td>
-        <td><a class="lnk" href="https://lissi.id/contact" target="_blank">lissi.id/contact ↗</a></td>
-        <td><a class="lnk" href="https://lissi.id" target="_blank">lissi.id ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="miniorange ssi suite" data-col="free selfhosted">
-        <td>miniOrange SSI Suite</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-blue">Free plugin · Paid plans</span></td>
-        <td><a class="lnk" href="https://www.miniorange.com/iam/pricing/" target="_blank">miniorange pricing ↗</a></td>
-        <td><a class="lnk" href="https://www.miniorange.com" target="_blank">miniorange.com ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="sphereon vdx" data-col="oid4vc eidas selfhosted wallet quote">
-        <td>Sphereon VDX</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-slate">Quote only (SDK free)</span></td>
-        <td><a class="lnk" href="https://sphereon.com/contact" target="_blank">sphereon contact ↗</a></td>
-        <td><a class="lnk" href="https://sphereon.com" target="_blank">sphereon.com ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="product" data-name="gataca studio" data-col="oid4vc eidas wallet mdl quote">
-        <td>Gataca Studio</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-slate">Quote only</span></td>
-        <td><a class="lnk" href="https://gataca.io/pricing" target="_blank">gataca.io/pricing ↗</a></td>
-        <td><a class="lnk" href="https://gataca.io" target="_blank">gataca.io ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="product" data-name="cheqd studio cosmos" data-col="anoncreds onchain free wallet">
-        <td>cheqd Studio</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-blue">Free tier · Tx fees</span></td>
-        <td><a class="lnk" href="https://cheqd.io/pricing" target="_blank">cheqd.io/pricing ↗</a></td>
-        <td><a class="lnk" href="https://cheqd.io" target="_blank">cheqd.io ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="product" data-name="truvera dock labs cheqd" data-col="zkp monetize wallet free">
-        <td>Truvera (Dock Labs)</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-blue">Free trial · Contact</span></td>
-        <td><a class="lnk" href="https://www.dock.io/pricing" target="_blank">dock.io/pricing ↗</a></td>
-        <td><a class="lnk" href="https://www.dock.io" target="_blank">dock.io ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="product" data-name="hyperledger identus atala prism saas cardano" data-col="anoncreds free selfhosted">
-        <td>Hyperledger Identus SaaS</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://hyperledger.github.io/identus/" target="_blank">identus ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="product" data-name="privado id polygon id zk evm" data-col="zkp onchain free wallet">
-        <td>Privado ID (ex-Polygon ID)</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td>
-        <td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="product" data-name="spruceid ethereum sign-in siwe" data-col="onchain free selfhosted">
-        <td>SpruceID</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">OSS · Enterprise paid</span></td>
-        <td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td>
-        <td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="product" data-name="procivis one swiss eidas government" data-col="eidas mdl wallet quote">
-        <td>Procivis One</td>
-        <td><span class="b b-blue">Product</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-slate">Quote only</span></td>
-        <td><a class="lnk" href="https://procivis.ch/en/contact" target="_blank">procivis.ch ↗</a></td>
-        <td><a class="lnk" href="https://procivis.ch" target="_blank">procivis.ch ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="hyperledger aries aca-py python bc gov" data-col="framework didcomm anoncreds python oid4vc">
-        <td>Hyperledger Aries / ACA-Py</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/aries-cloudagent-python" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/aries-cloudagent-python" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="credo aries framework js typescript animo" data-col="framework sdk typescript mobile anoncreds didcomm oid4vc">
-        <td>Credo (Aries Framework JS)</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://credo.js.org" target="_blank">credo.js.org ↗</a></td>
-        <td><a class="lnk" href="https://credo.js.org" target="_blank">credo.js.org ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="veramo sdk typescript consensys plugin" data-col="sdk typescript oid4vc mobile">
-        <td>Veramo</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://veramo.io" target="_blank">veramo.io ↗</a></td>
-        <td><a class="lnk" href="https://veramo.io" target="_blank">veramo.io ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="sphereon ssi-sdk typescript oid4vc bbs+" data-col="sdk typescript oid4vc eidas mobile">
-        <td>Sphereon SSI-SDK</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://github.com/Sphereon-Opensource/SSI-SDK" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://github.com/Sphereon-Opensource/SSI-SDK" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="walt.id ssi kit cli kotlin ebsi cheqd" data-col="sdk oid4vc eidas">
-        <td>walt.id SSI Kit</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://docs.walt.id" target="_blank">docs.walt.id ↗</a></td>
-        <td><a class="lnk" href="https://docs.walt.id" target="_blank">docs.walt.id ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="dif universal resolver did resolution 50 methods" data-col="resolution">
-        <td>DIF Universal Resolver</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://dev.uniresolver.io" target="_blank">uniresolver.io ↗</a></td>
-        <td><a class="lnk" href="https://dev.uniresolver.io" target="_blank">uniresolver.io ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="keri keripy gleif vlei ledgerless no blockchain" data-col="protocol">
-        <td>KERI / keripy</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://keri.one" target="_blank">keri.one ↗</a></td>
-        <td><a class="lnk" href="https://keri.one" target="_blank">keri.one ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="sidetree protocol dif bitcoin ion orb ethereum" data-col="protocol">
-        <td>Sidetree Protocol</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation ↗</a></td>
-        <td><a class="lnk" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-cat="devtool" data-name="tno eassi gateway multi-technology netherlands irma" data-col="resolution sdk">
-        <td>TNO EASSI</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="b b-slate">R&amp;D / Gov</span></td>
-        <td><a class="lnk" href="https://eassi.ssi-lab.nl" target="_blank">ssi-lab.nl ↗</a></td>
-        <td><a class="lnk" href="https://eassi.ssi-lab.nl" target="_blank">ssi-lab.nl ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="hyperledger indy node sovrin ledger" data-col="blockchain anoncreds">
-        <td>Hyperledger Indy</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/indy-node" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/indy-node" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="hyperledger indy on besu ethereum evm did:indy:besu" data-col="blockchain ethereum anoncreds">
-        <td>Hyperledger Indy on Besu</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/indy-besu" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/indy-besu" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="hyperledger identus sdk cardano atala prism iog scala">
-        <td>Hyperledger Identus SDK</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="anoncreds rs rust indy cheqd cl signatures zkp">
-        <td>AnonCreds RS</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/anoncreds-rs" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/anoncreds-rs" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="sovrin network indy public permissioned stewards">
-        <td>Sovrin Network</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-blue">Free read · Tx fees</span></td>
-        <td><a class="lnk" href="https://sovrin.org" target="_blank">sovrin.org ↗</a></td>
-        <td><a class="lnk" href="https://sovrin.org" target="_blank">sovrin.org ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="ebsi did:ebsi european blockchain eu eidas eudi wallet">
-        <td>EBSI (did:ebsi)</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Free (EU infra)</span></td>
-        <td><a class="lnk" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu ↗</a></td>
-        <td><a class="lnk" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="privado id polygon id tools iden3 circom zk evm hsbc bhutan">
-        <td>Privado ID / Polygon ID Tools</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source</span></td>
-        <td><a class="lnk" href="https://privado.id/docs" target="_blank">privado.id/docs ↗</a></td>
-        <td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-cat="devtool" data-name="quarkid buenos aires argentina zksync ethereum l2 government miba">
-        <td>QuarkID</td>
-        <td><span class="b b-cyan">Dev Tool</span></td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="b b-red">Open Source / Gov</span></td>
-        <td><a class="lnk" href="https://quarkid.org" target="_blank">quarkid.org ↗</a></td>
-        <td><a class="lnk" href="https://quarkid.org" target="_blank">quarkid.org ↗</a></td>
-      </tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="trinsic" data-col="type-product oid4vc wallet free"><td class="num"></td><td>Trinsic</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-blue">Free · $99/mo · Enterprise</span></td><td><a class="lnk" href="https://trinsic.id/pricing/" target="_blank">trinsic.id/pricing ↗</a></td><td><a class="lnk" href="https://trinsic.id" target="_blank">trinsic.id ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="walt.id" data-col="type-product oid4vc eidas anoncreds selfhosted free wallet"><td class="num"></td><td>walt.id</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-blue">Free OSS · Managed paid</span></td><td><a class="lnk" href="https://walt.id/pricing" target="_blank">walt.id/pricing ↗</a></td><td><a class="lnk" href="https://walt.id" target="_blank">walt.id ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="paradym animo" data-col="type-product oid4vc anoncreds selfhosted free wallet"><td class="num"></td><td>Paradym (Animo)</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-blue">Free trial · Paid tiers</span></td><td><a class="lnk" href="https://paradym.id/pricing" target="_blank">paradym.id/pricing ↗</a></td><td><a class="lnk" href="https://paradym.id" target="_blank">paradym.id ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="mattr global" data-col="type-product oid4vc eidas wallet quote"><td class="num"></td><td>MATTR Global</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-slate">Quote only</span></td><td><a class="lnk" href="https://mattr.global/contact" target="_blank">mattr.global/contact ↗</a></td><td><a class="lnk" href="https://mattr.global" target="_blank">mattr.global ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="microsoft entra verified id" data-col="type-product oid4vc eidas wallet mdl free"><td class="num"></td><td>Microsoft Entra Verified ID</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-blue">Free tier · Pay-per-use</span></td><td><a class="lnk" href="https://azure.microsoft.com/en-us/pricing/" target="_blank">azure pricing ↗</a></td><td><a class="lnk" href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-verified-id" target="_blank">microsoft.com ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="lissi cloud agent" data-col="type-product anoncreds wallet quote"><td class="num"></td><td>Lissi Cloud Agent</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-slate">Quote only</span></td><td><a class="lnk" href="https://lissi.id/contact" target="_blank">lissi.id/contact ↗</a></td><td><a class="lnk" href="https://lissi.id" target="_blank">lissi.id ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="miniorange ssi suite" data-col="type-product free selfhosted"><td class="num"></td><td>miniOrange SSI Suite</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-blue">Free plugin · Paid plans</span></td><td><a class="lnk" href="https://www.miniorange.com/iam/pricing/" target="_blank">miniorange pricing ↗</a></td><td><a class="lnk" href="https://www.miniorange.com" target="_blank">miniorange.com ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="sphereon vdx" data-col="type-product oid4vc eidas selfhosted wallet quote"><td class="num"></td><td>Sphereon VDX</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-slate">Quote only (SDK free)</span></td><td><a class="lnk" href="https://sphereon.com/contact" target="_blank">sphereon contact ↗</a></td><td><a class="lnk" href="https://sphereon.com" target="_blank">sphereon.com ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="product" data-name="gataca studio" data-col="type-product oid4vc eidas wallet mdl quote"><td class="num"></td><td>Gataca Studio</td><td><span class="b b-blue">Product</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-slate">Quote only</span></td><td><a class="lnk" href="https://gataca.io/pricing" target="_blank">gataca.io/pricing ↗</a></td><td><a class="lnk" href="https://gataca.io" target="_blank">gataca.io ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="product" data-name="cheqd studio cosmos" data-col="type-product anoncreds onchain free wallet"><td class="num"></td><td>cheqd Studio</td><td><span class="b b-blue">Product</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-blue">Free tier · Tx fees</span></td><td><a class="lnk" href="https://cheqd.io/pricing" target="_blank">cheqd.io/pricing ↗</a></td><td><a class="lnk" href="https://cheqd.io" target="_blank">cheqd.io ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="product" data-name="truvera dock labs cheqd" data-col="type-product zkp monetize wallet free"><td class="num"></td><td>Truvera (Dock Labs)</td><td><span class="b b-blue">Product</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-blue">Free trial · Contact</span></td><td><a class="lnk" href="https://www.dock.io/pricing" target="_blank">dock.io/pricing ↗</a></td><td><a class="lnk" href="https://www.dock.io" target="_blank">dock.io ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="product" data-name="hyperledger identus atala prism saas cardano" data-col="type-product anoncreds free selfhosted"><td class="num"></td><td>Hyperledger Identus SaaS</td><td><span class="b b-blue">Product</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://hyperledger.github.io/identus/" target="_blank">identus ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="product" data-name="privado id polygon id zk evm" data-col="type-product zkp onchain free wallet"><td class="num"></td><td>Privado ID (ex-Polygon ID)</td><td><span class="b b-blue">Product</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td><td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="product" data-name="spruceid ethereum sign-in siwe" data-col="type-product onchain free selfhosted"><td class="num"></td><td>SpruceID</td><td><span class="b b-blue">Product</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">OSS · Enterprise paid</span></td><td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td><td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="product" data-name="procivis one swiss eidas government" data-col="type-product eidas mdl wallet quote"><td class="num"></td><td>Procivis One</td><td><span class="b b-blue">Product</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-slate">Quote only</span></td><td><a class="lnk" href="https://procivis.ch/en/contact" target="_blank">procivis.ch ↗</a></td><td><a class="lnk" href="https://procivis.ch" target="_blank">procivis.ch ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="hyperledger aries aca-py python bc gov" data-col="type-devtool framework didcomm anoncreds python oid4vc"><td class="num"></td><td>Hyperledger Aries / ACA-Py</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://github.com/hyperledger/aries-cloudagent-python" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://github.com/hyperledger/aries-cloudagent-python" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="credo aries framework js typescript animo" data-col="type-devtool framework sdk typescript mobile anoncreds didcomm oid4vc"><td class="num"></td><td>Credo (Aries Framework JS)</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://credo.js.org" target="_blank">credo.js.org ↗</a></td><td><a class="lnk" href="https://credo.js.org" target="_blank">credo.js.org ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="veramo sdk typescript consensys plugin" data-col="type-devtool sdk typescript oid4vc mobile"><td class="num"></td><td>Veramo</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://veramo.io" target="_blank">veramo.io ↗</a></td><td><a class="lnk" href="https://veramo.io" target="_blank">veramo.io ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="sphereon ssi-sdk typescript oid4vc bbs+" data-col="type-devtool sdk typescript oid4vc eidas mobile"><td class="num"></td><td>Sphereon SSI-SDK</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://github.com/Sphereon-Opensource/SSI-SDK" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://github.com/Sphereon-Opensource/SSI-SDK" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="walt.id ssi kit cli kotlin ebsi cheqd" data-col="type-devtool sdk oid4vc eidas"><td class="num"></td><td>walt.id SSI Kit</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://docs.walt.id" target="_blank">docs.walt.id ↗</a></td><td><a class="lnk" href="https://docs.walt.id" target="_blank">docs.walt.id ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="dif universal resolver did resolution 50 methods" data-col="type-devtool resolution"><td class="num"></td><td>DIF Universal Resolver</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://dev.uniresolver.io" target="_blank">uniresolver.io ↗</a></td><td><a class="lnk" href="https://dev.uniresolver.io" target="_blank">uniresolver.io ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="keri keripy gleif vlei ledgerless no blockchain" data-col="type-devtool protocol"><td class="num"></td><td>KERI / keripy</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://keri.one" target="_blank">keri.one ↗</a></td><td><a class="lnk" href="https://keri.one" target="_blank">keri.one ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="sidetree protocol dif bitcoin ion orb ethereum" data-col="type-devtool protocol"><td class="num"></td><td>Sidetree Protocol</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation ↗</a></td><td><a class="lnk" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation ↗</a></td></tr>
+<tr data-ledger="agnostic" data-cat="devtool" data-name="tno eassi gateway multi-technology netherlands irma" data-col="type-devtool resolution sdk"><td class="num"></td><td>TNO EASSI</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-green">Agnostic</span></td><td><span class="b b-slate">R&amp;D / Gov</span></td><td><a class="lnk" href="https://eassi.ssi-lab.nl" target="_blank">ssi-lab.nl ↗</a></td><td><a class="lnk" href="https://eassi.ssi-lab.nl" target="_blank">ssi-lab.nl ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="hyperledger indy node sovrin ledger" data-col="type-devtool blockchain anoncreds"><td class="num"></td><td>Hyperledger Indy</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://github.com/hyperledger/indy-node" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://github.com/hyperledger/indy-node" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="hyperledger indy on besu ethereum evm did:indy:besu" data-col="type-devtool blockchain ethereum anoncreds"><td class="num"></td><td>Hyperledger Indy on Besu</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://github.com/hyperledger/indy-besu" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://github.com/hyperledger/indy-besu" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="hyperledger identus sdk cardano atala prism iog scala" data-col="type-devtool blockchain anoncreds didcomm"><td class="num"></td><td>Hyperledger Identus SDK</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="anoncreds rs rust indy cheqd cl signatures zkp" data-col="type-devtool sdk anoncreds zkp"><td class="num"></td><td>AnonCreds RS</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://github.com/hyperledger/anoncreds-rs" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://github.com/hyperledger/anoncreds-rs" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="sovrin network indy public permissioned stewards" data-col="type-devtool ledger-infra anoncreds government"><td class="num"></td><td>Sovrin Network</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-blue">Free read · Tx fees</span></td><td><a class="lnk" href="https://sovrin.org" target="_blank">sovrin.org ↗</a></td><td><a class="lnk" href="https://sovrin.org" target="_blank">sovrin.org ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="ebsi did:ebsi european blockchain eu eidas eudi wallet" data-col="type-devtool ledger-infra eu government eidas"><td class="num"></td><td>EBSI (did:ebsi)</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Free (EU infra)</span></td><td><a class="lnk" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu ↗</a></td><td><a class="lnk" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="privado id polygon id tools iden3 circom zk evm hsbc bhutan" data-col="type-devtool blockchain ethereum zkp sdk"><td class="num"></td><td>Privado ID / Polygon ID Tools</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source</span></td><td><a class="lnk" href="https://privado.id/docs" target="_blank">privado.id/docs ↗</a></td><td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td></tr>
+<tr data-ledger="specific" data-cat="devtool" data-name="quarkid buenos aires argentina zksync ethereum l2 government miba" data-col="type-devtool blockchain ethereum government"><td class="num"></td><td>QuarkID</td><td><span class="b b-cyan">Dev Tool</span></td><td><span class="b b-amber">Specific</span></td><td><span class="b b-red">Open Source / Gov</span></td><td><a class="lnk" href="https://quarkid.org" target="_blank">quarkid.org ↗</a></td><td><a class="lnk" href="https://quarkid.org" target="_blank">quarkid.org ↗</a></td></tr>
 </tbody>
   </table>
   </div>
 </div><!-- /panel-0 -->
+
 
 <!-- ══════════════════════════════════════════ -->
 <!-- PANEL 1 · PRODUCTS                        -->
@@ -1213,197 +319,73 @@ a.lnk: hover {
     <div class="sec-desc">15 commercial and open-source platforms for issuing, verifying, and managing verifiable credentials. Use the primary filter to split by ledger model.</div>
   </div>
 
+    <!-- PRODUCTS FILTER: Row 1 = Ledger · Row 2 = Column attributes -->
   <div class="filter-stack">
-    <div class="sub-filter" id="sf-products" style="border-radius:var(--r-lg) var(--r-lg) 0 0;margin-bottom:0">
-      <span class="sf-label">Ledger Model</span>
-      <button class="sf-btn sf-agnostic active" id="sfp-agnostic" onclick="productsLedger('agnostic',this)"><span class="sf-dot" style="background:#059669"></span>Ledger-Agnostic <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.1rem">9</span></button>
-      <button class="sf-btn sf-specific" id="sfp-specific" onclick="productsLedger('specific',this)"><span class="sf-dot" style="background:#d97706"></span>Specific Ledger <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.1rem">6</span></button>
+    <div class="sub-filter" id="sf-products">
+      <span class="sf-label">Ledger</span>
+      <button class="sf-btn sf-agnostic active" id="sfp-ag" onclick="productsLedger('agnostic',this)">
+        <span class="sf-dot" style="background:#059669"></span>Ledger-Agnostic
+        <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">9</span>
+      </button>
+      <button class="sf-btn sf-specific" id="sfp-sp" onclick="productsLedger('specific',this)">
+        <span class="sf-dot" style="background:#d97706"></span>Specific Ledger
+        <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">6</span>
+      </button>
       <div class="sf-divider"></div>
-      <input class="sf-search" id="sfp-search" type="text" placeholder="&#128269;  Search products…" oninput="productsRunFilter()"/>
+      <input class="sf-search" id="sfp-q" type="text"
+        placeholder="&#128269;  Search products&hellip;"
+        oninput="productsRunFilter()" />
       <span class="sf-count" id="sf-products-count">Showing <strong>9</strong> of 9</span>
     </div>
-    <div class="col-filter" id="cfp">
+    <div class="col-filter" id="cf-products">
       <span class="cf-label">Filter by</span>
-      <button class="cf-btn active" onclick="productsColFilter('all',this)">All</button>
-      <span id="cfp-agnostic-cols">
-        <button class="cf-btn" onclick="productsColFilter('oid4vc',this)">OID4VC</button>
-        <button class="cf-btn" onclick="productsColFilter('eidas',this)">eIDAS 2.0</button>
-        <button class="cf-btn" onclick="productsColFilter('anoncreds',this)">AnonCreds</button>
-        <button class="cf-btn" onclick="productsColFilter('selfhosted',this)">Self-Hosted</button>
-        <button class="cf-btn" onclick="productsColFilter('free',this)">Free / OSS</button>
-        <button class="cf-btn" onclick="productsColFilter('quote',this)">Quote Only</button>
-        <button class="cf-btn" onclick="productsColFilter('wallet',this)">Holder Wallet</button>
+      <button class="cf-btn active" onclick="productsCol('all',this)">All</button>
+      <span id="cfp-ag">
+        <button class="cf-btn" onclick="productsCol('oid4vc',this)">OID4VC</button>
+        <button class="cf-btn" onclick="productsCol('eidas',this)">eIDAS 2.0</button>
+        <button class="cf-btn" onclick="productsCol('anoncreds',this)">AnonCreds</button>
+        <button class="cf-btn" onclick="productsCol('selfhosted',this)">Self-Hosted</button>
+        <button class="cf-btn" onclick="productsCol('free',this)">Free / OSS</button>
+        <button class="cf-btn" onclick="productsCol('quote',this)">Quote Only</button>
+        <button class="cf-btn" onclick="productsCol('wallet',this)">Holder Wallet</button>
+        <button class="cf-btn" onclick="productsCol('mdl',this)">mDL / ISO 18013</button>
       </span>
-      <span id="cfp-specific-cols" style="display:none">
-        <button class="cf-btn" onclick="productsColFilter('zkp',this)">ZKP / ZK</button>
-        <button class="cf-btn" onclick="productsColFilter('onchain',this)">On-Chain Verify</button>
-        <button class="cf-btn" onclick="productsColFilter('monetize',this)">Monetization</button>
-        <button class="cf-btn" onclick="productsColFilter('mdl',this)">mDL / ISO 18013</button>
-        <button class="cf-btn" onclick="productsColFilter('wallet',this)">Holder Wallet</button>
-        <button class="cf-btn" onclick="productsColFilter('free',this)">Free / OSS</button>
-        <button class="cf-btn" onclick="productsColFilter('quote',this)">Quote Only</button>
+      <span id="cfp-sp" style="display:none">
+        <button class="cf-btn" onclick="productsCol('zkp',this)">ZKP / ZK</button>
+        <button class="cf-btn" onclick="productsCol('onchain',this)">On-Chain Verify</button>
+        <button class="cf-btn" onclick="productsCol('monetize',this)">Monetization</button>
+        <button class="cf-btn" onclick="productsCol('mdl',this)">mDL / ISO 18013</button>
+        <button class="cf-btn" onclick="productsCol('wallet',this)">Holder Wallet</button>
+        <button class="cf-btn" onclick="productsCol('free',this)">Free / OSS</button>
+        <button class="cf-btn" onclick="productsCol('quote',this)">Quote Only</button>
       </span>
     </div>
   </div>
 
   <div class="tbl-wrap">
   <table id="products-table">
-    <thead><tr><th>Company / Product</th><th>Ledger Model</th><th>DID Methods / Ledger</th><th>What It Offers</th><th>Pricing</th><th>Pricing Page</th><th>Website</th><th>Notes</th></tr></thead>
+    <thead><tr><th class="num-col">#</th><th>Company / Product</th><th>Ledger Model</th><th>DID Methods / Ledger</th><th>What It Offers</th><th>Pricing</th><th>Pricing Page</th><th>Website</th><th>Notes</th></tr></thead>
     <tbody>
-      <tr data-ledger="agnostic" data-name="trinsic did:key did:web did:ion">
-        <td>Trinsic</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">did:key · did:web · did:ion</span></td>
-        <td>Identity acceptance network + SaaS APIs for credential issuance and verification. Ledger-less by default; optional did:ion anchoring. Divested SSI assets to Dentity (Dec 2024).</td>
-        <td><span class="b b-blue">Free</span> <span class="b b-blue">$99/mo</span> <span class="b b-slate">Enterprise</span></td>
-        <td><a class="lnk" href="https://trinsic.id/pricing/" target="_blank">trinsic.id/pricing ↗</a></td>
-        <td><a class="lnk" href="https://trinsic.id" target="_blank">trinsic.id ↗</a></td>
-        <td class="notes">Pioneer of ledger-less SSI. Acceptance network covers CLEAR, mDLs, eIDs + decentralized wallets.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="walt.id did:key did:web did:ebsi did:cheqd oid4vc sd-jwt anoncreds">
-        <td>walt.id</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">did:key · did:web · did:ebsi · did:cheqd</span></td>
-        <td>Modular identity infrastructure: issuer, verifier, wallet engine. OSS foundation. Managed SaaS or self-hosted. Supports OID4VC, SD-JWT, JSON-LD, AnonCreds.</td>
-        <td><span class="b b-red">Free OSS</span> <span class="b b-blue">Managed paid</span></td>
-        <td><a class="lnk" href="https://walt.id/pricing" target="_blank">walt.id/pricing ↗</a></td>
-        <td><a class="lnk" href="https://walt.id" target="_blank">walt.id ↗</a></td>
-        <td class="notes">Strong EBSI + eIDAS 2.0 alignment. Widely used in EU Digital Identity pilots.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="paradym animo credo indy did:key did:web cheqd anoncreds json-ld">
-        <td>Paradym (Animo)</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">Indy · did:key · did:web · cheqd</span></td>
-        <td>No-code/low-code SaaS built on Credo (Aries Framework JS). AnonCreds + JSON-LD credential support. Lifecycle management, wallet integration, REST APIs.</td>
-        <td><span class="b b-blue">Free trial</span> <span class="b b-blue">Paid tiers</span></td>
-        <td><a class="lnk" href="https://paradym.id/pricing" target="_blank">paradym.id/pricing ↗</a></td>
-        <td><a class="lnk" href="https://paradym.id" target="_blank">paradym.id ↗</a></td>
-        <td class="notes">Developer-friendly UX. Built on Animo's extensive OSS Aries contributions.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="mattr global did:key did:web did:ion bitcoin ipfs bbs+ json-ld oid4vc">
-        <td>MATTR Global</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">did:key · did:web · did:ion (Bitcoin/IPFS)</span></td>
-        <td>Enterprise SaaS (MATTR VII). BBS+ signatures, JSON-LD, OID4VC. Used for IATA travel credentials and DHS projects.</td>
-        <td><span class="b b-slate">Quote only</span></td>
-        <td><a class="lnk" href="https://mattr.global/contact" target="_blank">mattr.global/contact ↗</a></td>
-        <td><a class="lnk" href="https://mattr.global" target="_blank">mattr.global ↗</a></td>
-        <td class="notes">No public pricing. Deep W3C standards involvement. BBS+ specialty.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="microsoft entra verified id did:web did:ion azure ad oid4vc sd-jwt mdl idemia">
-        <td>Microsoft Entra Verified ID</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">did:web · did:ion</span></td>
-        <td>Azure-hosted VC issuance + verification. Integrates with Azure AD. Selective disclosure, OID4VC, mDL. IDEMIA launch partner (Nov 2025).</td>
-        <td><span class="b b-blue">Free tier</span> <span class="b b-blue">Pay-per-use</span></td>
-        <td><a class="lnk" href="https://azure.microsoft.com/en-us/pricing/" target="_blank">azure.microsoft.com ↗</a></td>
-        <td><a class="lnk" href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-verified-id" target="_blank">microsoft.com ↗</a></td>
-        <td class="notes">Best fit on Azure AD. Strongest enterprise identity integration.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="lissi cloud agent indy networks neosfer main incubator aries">
-        <td>Lissi Cloud Agent</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">Indy networks (multi)</span></td>
-        <td>Institutional cloud agent by Neosfer / Main Incubator. Wallet + issuer + verifier portal. Aries-based, multiple Indy networks. Germany-based, proven production deployments.</td>
-        <td><span class="b b-slate">Quote only</span></td>
-        <td><a class="lnk" href="https://lissi.id/contact" target="_blank">lissi.id/contact ↗</a></td>
-        <td><a class="lnk" href="https://lissi.id" target="_blank">lissi.id ↗</a></td>
-        <td class="notes">Germany-based. Proven wallet portability with Trinsic and esatus.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="miniorange ssi suite wordpress drupal shopify magento java php node">
-        <td>miniOrange SSI Suite</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">W3C multi-method</span></td>
-        <td>SSI integration middleware for WordPress, Drupal, Shopify, Magento, Java, .NET, PHP, Node.js. Digital ID login and access control.</td>
-        <td><span class="b b-blue">Free plugin</span> <span class="b b-blue">Paid enterprise</span></td>
-        <td><a class="lnk" href="https://www.miniorange.com/iam/pricing/" target="_blank">miniorange.com/pricing ↗</a></td>
-        <td><a class="lnk" href="https://www.miniorange.com" target="_blank">miniorange.com ↗</a></td>
-        <td class="notes">Best for adding SSI to existing web stacks without building from scratch.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="sphereon vdx oid4vc siop eidas eudi wallet sprind germany netherlands">
-        <td>Sphereon VDX</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">OID4VC · SIOPv2 · multi-DID</span></td>
-        <td>Enterprise Verifiable Data Exchange. OID4VCI, SIOPv2, OID4VP, eIDAS 2.0, EUDI Wallet. Hybrid cloud + on-prem. OSS SDK + managed SaaS. SPRIND (Germany) selected for EUDI prototyping.</td>
-        <td><span class="b b-red">SDK: OSS</span> <span class="b b-slate">Platform: Quote</span></td>
-        <td><a class="lnk" href="https://sphereon.com/contact" target="_blank">sphereon.com/contact ↗</a></td>
-        <td><a class="lnk" href="https://sphereon.com" target="_blank">sphereon.com ↗</a></td>
-        <td class="notes">Dutch pioneer of OID4VC + Presentation Exchange. Used by Dutch Ministry of Justice.</td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="gataca studio did:gatc did:ebsi eu age verification germany kjm spain fnmt">
-        <td>Gataca Studio</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">did:gatc · did:ebsi</span></td>
-        <td>EU SSI SaaS: issuance, verification, ID wallet. KJM-approved age verification for Germany. Spanish FNMT university pilot and WE-BUILD EU consortium.</td>
-        <td><span class="b b-slate">Quote only</span></td>
-        <td><a class="lnk" href="https://gataca.io/pricing" target="_blank">gataca.io/pricing ↗</a></td>
-        <td><a class="lnk" href="https://gataca.io" target="_blank">gataca.io ↗</a></td>
-        <td class="notes">Spain-based. Only KJM-approved SSI age verifier in Germany. Deep EU regulatory alignment.</td>
-      </tr>
-      <tr data-ledger="specific" data-name="cheqd studio cosmos sdk anoncreds trust registry monetization dock">
-        <td>cheqd Studio</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">cheqd Network (Cosmos SDK)</span></td>
-        <td>VC issuance + verification SaaS on cheqd network. First to decouple AnonCreds from Hyperledger Indy. Trust Registry, DID management, status lists. Dock Labs migrated here in 2024 merger.</td>
-        <td><span class="b b-blue">Free tier</span> <span class="b b-blue">On-chain tx fees</span></td>
-        <td><a class="lnk" href="https://cheqd.io/pricing" target="_blank">cheqd.io/pricing ↗</a></td>
-        <td><a class="lnk" href="https://cheqd.io" target="_blank">cheqd.io ↗</a></td>
-        <td class="notes">Growing ecosystem hub. Dock, Truvera migrated to cheqd as registry layer.</td>
-      </tr>
-      <tr data-ledger="specific" data-name="truvera dock labs cheqd biometric monetization zkp reusable id">
-        <td>Truvera (Dock Labs)</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">cheqd Network · did:key</span></td>
-        <td>Reusable digital ID platform. Issue/verify VCs, biometric-bound credentials, selective disclosure, ZKPs. REST API + Workspace + Wallet SDK. Unique: credential monetization per verification.</td>
-        <td><span class="b b-blue">Free trial</span> <span class="b b-slate">Contact for plans</span></td>
-        <td><a class="lnk" href="https://www.dock.io/pricing" target="_blank">dock.io/pricing ↗</a></td>
-        <td><a class="lnk" href="https://www.dock.io" target="_blank">dock.io ↗</a></td>
-        <td class="notes">Unique monetization model. Biometric binding vs deepfakes. Healthcare, finance, education.</td>
-      </tr>
-      <tr data-ledger="specific" data-name="hyperledger identus atala prism saas cardano iog scala rest aries">
-        <td>Hyperledger Identus SaaS</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Cardano blockchain</span></td>
-        <td>OSS enterprise SSI agent (contributed by IOG to Hyperledger, Dec 2023). REST API, W3C DID + VC, Aries RFCs. Scala. Long-term multi-chain vision.</td>
-        <td><span class="b b-red">Open Source</span> <span class="b b-slate">IOG commercial support</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td>
-        <td><a class="lnk" href="https://hyperledger.github.io/identus/" target="_blank">identus ↗</a></td>
-        <td class="notes">Cardano-native. Powers government identity pilots. Strong IOG research backing.</td>
-      </tr>
-      <tr data-ledger="specific" data-name="privado id polygon id zk evm iden3 circom hsbc bhutan ndi on-chain">
-        <td>Privado ID (ex-Polygon ID)</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Polygon · EVM-compatible chains</span></td>
-        <td>ZK-powered SSI: on-chain VC verification using zero-knowledge proofs. First ZK-native identity platform. Spun out from Polygon Labs (Jun 2024) to become multi-chain EVM. Used by HSBC, Bhutan NDI.</td>
-        <td><span class="b b-red">Open Source</span> <span class="b b-slate">Enterprise via partners</span></td>
-        <td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td>
-        <td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td>
-        <td class="notes">ZK-first differentiator. Iden3 + Circom. Most advanced ZK credential verification.</td>
-      </tr>
-      <tr data-ledger="specific" data-name="spruceid ethereum did:ethr did:pkh siwe sign-in w3c">
-        <td>SpruceID</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Ethereum (did:ethr · did:pkh)</span></td>
-        <td>SSI auth and VC products centered on Ethereum. Created Sign-In with Ethereum (SIWE). VCs, data vaults. Developer + enterprise focus. W3C standards compliant.</td>
-        <td><span class="b b-red">OSS core</span> <span class="b b-slate">Enterprise paid</span></td>
-        <td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td>
-        <td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td>
-        <td class="notes">Created Sign-In with Ethereum standard. Strong Web3-native developer community.</td>
-      </tr>
-      <tr data-ledger="specific" data-name="procivis one swiss eid mdl eidas government national identity wallet">
-        <td>Procivis One</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Swiss / permissioned national ledgers</span></td>
-        <td>Government-grade SSI SaaS. Swiss eID, mDL (ISO 18013-5), eIDAS 2.0. Full stack: issuance, holder wallet, verifier SDK. Designed for national digital identity programs.</td>
-        <td><span class="b b-slate">Quote only (gov/enterprise)</span></td>
-        <td><a class="lnk" href="https://procivis.ch/en/contact" target="_blank">procivis.ch/contact ↗</a></td>
-        <td><a class="lnk" href="https://procivis.ch" target="_blank">procivis.ch ↗</a></td>
-        <td class="notes">Swiss company. Government-grade security. National ID program deployments.</td>
-      </tr>
+<tr data-ledger="agnostic" data-name="trinsic did:key did:web did:ion" data-col="type-product oid4vc wallet free"><td class="num"></td><td>Trinsic</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">did:key · did:web · did:ion</span></td><td>Identity acceptance network + SaaS APIs for credential issuance and verification. Ledger-less by default; optional did:ion anchoring. Divested SSI assets to Dentity (Dec 2024).</td><td><span class="b b-blue">Free</span> <span class="b b-blue">$99/mo</span> <span class="b b-slate">Enterprise</span></td><td><a class="lnk" href="https://trinsic.id/pricing/" target="_blank">trinsic.id/pricing ↗</a></td><td><a class="lnk" href="https://trinsic.id" target="_blank">trinsic.id ↗</a></td><td class="notes">Pioneer of ledger-less SSI. Acceptance network covers CLEAR, mDLs, eIDs + decentralized wallets.</td></tr>
+<tr data-ledger="agnostic" data-name="walt.id did:key did:web did:ebsi did:cheqd oid4vc sd-jwt anoncreds" data-col="type-product oid4vc eidas anoncreds selfhosted free wallet"><td class="num"></td><td>walt.id</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">did:key · did:web · did:ebsi · did:cheqd</span></td><td>Modular identity infrastructure: issuer, verifier, wallet engine. OSS foundation. Managed SaaS or self-hosted. Supports OID4VC, SD-JWT, JSON-LD, AnonCreds.</td><td><span class="b b-red">Free OSS</span> <span class="b b-blue">Managed paid</span></td><td><a class="lnk" href="https://walt.id/pricing" target="_blank">walt.id/pricing ↗</a></td><td><a class="lnk" href="https://walt.id" target="_blank">walt.id ↗</a></td><td class="notes">Strong EBSI + eIDAS 2.0 alignment. Widely used in EU Digital Identity pilots.</td></tr>
+<tr data-ledger="agnostic" data-name="paradym animo credo indy did:key did:web cheqd anoncreds json-ld" data-col="type-product oid4vc anoncreds selfhosted free wallet"><td class="num"></td><td>Paradym (Animo)</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">Indy · did:key · did:web · cheqd</span></td><td>No-code/low-code SaaS built on Credo (Aries Framework JS). AnonCreds + JSON-LD credential support. Lifecycle management, wallet integration, REST APIs.</td><td><span class="b b-blue">Free trial</span> <span class="b b-blue">Paid tiers</span></td><td><a class="lnk" href="https://paradym.id/pricing" target="_blank">paradym.id/pricing ↗</a></td><td><a class="lnk" href="https://paradym.id" target="_blank">paradym.id ↗</a></td><td class="notes">Developer-friendly UX. Built on Animo's extensive OSS Aries contributions.</td></tr>
+<tr data-ledger="agnostic" data-name="mattr global did:key did:web did:ion bitcoin ipfs bbs+ json-ld oid4vc" data-col="type-product oid4vc eidas wallet quote"><td class="num"></td><td>MATTR Global</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">did:key · did:web · did:ion (Bitcoin/IPFS)</span></td><td>Enterprise SaaS (MATTR VII). BBS+ signatures, JSON-LD, OID4VC. Used for IATA travel credentials and DHS projects.</td><td><span class="b b-slate">Quote only</span></td><td><a class="lnk" href="https://mattr.global/contact" target="_blank">mattr.global/contact ↗</a></td><td><a class="lnk" href="https://mattr.global" target="_blank">mattr.global ↗</a></td><td class="notes">No public pricing. Deep W3C standards involvement. BBS+ specialty.</td></tr>
+<tr data-ledger="agnostic" data-name="microsoft entra verified id did:web did:ion azure ad oid4vc sd-jwt mdl idemia" data-col="type-product oid4vc eidas wallet mdl free"><td class="num"></td><td>Microsoft Entra Verified ID</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">did:web · did:ion</span></td><td>Azure-hosted VC issuance + verification. Integrates with Azure AD. Selective disclosure, OID4VC, mDL. IDEMIA launch partner (Nov 2025).</td><td><span class="b b-blue">Free tier</span> <span class="b b-blue">Pay-per-use</span></td><td><a class="lnk" href="https://azure.microsoft.com/en-us/pricing/" target="_blank">azure.microsoft.com ↗</a></td><td><a class="lnk" href="https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-verified-id" target="_blank">microsoft.com ↗</a></td><td class="notes">Best fit on Azure AD. Strongest enterprise identity integration.</td></tr>
+<tr data-ledger="agnostic" data-name="lissi cloud agent indy networks neosfer main incubator aries" data-col="type-product anoncreds wallet quote"><td class="num"></td><td>Lissi Cloud Agent</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">Indy networks (multi)</span></td><td>Institutional cloud agent by Neosfer / Main Incubator. Wallet + issuer + verifier portal. Aries-based, multiple Indy networks. Germany-based, proven production deployments.</td><td><span class="b b-slate">Quote only</span></td><td><a class="lnk" href="https://lissi.id/contact" target="_blank">lissi.id/contact ↗</a></td><td><a class="lnk" href="https://lissi.id" target="_blank">lissi.id ↗</a></td><td class="notes">Germany-based. Proven wallet portability with Trinsic and esatus.</td></tr>
+<tr data-ledger="agnostic" data-name="miniorange ssi suite wordpress drupal shopify magento java php node" data-col="type-product free selfhosted"><td class="num"></td><td>miniOrange SSI Suite</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">W3C multi-method</span></td><td>SSI integration middleware for WordPress, Drupal, Shopify, Magento, Java, .NET, PHP, Node.js. Digital ID login and access control.</td><td><span class="b b-blue">Free plugin</span> <span class="b b-blue">Paid enterprise</span></td><td><a class="lnk" href="https://www.miniorange.com/iam/pricing/" target="_blank">miniorange.com/pricing ↗</a></td><td><a class="lnk" href="https://www.miniorange.com" target="_blank">miniorange.com ↗</a></td><td class="notes">Best for adding SSI to existing web stacks without building from scratch.</td></tr>
+<tr data-ledger="agnostic" data-name="sphereon vdx oid4vc siop eidas eudi wallet sprind germany netherlands" data-col="type-product oid4vc eidas selfhosted wallet quote"><td class="num"></td><td>Sphereon VDX</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">OID4VC · SIOPv2 · multi-DID</span></td><td>Enterprise Verifiable Data Exchange. OID4VCI, SIOPv2, OID4VP, eIDAS 2.0, EUDI Wallet. Hybrid cloud + on-prem. OSS SDK + managed SaaS. SPRIND (Germany) selected for EUDI prototyping.</td><td><span class="b b-red">SDK: OSS</span> <span class="b b-slate">Platform: Quote</span></td><td><a class="lnk" href="https://sphereon.com/contact" target="_blank">sphereon.com/contact ↗</a></td><td><a class="lnk" href="https://sphereon.com" target="_blank">sphereon.com ↗</a></td><td class="notes">Dutch pioneer of OID4VC + Presentation Exchange. Used by Dutch Ministry of Justice.</td></tr>
+<tr data-ledger="agnostic" data-name="gataca studio did:gatc did:ebsi eu age verification germany kjm spain fnmt" data-col="type-product oid4vc eidas wallet mdl quote"><td class="num"></td><td>Gataca Studio</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">did:gatc · did:ebsi</span></td><td>EU SSI SaaS: issuance, verification, ID wallet. KJM-approved age verification for Germany. Spanish FNMT university pilot and WE-BUILD EU consortium.</td><td><span class="b b-slate">Quote only</span></td><td><a class="lnk" href="https://gataca.io/pricing" target="_blank">gataca.io/pricing ↗</a></td><td><a class="lnk" href="https://gataca.io" target="_blank">gataca.io ↗</a></td><td class="notes">Spain-based. Only KJM-approved SSI age verifier in Germany. Deep EU regulatory alignment.</td></tr>
+<tr data-ledger="specific" data-name="cheqd studio cosmos sdk anoncreds trust registry monetization dock" data-col="type-product anoncreds onchain free wallet"><td class="num"></td><td>cheqd Studio</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">cheqd Network (Cosmos SDK)</span></td><td>VC issuance + verification SaaS on cheqd network. First to decouple AnonCreds from Hyperledger Indy. Trust Registry, DID management, status lists. Dock Labs migrated here in 2024 merger.</td><td><span class="b b-blue">Free tier</span> <span class="b b-blue">On-chain tx fees</span></td><td><a class="lnk" href="https://cheqd.io/pricing" target="_blank">cheqd.io/pricing ↗</a></td><td><a class="lnk" href="https://cheqd.io" target="_blank">cheqd.io ↗</a></td><td class="notes">Growing ecosystem hub. Dock, Truvera migrated to cheqd as registry layer.</td></tr>
+<tr data-ledger="specific" data-name="truvera dock labs cheqd biometric monetization zkp reusable id" data-col="type-product zkp monetize wallet free"><td class="num"></td><td>Truvera (Dock Labs)</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">cheqd Network · did:key</span></td><td>Reusable digital ID platform. Issue/verify VCs, biometric-bound credentials, selective disclosure, ZKPs. REST API + Workspace + Wallet SDK. Unique: credential monetization per verification.</td><td><span class="b b-blue">Free trial</span> <span class="b b-slate">Contact for plans</span></td><td><a class="lnk" href="https://www.dock.io/pricing" target="_blank">dock.io/pricing ↗</a></td><td><a class="lnk" href="https://www.dock.io" target="_blank">dock.io ↗</a></td><td class="notes">Unique monetization model. Biometric binding vs deepfakes. Healthcare, finance, education.</td></tr>
+<tr data-ledger="specific" data-name="hyperledger identus atala prism saas cardano iog scala rest aries" data-col="type-product anoncreds free selfhosted"><td class="num"></td><td>Hyperledger Identus SaaS</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Cardano blockchain</span></td><td>OSS enterprise SSI agent (contributed by IOG to Hyperledger, Dec 2023). REST API, W3C DID + VC, Aries RFCs. Scala. Long-term multi-chain vision.</td><td><span class="b b-red">Open Source</span> <span class="b b-slate">IOG commercial support</span></td><td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td><td><a class="lnk" href="https://hyperledger.github.io/identus/" target="_blank">identus ↗</a></td><td class="notes">Cardano-native. Powers government identity pilots. Strong IOG research backing.</td></tr>
+<tr data-ledger="specific" data-name="privado id polygon id zk evm iden3 circom hsbc bhutan ndi on-chain" data-col="type-product zkp onchain free wallet"><td class="num"></td><td>Privado ID (ex-Polygon ID)</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Polygon · EVM-compatible chains</span></td><td>ZK-powered SSI: on-chain VC verification using zero-knowledge proofs. First ZK-native identity platform. Spun out from Polygon Labs (Jun 2024) to become multi-chain EVM. Used by HSBC, Bhutan NDI.</td><td><span class="b b-red">Open Source</span> <span class="b b-slate">Enterprise via partners</span></td><td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td><td><a class="lnk" href="https://privado.id" target="_blank">privado.id ↗</a></td><td class="notes">ZK-first differentiator. Iden3 + Circom. Most advanced ZK credential verification.</td></tr>
+<tr data-ledger="specific" data-name="spruceid ethereum did:ethr did:pkh siwe sign-in w3c" data-col="type-product onchain free selfhosted"><td class="num"></td><td>SpruceID</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Ethereum (did:ethr · did:pkh)</span></td><td>SSI auth and VC products centered on Ethereum. Created Sign-In with Ethereum (SIWE). VCs, data vaults. Developer + enterprise focus. W3C standards compliant.</td><td><span class="b b-red">OSS core</span> <span class="b b-slate">Enterprise paid</span></td><td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td><td><a class="lnk" href="https://spruceid.com" target="_blank">spruceid.com ↗</a></td><td class="notes">Created Sign-In with Ethereum standard. Strong Web3-native developer community.</td></tr>
+<tr data-ledger="specific" data-name="procivis one swiss eid mdl eidas government national identity wallet" data-col="type-product eidas mdl wallet quote"><td class="num"></td><td>Procivis One</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Swiss / permissioned national ledgers</span></td><td>Government-grade SSI SaaS. Swiss eID, mDL (ISO 18013-5), eIDAS 2.0. Full stack: issuance, holder wallet, verifier SDK. Designed for national digital identity programs.</td><td><span class="b b-slate">Quote only (gov/enterprise)</span></td><td><a class="lnk" href="https://procivis.ch/en/contact" target="_blank">procivis.ch/contact ↗</a></td><td><a class="lnk" href="https://procivis.ch" target="_blank">procivis.ch ↗</a></td><td class="notes">Swiss company. Government-grade security. National ID program deployments.</td></tr>
 </tbody>
   </table>
   </div>
 </div><!-- /panel-1 -->
+
 
 <!-- ══════════════════════════════════════════ -->
 <!-- PANEL 2 · DEV TOOLS                       -->
@@ -1416,219 +398,76 @@ a.lnk: hover {
     <div class="sec-desc">17 open-source tools and infrastructure projects. Use the primary filter to separate multi-registry tools from single-chain ones.</div>
   </div>
 
+    <!-- DEVTOOLS FILTER: Row 1 = Ledger · Row 2 = Column attributes -->
   <div class="filter-stack">
-    <div class="sub-filter" id="sf-devtools" style="border-radius:var(--r-lg) var(--r-lg) 0 0;margin-bottom:0">
-      <span class="sf-label">Ledger Model</span>
-      <button class="sf-btn sf-agnostic active" id="sfd-agnostic" onclick="devtoolsLedger('agnostic',this)"><span class="sf-dot" style="background:#059669"></span>Ledger-Agnostic <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.1rem">9</span></button>
-      <button class="sf-btn sf-specific" id="sfd-specific" onclick="devtoolsLedger('specific',this)"><span class="sf-dot" style="background:#d97706"></span>Specific Ledger <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.1rem">8</span></button>
+    <div class="sub-filter" id="sf-devtools">
+      <span class="sf-label">Ledger</span>
+      <button class="sf-btn sf-agnostic active" id="sfd-ag" onclick="devtoolsLedger('agnostic',this)">
+        <span class="sf-dot" style="background:#059669"></span>Ledger-Agnostic
+        <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">9</span>
+      </button>
+      <button class="sf-btn sf-specific" id="sfd-sp" onclick="devtoolsLedger('specific',this)">
+        <span class="sf-dot" style="background:#d97706"></span>Specific Ledger
+        <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">8</span>
+      </button>
       <div class="sf-divider"></div>
-      <input class="sf-search" id="sfd-search" type="text" placeholder="&#128269;  Search tools…" oninput="devtoolsRunFilter()"/>
+      <input class="sf-search" id="sfd-q" type="text"
+        placeholder="&#128269;  Search tools&hellip;"
+        oninput="devtoolsRunFilter()" />
       <span class="sf-count" id="sf-devtools-count">Showing <strong>9</strong> of 9</span>
     </div>
-    <div class="col-filter" id="cfd">
+    <div class="col-filter" id="cf-devtools">
       <span class="cf-label">Filter by</span>
-      <button class="cf-btn active" onclick="devtoolsColFilter('all',this)">All</button>
-      <span id="cfd-agnostic-cols">
-        <button class="cf-btn" onclick="devtoolsColFilter('framework',this)">Framework</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('sdk',this)">SDK / Library</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('protocol',this)">Protocol</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('resolution',this)">Resolution</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('mobile',this)">Mobile / RN</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('oid4vc',this)">OID4VC</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('didcomm',this)">DIDComm</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('python',this)">Python</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('typescript',this)">TypeScript / JS</button>
+      <button class="cf-btn active" onclick="devtoolsCol('all',this)">All</button>
+      <span id="cfd-ag">
+        <button class="cf-btn" onclick="devtoolsCol('framework',this)">Framework</button>
+        <button class="cf-btn" onclick="devtoolsCol('sdk',this)">SDK / Library</button>
+        <button class="cf-btn" onclick="devtoolsCol('protocol',this)">Protocol</button>
+        <button class="cf-btn" onclick="devtoolsCol('resolution',this)">Resolution</button>
+        <button class="cf-btn" onclick="devtoolsCol('mobile',this)">Mobile / RN</button>
+        <button class="cf-btn" onclick="devtoolsCol('oid4vc',this)">OID4VC</button>
+        <button class="cf-btn" onclick="devtoolsCol('didcomm',this)">DIDComm</button>
+        <button class="cf-btn" onclick="devtoolsCol('python',this)">Python</button>
+        <button class="cf-btn" onclick="devtoolsCol('typescript',this)">TypeScript / JS</button>
       </span>
-      <span id="cfd-specific-cols" style="display:none">
-        <button class="cf-btn" onclick="devtoolsColFilter('blockchain',this)">Blockchain / Ledger</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('ledger-infra',this)">Public Infra</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('zkp',this)">ZKP / ZK</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('anoncreds',this)">AnonCreds</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('ethereum',this)">Ethereum / EVM</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('eu',this)">EU / EBSI</button>
-        <button class="cf-btn" onclick="devtoolsColFilter('government',this)">Government</button>
+      <span id="cfd-sp" style="display:none">
+        <button class="cf-btn" onclick="devtoolsCol('blockchain',this)">Blockchain</button>
+        <button class="cf-btn" onclick="devtoolsCol('ledger-infra',this)">Public Infra / Network</button>
+        <button class="cf-btn" onclick="devtoolsCol('zkp',this)">ZKP / ZK</button>
+        <button class="cf-btn" onclick="devtoolsCol('anoncreds',this)">AnonCreds</button>
+        <button class="cf-btn" onclick="devtoolsCol('ethereum',this)">Ethereum / EVM</button>
+        <button class="cf-btn" onclick="devtoolsCol('eu',this)">EU / EBSI</button>
+        <button class="cf-btn" onclick="devtoolsCol('government',this)">Government</button>
       </span>
     </div>
   </div>
 
   <div class="tbl-wrap">
   <table id="devtools-table">
-    <thead><tr><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Type</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
+    <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Type</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
     <tbody>
-      <tr data-ledger="agnostic" data-name="hyperledger aries aca-py python bc gov indy did:key did:web cheqd didcomm anoncreds">
-        <td>Hyperledger Aries / ACA-Py</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">Indy · did:key · did:web · cheqd</span></td>
-        <td>Linux Foundation / BC Gov</td>
-        <td><span class="b b-cyan">Framework · Python</span></td>
-        <td>Mature SSI agent for non-mobile. DIDComm v1+v2. Production-proven at national scale (NHS, IATA). Ledger-agnostic by design.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/aries-cloudagent-python" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="credo aries framework js typescript react native animo indy cheqd did:key did:web did:peer anoncreds sd-jwt">
-        <td>Credo (Aries Framework JS)</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">Indy · cheqd · did:key · did:web · did:peer</span></td>
-        <td>Animo + community</td>
-        <td><span class="b b-cyan">Framework · TypeScript</span></td>
-        <td>TypeScript/JavaScript SSI agent. Works on mobile (React Native) and server. AnonCreds, JSON-LD, SD-JWT. Powers Paradym SaaS.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://credo.js.org" target="_blank">credo.js.org ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="veramo sdk typescript consensys plugin did:ethr did:key did:web did:ebsi jwt json-ld eip-712">
-        <td>Veramo</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">did:ethr · did:key · did:web · did:ebsi · 20+ methods</span></td>
-        <td>Consensys Mesh</td>
-        <td><span class="b b-cyan">SDK · TypeScript</span></td>
-        <td>Plugin-based modular DID + VC framework. Highly extensible. Supports JWT, JSON-LD, EIP-712. Powers Sphereon SSI-SDK.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://veramo.io" target="_blank">veramo.io ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="sphereon ssi-sdk typescript oid4vc siop presentation exchange bbs+ eidas react native node">
-        <td>Sphereon SSI-SDK</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">Multi-method via Veramo</span></td>
-        <td>Sphereon</td>
-        <td><span class="b b-cyan">SDK · TypeScript</span></td>
-        <td>Built on Veramo. Adds OID4VCI, SIOPv2, OID4VP, BBS+, Presentation Exchange, eIDAS AES/QES. React Native + Node.js + browser. OSS base of Sphereon VDX.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://github.com/Sphereon-Opensource/SSI-SDK" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="walt.id ssi kit cli kotlin rest cheqd ebsi did:key did:web oid4vc sd-jwt json-ld anoncreds">
-        <td>walt.id SSI Kit</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">cheqd · EBSI · did:key · did:web</span></td>
-        <td>walt.id</td>
-        <td><span class="b b-cyan">SDK / CLI · Kotlin</span></td>
-        <td>Issue, verify, manage VCs across multiple registries. REST API and CLI. OID4VC, JSON-LD, SD-JWT. OSS base of walt.id managed SaaS.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://docs.walt.id" target="_blank">docs.walt.id ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="dif universal resolver did resolution 50 methods agnostic interoperability">
-        <td>DIF Universal Resolver</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">50+ DID methods</span></td>
-        <td>Decentralized Identity Foundation</td>
-        <td><span class="b b-cyan">Resolution Service</span></td>
-        <td>Universal DID resolution service. Resolves any registered DID method to a DID document. Foundation of SSI interoperability. Self-hostable.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://dev.uniresolver.io" target="_blank">dev.uniresolver.io ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="keri keripy gleif vlei ledgerless no blockchain key event receipt infrastructure gleif">
-        <td>KERI / keripy</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">No blockchain required</span></td>
-        <td>GLEIF / DIF</td>
-        <td><span class="b b-cyan">Protocol + Library · Python</span></td>
-        <td>Key Event Receipt Infrastructure — fully ledger-less identity. No blockchain dependency. Powers GLEIF's vLEI (verifiable Legal Entity Identifier) program globally.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://keri.one" target="_blank">keri.one ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="sidetree protocol dif bitcoin ethereum did:ion did:orb microsoft dpki scalable">
-        <td>Sidetree Protocol</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">Any DLT (Bitcoin · Ethereum · IPFS)</span></td>
-        <td>Decentralized Identity Foundation</td>
-        <td><span class="b b-cyan">Protocol Layer</span></td>
-        <td>Scalable DPKI protocol on top of any DLT. Batches DID operations for efficiency. Powers did:ion (Microsoft/Bitcoin) and did:orb. Open protocol specification.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation ↗</a></td>
-      </tr>
-      <tr data-ledger="agnostic" data-name="tno eassi gateway multi-technology netherlands irma indy trinsic gataca walt.id government healthcare">
-        <td>TNO EASSI</td>
-        <td><span class="b b-green">Agnostic</span></td>
-        <td><span class="lp">IRMA · Indy · Trinsic · Gataca · walt.id</span></td>
-        <td>TNO (Netherlands)</td>
-        <td><span class="b b-cyan">Gateway / Middleware</span></td>
-        <td>Multi-technology SSI gateway. Issues and verifies credentials across multiple SSI ecosystems from a single API. Used in Dutch government and healthcare projects.</td>
-        <td><span class="b b-slate">R&amp;D / Gov partnerships</span></td>
-        <td><a class="lnk" href="https://eassi.ssi-lab.nl" target="_blank">eassi.ssi-lab.nl ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="hyperledger indy node sovrin ledger purpose-built dlt anoncreds 2016">
-        <td>Hyperledger Indy</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Indy ledger (Sovrin, etc.)</span></td>
-        <td>Linux Foundation</td>
-        <td><span class="b b-violet">Blockchain + SDK</span></td>
-        <td>Purpose-built DLT for SSI (2016). First production-grade SSI solution. Powers Sovrin. Origin of AnonCreds. Architecture being modernized via Indy on Besu.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/indy-node" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="hyperledger indy on besu ethereum evm did:indy:besu qbft solidity smart contracts dsr corp 2025">
-        <td>Hyperledger Indy on Besu</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Ethereum / Hyperledger Besu</span></td>
-        <td>Linux Foundation / DSR Corp</td>
-        <td><span class="b b-violet">Blockchain Framework</span></td>
-        <td>Indy business logic on Besu EVM. did:indy:besu. QBFT consensus. Permissioned + permissionless modes. Solidity smart contracts for DID + AnonCreds registries. Launched Apr 2025.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/indy-besu" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="hyperledger identus sdk cardano atala prism iog scala kotlin rest aries oid4vc w3c">
-        <td>Hyperledger Identus SDK</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Cardano blockchain</span></td>
-        <td>IOG / Hyperledger Foundation</td>
-        <td><span class="b b-violet">Agent SDK · Scala/Kotlin</span></td>
-        <td>Full enterprise SSI SDK for Cardano. REST API, W3C DID + VC, Aries RFCs, OID4VC. Contributed by IOG (Dec 2023). Vision: support multiple chains long-term.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="anoncreds rs rust indy cheqd cl signatures zkp selective disclosure predicates anonymous credentials">
-        <td>AnonCreds RS</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Indy primary · cheqd expanding</span></td>
-        <td>Linux Foundation</td>
-        <td><span class="b b-violet">Credential Library · Rust</span></td>
-        <td>Reference implementation of AnonCreds in Rust. CL-signatures, ZK proofs, selective disclosure, predicates. Originally Indy-only; cheqd first to decouple this dependency.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://github.com/hyperledger/anoncreds-rs" target="_blank">GitHub ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="sovrin network indy public permissioned stewards foundation ledger global" data-col="ledger-infra anoncreds government">
-        <td>Sovrin Network</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Hyperledger Indy ledger</span></td>
-        <td>Sovrin Foundation</td>
-        <td><span class="b b-violet">Public Permissioned Ledger</span></td>
-        <td>Global public utility for SSI. Run by Sovrin Stewards worldwide. Universal DID discovery and credential schema registry. Most widely deployed Indy production network.</td>
-        <td><span class="b b-blue">Free read · Tx fees for writes</span></td>
-        <td><a class="lnk" href="https://sovrin.org" target="_blank">sovrin.org ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="ebsi did:ebsi european blockchain services infrastructure eidas 2.0 eudi wallet eu commission large scale pilots 2026">
-        <td>EBSI (did:ebsi)</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">EU Blockchain Services Infrastructure</span></td>
-        <td>European Commission</td>
-        <td><span class="b b-violet">Public Permissioned Ledger</span></td>
-        <td>EU-mandated registry for EUDI Wallet / eIDAS 2.0 conformance. Large Scale Pilots across 26 EU member states. Nationwide rollout by 2026.</td>
-        <td><span class="b b-red">Free (EU public infrastructure)</span></td>
-        <td><a class="lnk" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="privado id polygon id tools iden3 circom zk evm hsbc bhutan ndi on-chain verification issuer node" data-col="blockchain ethereum zkp sdk">
-        <td>Privado ID / Polygon ID Tools</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">Polygon · EVM-compatible chains</span></td>
-        <td>Privado ID (ex-Polygon Labs)</td>
-        <td><span class="b b-violet">SDK + Toolset</span></td>
-        <td>Iden3 protocol libraries, Circom ZK toolkit, issuer node, verifier SDK. On-chain VC verification with ZK proofs. Post-separation (2024), supports multiple EVM chains. Used by HSBC and Bhutan NDI.</td>
-        <td><span class="b b-red">Free / OSS</span></td>
-        <td><a class="lnk" href="https://privado.id/docs" target="_blank">privado.id/docs ↗</a></td>
-      </tr>
-      <tr data-ledger="specific" data-name="quarkid buenos aires argentina zksync ethereum l2 government miba extrimian 3.6m residents 2024" data-col="blockchain ethereum government">
-        <td>QuarkID</td>
-        <td><span class="b b-amber">Specific</span></td>
-        <td><span class="lp">ZKsync (Ethereum L2)</span></td>
-        <td>Buenos Aires Gov + Extrimian</td>
-        <td><span class="b b-violet">Protocol + Toolkit</span></td>
-        <td>SSI protocol powering Buenos Aires official government wallet (miBA). 3.6M+ residents since Oct 2024. First large-scale government SSI on an Ethereum L2. Expanding to other Argentine provinces.</td>
-        <td><span class="b b-red">Open Source / Gov-funded</span></td>
-        <td><a class="lnk" href="https://quarkid.org" target="_blank">quarkid.org ↗</a></td>
-      </tr>
+<tr data-ledger="agnostic" data-name="hyperledger aries aca-py python bc gov indy did:key did:web cheqd didcomm anoncreds" data-col="type-devtool framework didcomm anoncreds python oid4vc"><td class="num"></td><td>Hyperledger Aries / ACA-Py</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">Indy · did:key · did:web · cheqd</span></td><td>Linux Foundation / BC Gov</td><td><span class="b b-cyan">Framework · Python</span></td><td>Mature SSI agent for non-mobile. DIDComm v1+v2. Production-proven at national scale (NHS, IATA). Ledger-agnostic by design.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://github.com/hyperledger/aries-cloudagent-python" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="credo aries framework js typescript react native animo indy cheqd did:key did:web did:peer anoncreds sd-jwt" data-col="type-devtool framework sdk typescript mobile anoncreds didcomm oid4vc"><td class="num"></td><td>Credo (Aries Framework JS)</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">Indy · cheqd · did:key · did:web · did:peer</span></td><td>Animo + community</td><td><span class="b b-cyan">Framework · TypeScript</span></td><td>TypeScript/JavaScript SSI agent. Works on mobile (React Native) and server. AnonCreds, JSON-LD, SD-JWT. Powers Paradym SaaS.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://credo.js.org" target="_blank">credo.js.org ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="veramo sdk typescript consensys plugin did:ethr did:key did:web did:ebsi jwt json-ld eip-712" data-col="type-devtool sdk typescript oid4vc mobile"><td class="num"></td><td>Veramo</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">did:ethr · did:key · did:web · did:ebsi · 20+ methods</span></td><td>Consensys Mesh</td><td><span class="b b-cyan">SDK · TypeScript</span></td><td>Plugin-based modular DID + VC framework. Highly extensible. Supports JWT, JSON-LD, EIP-712. Powers Sphereon SSI-SDK.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://veramo.io" target="_blank">veramo.io ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="sphereon ssi-sdk typescript oid4vc siop presentation exchange bbs+ eidas react native node" data-col="type-devtool sdk typescript oid4vc eidas mobile"><td class="num"></td><td>Sphereon SSI-SDK</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">Multi-method via Veramo</span></td><td>Sphereon</td><td><span class="b b-cyan">SDK · TypeScript</span></td><td>Built on Veramo. Adds OID4VCI, SIOPv2, OID4VP, BBS+, Presentation Exchange, eIDAS AES/QES. React Native + Node.js + browser. OSS base of Sphereon VDX.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://github.com/Sphereon-Opensource/SSI-SDK" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="walt.id ssi kit cli kotlin rest cheqd ebsi did:key did:web oid4vc sd-jwt json-ld anoncreds" data-col="type-devtool sdk oid4vc eidas"><td class="num"></td><td>walt.id SSI Kit</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">cheqd · EBSI · did:key · did:web</span></td><td>walt.id</td><td><span class="b b-cyan">SDK / CLI · Kotlin</span></td><td>Issue, verify, manage VCs across multiple registries. REST API and CLI. OID4VC, JSON-LD, SD-JWT. OSS base of walt.id managed SaaS.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://docs.walt.id" target="_blank">docs.walt.id ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="dif universal resolver did resolution 50 methods agnostic interoperability" data-col="type-devtool resolution"><td class="num"></td><td>DIF Universal Resolver</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">50+ DID methods</span></td><td>Decentralized Identity Foundation</td><td><span class="b b-cyan">Resolution Service</span></td><td>Universal DID resolution service. Resolves any registered DID method to a DID document. Foundation of SSI interoperability. Self-hostable.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://dev.uniresolver.io" target="_blank">dev.uniresolver.io ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="keri keripy gleif vlei ledgerless no blockchain key event receipt infrastructure gleif" data-col="type-devtool protocol"><td class="num"></td><td>KERI / keripy</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">No blockchain required</span></td><td>GLEIF / DIF</td><td><span class="b b-cyan">Protocol + Library · Python</span></td><td>Key Event Receipt Infrastructure — fully ledger-less identity. No blockchain dependency. Powers GLEIF's vLEI (verifiable Legal Entity Identifier) program globally.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://keri.one" target="_blank">keri.one ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="sidetree protocol dif bitcoin ethereum did:ion did:orb microsoft dpki scalable" data-col="type-devtool protocol"><td class="num"></td><td>Sidetree Protocol</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">Any DLT (Bitcoin · Ethereum · IPFS)</span></td><td>Decentralized Identity Foundation</td><td><span class="b b-cyan">Protocol Layer</span></td><td>Scalable DPKI protocol on top of any DLT. Batches DID operations for efficiency. Powers did:ion (Microsoft/Bitcoin) and did:orb. Open protocol specification.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation ↗</a></td></tr>
+<tr data-ledger="agnostic" data-name="tno eassi gateway multi-technology netherlands irma indy trinsic gataca walt.id government healthcare" data-col="type-devtool resolution sdk"><td class="num"></td><td>TNO EASSI</td><td><span class="b b-green">Agnostic</span></td><td><span class="lp">IRMA · Indy · Trinsic · Gataca · walt.id</span></td><td>TNO (Netherlands)</td><td><span class="b b-cyan">Gateway / Middleware</span></td><td>Multi-technology SSI gateway. Issues and verifies credentials across multiple SSI ecosystems from a single API. Used in Dutch government and healthcare projects.</td><td><span class="b b-slate">R&amp;D / Gov partnerships</span></td><td><a class="lnk" href="https://eassi.ssi-lab.nl" target="_blank">eassi.ssi-lab.nl ↗</a></td></tr>
+<tr data-ledger="specific" data-name="hyperledger indy node sovrin ledger purpose-built dlt anoncreds 2016" data-col="type-devtool blockchain anoncreds"><td class="num"></td><td>Hyperledger Indy</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Indy ledger (Sovrin, etc.)</span></td><td>Linux Foundation</td><td><span class="b b-violet">Blockchain + SDK</span></td><td>Purpose-built DLT for SSI (2016). First production-grade SSI solution. Powers Sovrin. Origin of AnonCreds. Architecture being modernized via Indy on Besu.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://github.com/hyperledger/indy-node" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-name="hyperledger indy on besu ethereum evm did:indy:besu qbft solidity smart contracts dsr corp 2025" data-col="type-devtool blockchain ethereum anoncreds"><td class="num"></td><td>Hyperledger Indy on Besu</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Ethereum / Hyperledger Besu</span></td><td>Linux Foundation / DSR Corp</td><td><span class="b b-violet">Blockchain Framework</span></td><td>Indy business logic on Besu EVM. did:indy:besu. QBFT consensus. Permissioned + permissionless modes. Solidity smart contracts for DID + AnonCreds registries. Launched Apr 2025.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://github.com/hyperledger/indy-besu" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-name="hyperledger identus sdk cardano atala prism iog scala kotlin rest aries oid4vc w3c" data-col="type-devtool blockchain anoncreds didcomm"><td class="num"></td><td>Hyperledger Identus SDK</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Cardano blockchain</span></td><td>IOG / Hyperledger Foundation</td><td><span class="b b-violet">Agent SDK · Scala/Kotlin</span></td><td>Full enterprise SSI SDK for Cardano. REST API, W3C DID + VC, Aries RFCs, OID4VC. Contributed by IOG (Dec 2023). Vision: support multiple chains long-term.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://github.com/hyperledger/identus" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-name="anoncreds rs rust indy cheqd cl signatures zkp selective disclosure predicates anonymous credentials" data-col="type-devtool sdk anoncreds zkp"><td class="num"></td><td>AnonCreds RS</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Indy primary · cheqd expanding</span></td><td>Linux Foundation</td><td><span class="b b-violet">Credential Library · Rust</span></td><td>Reference implementation of AnonCreds in Rust. CL-signatures, ZK proofs, selective disclosure, predicates. Originally Indy-only; cheqd first to decouple this dependency.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://github.com/hyperledger/anoncreds-rs" target="_blank">GitHub ↗</a></td></tr>
+<tr data-ledger="specific" data-name="sovrin network indy public permissioned stewards foundation ledger global" data-col="type-devtool ledger-infra anoncreds government"><td class="num"></td><td>Sovrin Network</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Hyperledger Indy ledger</span></td><td>Sovrin Foundation</td><td><span class="b b-violet">Public Permissioned Ledger</span></td><td>Global public utility for SSI. Run by Sovrin Stewards worldwide. Universal DID discovery and credential schema registry. Most widely deployed Indy production network.</td><td><span class="b b-blue">Free read · Tx fees for writes</span></td><td><a class="lnk" href="https://sovrin.org" target="_blank">sovrin.org ↗</a></td></tr>
+<tr data-ledger="specific" data-name="ebsi did:ebsi european blockchain services infrastructure eidas 2.0 eudi wallet eu commission large scale pilots 2026" data-col="type-devtool ledger-infra eu government eidas"><td class="num"></td><td>EBSI (did:ebsi)</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">EU Blockchain Services Infrastructure</span></td><td>European Commission</td><td><span class="b b-violet">Public Permissioned Ledger</span></td><td>EU-mandated registry for EUDI Wallet / eIDAS 2.0 conformance. Large Scale Pilots across 26 EU member states. Nationwide rollout by 2026.</td><td><span class="b b-red">Free (EU public infrastructure)</span></td><td><a class="lnk" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu ↗</a></td></tr>
+<tr data-ledger="specific" data-name="privado id polygon id tools iden3 circom zk evm hsbc bhutan ndi on-chain verification issuer node" data-col="type-devtool blockchain ethereum zkp sdk"><td class="num"></td><td>Privado ID / Polygon ID Tools</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">Polygon · EVM-compatible chains</span></td><td>Privado ID (ex-Polygon Labs)</td><td><span class="b b-violet">SDK + Toolset</span></td><td>Iden3 protocol libraries, Circom ZK toolkit, issuer node, verifier SDK. On-chain VC verification with ZK proofs. Post-separation (2024), supports multiple EVM chains. Used by HSBC and Bhutan NDI.</td><td><span class="b b-red">Free / OSS</span></td><td><a class="lnk" href="https://privado.id/docs" target="_blank">privado.id/docs ↗</a></td></tr>
+<tr data-ledger="specific" data-name="quarkid buenos aires argentina zksync ethereum l2 government miba extrimian 3.6m residents 2024" data-col="type-devtool blockchain ethereum government"><td class="num"></td><td>QuarkID</td><td><span class="b b-amber">Specific</span></td><td><span class="lp">ZKsync (Ethereum L2)</span></td><td>Buenos Aires Gov + Extrimian</td><td><span class="b b-violet">Protocol + Toolkit</span></td><td>SSI protocol powering Buenos Aires official government wallet (miBA). 3.6M+ residents since Oct 2024. First large-scale government SSI on an Ethereum L2. Expanding to other Argentine provinces.</td><td><span class="b b-red">Open Source / Gov-funded</span></td><td><a class="lnk" href="https://quarkid.org" target="_blank">quarkid.org ↗</a></td></tr>
 </tbody>
   </table>
   </div>
 </div><!-- /panel-2 -->
+
 
 <!-- ══════════════════════════════════════════ -->
 <!-- PANEL 3 · FEATURE COMPARISON MATRIX       -->
@@ -1665,8 +504,7 @@ a.lnk: hover {
 </div><!-- /shell -->
 
 <script>
-
-// ── PRIMARY NAV ─────────────────────────────────────────────────────────────
+// ── PRIMARY NAV ──────────────────────────────────────────────────────────────
 function switchPrimary(idx, btn) {
   document.querySelectorAll('.pnav-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.primary-panel').forEach(p => p.classList.remove('active'));
@@ -1674,91 +512,114 @@ function switchPrimary(idx, btn) {
   document.getElementById('panel-' + idx).classList.add('active');
 }
 
-// ── PANEL 0: SUMMARY ─────────────────────────────────────────────────────────
-// State: cat = all|product|devtool, ledger = all|agnostic|specific
-const sumState = { cat: 'all', ledger: 'all', q: '' };
-
-function summaryFilter(val, btn) {
-  if (['all','product','devtool'].includes(val)) sumState.cat = val;
-  if (val === 'agnostic' || val === 'specific') {
-    sumState.ledger = sumState.ledger === val ? 'all' : val;
-  }
-  _sumRefreshButtons();
-  _sumRunFilter();
+// ── SHARED HELPERS ────────────────────────────────────────────────────────────
+function _activate(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
 }
-function summarySearch(val) { sumState.q = val.toLowerCase().trim(); _sumRunFilter(); }
 
-function _sumRefreshButtons() {
-  // clear all
-  document.querySelectorAll('#sf-summary .sf-btn').forEach(b => b.classList.remove('active'));
-  // cat buttons
-  if (sumState.cat === 'all')     _sfActive('sfsum-all');
-  if (sumState.cat === 'product') _sfActive('sfsum-product');
-  if (sumState.cat === 'devtool') _sfActive('sfsum-devtool');
-  // ledger buttons (independent toggles)
-  if (sumState.ledger === 'agnostic') _sfActive('sfsum-agnostic');
-  if (sumState.ledger === 'specific') _sfActive('sfsum-specific');
+function _swapColGroup(agId, spId, showAg) {
+  const ag = document.getElementById(agId);
+  const sp = document.getElementById(spId);
+  if (ag) ag.style.display = showAg ? '' : 'none';
+  if (sp) sp.style.display = showAg ? 'none' : '';
 }
-function _sfActive(id) { const el = document.getElementById(id); if (el) el.classList.add('active'); }
 
-function _sumRunFilter() {
-  let vis = 0;
-  document.querySelectorAll('#summary-table tbody tr').forEach(tr => {
-    const catOk    = sumState.cat === 'all'    || tr.dataset.cat    === sumState.cat;
-    const ledgerOk = sumState.ledger === 'all' || tr.dataset.ledger === sumState.ledger;
-    const qOk      = !sumState.q || (tr.dataset.name || '').toLowerCase().includes(sumState.q);
-    const show = catOk && ledgerOk && qOk;
+function _resetChips(containerId) {
+  document.querySelectorAll('#' + containerId + ' .cf-btn').forEach(b => b.classList.remove('active'));
+  const first = document.querySelector('#' + containerId + ' .cf-btn');
+  if (first) first.classList.add('active');
+}
+
+function _filterRows(tableId, ledger, col, q, catFilter) {
+  let vis = 0, total = 0;
+  document.querySelectorAll('#' + tableId + ' tbody tr').forEach(tr => {
+    const trLedger = tr.dataset.ledger || '';
+    const trCat    = tr.dataset.cat    || '';
+    const trName   = (tr.dataset.name  || '').toLowerCase();
+    const trCol    = (tr.dataset.col   || '').toLowerCase();
+
+    const ledOk = ledger === 'all' || trLedger === ledger;
+    const catOk = !catFilter       || trCat    === catFilter;
+    const colOk = col === 'all'    || trCol.includes(col);
+    const qOk   = !q              || trName.includes(q);
+
+    const show = ledOk && catOk && colOk && qOk;
     tr.style.display = show ? '' : 'none';
+    if (ledOk && catOk) total++;
     if (show) vis++;
   });
-  const el = document.getElementById('sf-summary-count');
-  if (el) el.innerHTML = 'Showing <strong>' + vis + '</strong> of 33';
+  return { vis, total };
 }
 
-// ── PANEL 1: PRODUCTS ────────────────────────────────────────────────────────
-// State: ledger = agnostic|specific, col = all|<tag>, q = search string
+function _setCount(countId, vis, total) {
+  const el = document.getElementById(countId);
+  if (el) el.innerHTML = 'Showing <strong>' + vis + '</strong> of ' + total;
+}
+
+// ── PANEL 0 · SUMMARY ────────────────────────────────────────────────────────
+const sumState = { ledger: 'agnostic', col: 'all', q: '' };
+
+function summaryLedger(val, btn) {
+  sumState.ledger = val;
+  sumState.col = 'all';
+  document.querySelectorAll('#sf-summary .sf-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  _swapColGroup('cfs-ag', 'cfs-sp', val === 'agnostic');
+  _resetChips('cf-summary');
+  summaryRunFilter();
+}
+
+function summaryCol(val, btn) {
+  sumState.col = val;
+  document.querySelectorAll('#cf-summary .cf-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  summaryRunFilter();
+}
+
+function summaryRunFilter() {
+  const inp = document.getElementById('sfsum-q');
+  sumState.q = inp ? inp.value.toLowerCase().trim() : '';
+
+  // col chip 'type-product' / 'type-devtool' map to catFilter
+  const catFilter = sumState.col === 'type-product' ? 'product'
+                  : sumState.col === 'type-devtool'  ? 'devtool'
+                  : null;
+  const col = (catFilter) ? 'all' : sumState.col;
+
+  const { vis, total } = _filterRows('summary-table', sumState.ledger, col, sumState.q, catFilter);
+  _setCount('sf-summary-count', vis, total);
+}
+
+// ── PANEL 1 · PRODUCTS ───────────────────────────────────────────────────────
 const prodState = { ledger: 'agnostic', col: 'all', q: '' };
 
 function productsLedger(val, btn) {
   prodState.ledger = val;
   prodState.col = 'all';
-  // update ledger buttons
   document.querySelectorAll('#sf-products .sf-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  // swap column chips
-  const agCols = document.getElementById('cfp-agnostic-cols');
-  const spCols = document.getElementById('cfp-specific-cols');
-  if (agCols) agCols.style.display = val === 'agnostic' ? '' : 'none';
-  if (spCols) spCols.style.display = val === 'specific'  ? '' : 'none';
-  // reset col chip active
-  document.querySelectorAll('#cfp .cf-btn').forEach(b => b.classList.remove('active'));
-  const first = document.querySelector('#cfp .cf-btn');
-  if (first) first.classList.add('active');
+  _swapColGroup('cfp-ag', 'cfp-sp', val === 'agnostic');
+  _resetChips('cf-products');
   productsRunFilter();
 }
-function productsColFilter(val, btn) {
+
+function productsCol(val, btn) {
   prodState.col = val;
-  document.querySelectorAll('#cfp .cf-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#cf-products .cf-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   productsRunFilter();
 }
+
 function productsRunFilter() {
-  const inp = document.getElementById('sfp-search');
+  const inp = document.getElementById('sfp-q');
   prodState.q = inp ? inp.value.toLowerCase().trim() : '';
-  let vis = 0, total = 0;
-  document.querySelectorAll('#products-table tbody tr').forEach(tr => {
-    const ledOk  = tr.dataset.ledger === prodState.ledger;
-    const colOk  = prodState.col === 'all' || (tr.dataset.col || '').toLowerCase().includes(prodState.col);
-    const qOk    = !prodState.q || (tr.dataset.name || '').toLowerCase().includes(prodState.q);
-    tr.style.display = (ledOk && colOk && qOk) ? '' : 'none';
-    if (ledOk) total++;
-    if (ledOk && colOk && qOk) vis++;
-  });
-  const el = document.getElementById('sf-products-count');
-  if (el) el.innerHTML = 'Showing <strong>' + vis + '</strong> of ' + total;
+  // Products table only contains product rows — no catFilter needed
+  const { vis, total } = _filterRows('products-table', prodState.ledger, prodState.col, prodState.q, null);
+  _setCount('sf-products-count', vis, total);
 }
 
-// ── PANEL 2: DEV TOOLS ───────────────────────────────────────────────────────
+// ── PANEL 2 · DEV TOOLS ──────────────────────────────────────────────────────
 const devState = { ledger: 'agnostic', col: 'all', q: '' };
 
 function devtoolsLedger(val, btn) {
@@ -1766,48 +627,36 @@ function devtoolsLedger(val, btn) {
   devState.col = 'all';
   document.querySelectorAll('#sf-devtools .sf-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
-  const agCols = document.getElementById('cfd-agnostic-cols');
-  const spCols = document.getElementById('cfd-specific-cols');
-  if (agCols) agCols.style.display = val === 'agnostic' ? '' : 'none';
-  if (spCols) spCols.style.display = val === 'specific'  ? '' : 'none';
-  document.querySelectorAll('#cfd .cf-btn').forEach(b => b.classList.remove('active'));
-  const first = document.querySelector('#cfd .cf-btn');
-  if (first) first.classList.add('active');
+  _swapColGroup('cfd-ag', 'cfd-sp', val === 'agnostic');
+  _resetChips('cf-devtools');
   devtoolsRunFilter();
 }
-function devtoolsColFilter(val, btn) {
+
+function devtoolsCol(val, btn) {
   devState.col = val;
-  document.querySelectorAll('#cfd .cf-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#cf-devtools .cf-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   devtoolsRunFilter();
 }
+
 function devtoolsRunFilter() {
-  const inp = document.getElementById('sfd-search');
+  const inp = document.getElementById('sfd-q');
   devState.q = inp ? inp.value.toLowerCase().trim() : '';
-  let vis = 0, total = 0;
-  document.querySelectorAll('#devtools-table tbody tr').forEach(tr => {
-    const ledOk = tr.dataset.ledger === devState.ledger;
-    const colOk = devState.col === 'all' || (tr.dataset.col || '').toLowerCase().includes(devState.col);
-    const qOk   = !devState.q || (tr.dataset.name || '').toLowerCase().includes(devState.q);
-    tr.style.display = (ledOk && colOk && qOk) ? '' : 'none';
-    if (ledOk) total++;
-    if (ledOk && colOk && qOk) vis++;
-  });
-  const el = document.getElementById('sf-devtools-count');
-  if (el) el.innerHTML = 'Showing <strong>' + vis + '</strong> of ' + total;
+  // DevTools table only contains devtool rows — no catFilter needed
+  const { vis, total } = _filterRows('devtools-table', devState.ledger, devState.col, devState.q, null);
+  _setCount('sf-devtools-count', vis, total);
 }
 
-// ── PANEL 3: FEATURE COMPARISON MATRIX ──────────────────────────────────────
+// ── PANEL 3 · FEATURE MATRIX ─────────────────────────────────────────────────
 function filterMatrix(val) {
   const q = val.toLowerCase().trim();
   document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
     if (tr.querySelector('.fcat-header')) { tr.style.display = ''; return; }
-    const feat  = tr.dataset.feature || '';
-    const label = tr.querySelector('.frow-label');
-    const text  = (label ? label.textContent.toLowerCase() : '') + ' ' + feat;
-    tr.style.display = (!q || text.includes(q)) ? '' : 'none';
+    const text = (tr.dataset.feature || '') + ' ' + ((tr.querySelector('.frow-label') || {}).textContent || '');
+    tr.style.display = (!q || text.toLowerCase().includes(q)) ? '' : 'none';
   });
 }
+
 function toggleHideUnsupported() {
   const hide = document.getElementById('hide-unsupported').checked;
   document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
@@ -1819,31 +668,24 @@ function toggleHideUnsupported() {
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  // Summary: All active, show everything
-  _sfActive('sfsum-all');
-  _sumRunFilter();
-  // Products: Agnostic default
-  const sfpAg = document.getElementById('sfp-agnostic');
-  if (sfpAg) sfpAg.classList.add('active');
-  const cfpAg = document.getElementById('cfp-agnostic-cols');
-  const cfpSp = document.getElementById('cfp-specific-cols');
-  if (cfpAg) cfpAg.style.display = '';
-  if (cfpSp) cfpSp.style.display = 'none';
-  const cfpFirst = document.querySelector('#cfp .cf-btn');
-  if (cfpFirst) cfpFirst.classList.add('active');
+  // Summary: agnostic default
+  _activate('sfsum-ag');
+  _swapColGroup('cfs-ag', 'cfs-sp', true);
+  _resetChips('cf-summary');
+  summaryRunFilter();
+
+  // Products: agnostic default
+  _activate('sfp-ag');
+  _swapColGroup('cfp-ag', 'cfp-sp', true);
+  _resetChips('cf-products');
   productsRunFilter();
-  // DevTools: Agnostic default
-  const sfdAg = document.getElementById('sfd-agnostic');
-  if (sfdAg) sfdAg.classList.add('active');
-  const cfdAg = document.getElementById('cfd-agnostic-cols');
-  const cfdSp = document.getElementById('cfd-specific-cols');
-  if (cfdAg) cfdAg.style.display = '';
-  if (cfdSp) cfdSp.style.display = 'none';
-  const cfdFirst = document.querySelector('#cfd .cf-btn');
-  if (cfdFirst) cfdFirst.classList.add('active');
+
+  // DevTools: agnostic default
+  _activate('sfd-ag');
+  _swapColGroup('cfd-ag', 'cfd-sp', true);
+  _resetChips('cf-devtools');
   devtoolsRunFilter();
 });
-
 </script>
 </body>
 </html>
