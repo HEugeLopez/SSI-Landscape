@@ -107,7 +107,6 @@ thead tr { background: var(--bg3); }
 th { padding: .65rem 1rem; text-align: left; color: #475569; font-weight: 600; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; border-bottom: 1px solid var(--border2); font-family: var(--mono); }
 td { padding: .65rem 1rem; border-top: 1px solid var(--border); vertical-align: top; line-height: 1.5; color: #334155; }
 tr:hover td { background: rgba(37,99,235,.03); }
-
 /* Fix sticky label cell overlap on hover */
 .matrix-table tr:hover .frow-label {
   background: #eef2fb;
@@ -162,6 +161,40 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .icon-yes { color: #059669; font-size: .85rem; }
 .icon-no { color: #d1d5db; font-size: .85rem; }
 .icon-partial { color: #d97706; font-size: .82rem; }
+/* PARTIAL TOOLTIPS */
+.cell-partial { position: relative; }
+.cell-partial .tip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #f1f5f9;
+  font-size: .7rem;
+  font-family: var(--sans);
+  line-height: 1.5;
+  padding: .45rem .7rem;
+  border-radius: 6px;
+  width: 220px;
+  white-space: normal;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  text-align: left;
+}
+.cell-partial .tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #1e293b;
+}
+.cell-partial:hover .tip { display: block; }
+.icon-partial { cursor: help; }
+
 .matrix-corner { background: var(--bg2); position: sticky; left: 0; top: 0; z-index: 6; border-right: 2px solid var(--border2); padding: .5rem .85rem; font-size: .62rem; font-weight: 700; color: var(--slate); font-family: var(--mono); text-transform: uppercase; letter-spacing: .07em; }
 
 @media (max-width: 1024px) { .dash-grid { grid-template-columns: 1fr 1fr; } .dash-two { grid-template-columns: 1fr; } }
@@ -208,7 +241,7 @@ async function loadData() {
   const [providers, features, matrix] = await Promise.all([
     query('providers', 'select=*&order=sort_order&active=eq.true'),
     query('features',  'select=*&order=sort_order'),
-    query('feature_matrix', 'select=provider_id,feature_id,support')
+    query('feature_matrix', 'select=provider_id,feature_id,support,tooltip')
   ]);
   return { providers, features, matrix };
 }
@@ -245,8 +278,12 @@ function supportIcon(s) {
   return '<span class="icon-no">&mdash;</span>';
 }
 
-function supportCell(s) {
+
+function supportCell(s, tip) {
   const cls = s === 'yes' ? 'cell-yes' : s === 'partial' ? 'cell-partial' : 'cell-no';
+  if (s === 'partial' && tip) {
+    return `<td class="cell ${cls}"><span class="icon-partial" title="">&#9675;<span class="tip">${tip}</span></span></td>`;
+  }
   return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
 }
 
@@ -379,7 +416,7 @@ function renderApp({ providers, features, matrix }) {
   const matrixMap = {};
   matrix.forEach(m => {
     if (!matrixMap[m.provider_id]) matrixMap[m.provider_id] = {};
-    matrixMap[m.provider_id][m.feature_id] = m.support;
+    matrixMap[m.provider_id][m.feature_id] = { support: m.support, tooltip: m.tooltip || '' };
   });
 
   // Split providers
@@ -454,8 +491,10 @@ function renderApp({ providers, features, matrix }) {
     matrixRows += `<tr class="mrow"><td class="fcat-header" colspan="${providers.length + 1}">${group}</td></tr>`;
     feats.forEach(f => {
       const cells = providers.map(p => {
-        const support = (matrixMap[p.id] || {})[f.id] || 'no';
-        return supportCell(support);
+        const entry   = (matrixMap[p.id] || {})[f.id] || { support: 'no', tooltip: '' };
+        const support = typeof entry === 'object' ? entry.support  : entry;
+        const tip     = typeof entry === 'object' ? entry.tooltip  : '';
+        return supportCell(support, tip);
       }).join('');
       matrixRows += `<tr class="mrow" data-feature="${f.search_tags || ''}">
         <td class="frow-label">${f.label}</td>
