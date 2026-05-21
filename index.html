@@ -253,14 +253,16 @@ function runFilter(section) {
 
   let vis = 0, total = 0, rowNum = 0;
   table.querySelectorAll('tbody tr').forEach(tr => {
-    const ledger = tr.dataset.ledger || '';
-    const col    = (tr.dataset.col   || '').toLowerCase();
-    const name   = (tr.dataset.name  || '').toLowerCase();
-    // For summary: ledger filter, col filter (type-product/type-devtool map to cat)
+    const ledger    = tr.dataset.ledger || '';
+    const col       = (tr.dataset.col  || '').toLowerCase();
+    const name      = (tr.dataset.name || '').toLowerCase();
+    const cat       = tr.dataset.cat   || '';
+
+    // For summary, col chips 'type-product'/'type-devtool' map to cat filter
     const catFilter = section === 'summary'
       ? (s.col === 'type-product' ? 'product' : s.col === 'type-devtool' ? 'devtool' : null)
       : null;
-    const cat = tr.dataset.cat || '';
+
     const ledOk = ledger === s.ledger;
     const catOk = !catFilter || cat === catFilter;
     const colOk = s.col === 'all' || s.col === 'type-product' || s.col === 'type-devtool' || col.includes(s.col);
@@ -268,12 +270,18 @@ function runFilter(section) {
 
     const show = ledOk && catOk && colOk && qOk;
     tr.style.display = show ? '' : 'none';
+
     if (ledOk) total++;
     if (show) {
       vis++;
       rowNum++;
-      const numCell = tr.querySelector('.num');
+      // JS-based numbering — works for dynamically rendered rows
+      const numCell = tr.querySelector('td.num');
       if (numCell) numCell.textContent = rowNum;
+    } else {
+      // Clear number on hidden rows so they don't show stale numbers if re-shown
+      const numCell = tr.querySelector('td.num');
+      if (numCell) numCell.textContent = '';
     }
   });
 
