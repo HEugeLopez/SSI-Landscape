@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SSI Landscape — Interactive Reference 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #fff; --bg1: #f8fafc; --bg2: #f1f5f9; --bg3: #e8eef6; --bg4: #dde6f0;
+  --blue: #2563eb; --blue-dim: rgba(37,99,235,.09);
+  --green: #059669; --amber: #d97706; --red: #dc2626; --cyan: #0891b2; --violet: #7c3aed;
+  --slate: #64748b; --ink: #0f172a;
+  --border: rgba(0,0,0,.08); --border2: rgba(0,0,0,.13);
+  --sans: 'IBM Plex Sans', sans-serif; --mono: 'IBM Plex Mono', monospace;
+  --r: 6px; --r-lg: 10px;
+}
+html, body { min-height: 100vh; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 14px; line-height: 1.6; overflow-x: hidden; }
+
+/* TOPBAR */
+.topbar { padding: 1rem 2rem; background: var(--bg1); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 60; backdrop-filter: blur(12px); }
+.logo { font-family: var(--mono); font-size: .85rem; font-weight: 600; color: var(--blue); letter-spacing: .12em; text-transform: uppercase; }
+.topbar-meta { font-size: .78rem; color: var(--slate); display: flex; align-items: center; gap: 1rem; }
+.topbar-badge { font-family: var(--mono); font-size: .62rem; padding: .2rem .55rem; border-radius: 100px; background: rgba(5,150,105,.1); color: #059669; border: 1px solid rgba(5,150,105,.25); }
+
+/* LOADING */
+.loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 1rem; }
+.spinner { width: 36px; height: 36px; border: 3px solid var(--bg3); border-top-color: var(--blue); border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { font-family: var(--mono); font-size: .8rem; color: var(--slate); }
+.error-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: .75rem; }
+.error-box { background: var(--bg1); border: 1px solid rgba(220,38,38,.2); border-radius: var(--r-lg); padding: 1.5rem 2rem; text-align: center; max-width: 480px; }
+.error-box h3 { color: var(--red); font-size: .9rem; margin-bottom: .5rem; }
+.error-box p { font-size: .8rem; color: var(--slate); }
+
+/* PRIMARY NAV */
+.primary-nav { display: flex; border-bottom: 2px solid var(--border2); background: var(--bg1); padding: 0 2rem; position: sticky; top: 57px; z-index: 55; overflow-x: auto; scrollbar-width: none; }
+.primary-nav::-webkit-scrollbar { display: none; }
+.pnav-btn { display: flex; align-items: center; gap: .5rem; padding: .9rem 1.5rem; background: none; border: none; cursor: pointer; font-family: var(--sans); font-size: .82rem; font-weight: 600; color: var(--slate); white-space: nowrap; border-bottom: 2px solid transparent; position: relative; bottom: -2px; transition: color .15s, border-color .15s; }
+.pnav-btn:hover { color: var(--ink); }
+.pnav-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+.pnav-count { font-family: var(--mono); font-size: .6rem; padding: .1rem .38rem; border-radius: 100px; background: var(--bg3); color: var(--slate); font-weight: 600; }
+.pnav-btn.active .pnav-count { background: var(--blue-dim); color: var(--blue); }
+
+/* SHELL & PANELS */
+.shell { max-width: 1440px; margin: 0 auto; padding: 0 2rem 4rem; }
+.primary-panel { display: none; padding-top: 2rem; animation: fadeUp .18s ease; }
+.primary-panel.active { display: block; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SECTION HEADER */
+.section-header { margin-bottom: 1.4rem; }
+.eyebrow { font-family: var(--mono); font-size: .63rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--blue); margin-bottom: .3rem; display: flex; align-items: center; gap: .4rem; }
+.eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--blue); }
+.sec-title { font-size: 1.15rem; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+.sec-desc { font-size: .8rem; color: var(--slate); margin-top: .3rem; max-width: 700px; line-height: 1.65; }
+
+/* STAT CARDS */
+.dash-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { background: var(--bg1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem 1.5rem; position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent, var(--blue)); }
+.stat-num { font-size: 2rem; font-weight: 700; font-family: var(--mono); letter-spacing: -.03em; color: var(--ink); line-height: 1; }
+.stat-label { font-size: .7rem; color: var(--slate); text-transform: uppercase; letter-spacing: .09em; margin-top: .35rem; font-weight: 600; }
+.stat-sub { font-size: .68rem; color: #94a3b8; margin-top: .2rem; }
+.dash-two { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+.dash-card { background: var(--bg1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.4rem; }
+.dash-card-title { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--slate); margin-bottom: 1rem; display: flex; align-items: center; gap: .4rem; font-family: var(--mono); }
+.dash-card-title::before { content: ''; width: 12px; height: 1px; background: currentColor; opacity: .5; }
+.legend-grid { display: flex; flex-direction: column; gap: .55rem; }
+.legend-row { display: flex; align-items: center; gap: .65rem; font-size: .78rem; color: #334155; }
+.legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.legend-count { font-family: var(--mono); font-size: .68rem; color: #94a3b8; margin-left: auto; }
+.pb-row { display: flex; align-items: center; gap: .6rem; font-size: .77rem; margin-bottom: .5rem; }
+.pb-bar-wrap { flex: 1; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.pb-bar { height: 100%; border-radius: 2px; }
+.pb-val { font-family: var(--mono); font-size: .68rem; color: var(--slate); min-width: 20px; text-align: right; }
+.insight-list { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+.insight-li { display: flex; gap: .65rem; align-items: flex-start; font-size: .79rem; color: #334155; line-height: 1.55; }
+.ins-icon { width: 16px; height: 16px; min-width: 16px; border-radius: 3px; background: var(--blue-dim); color: var(--blue); display: flex; align-items: center; justify-content: center; font-size: .6rem; margin-top: 2px; border: 1px solid rgba(37,99,235,.15); }
+
+/* FILTER STACK */
+.filter-stack { margin-bottom: 1.6rem; }
+.filter-stack > .sub-filter { border-radius: var(--r-lg) var(--r-lg) 0 0; margin-bottom: 0; }
+.sub-filter { display: flex; align-items: center; gap: .45rem; flex-wrap: wrap; background: var(--bg1); border: 1px solid var(--border); border-radius: var(--r-lg); padding: .7rem 1rem; margin-bottom: 1.6rem; }
+.sf-label { font-family: var(--mono); font-size: .65rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--slate); white-space: nowrap; margin-right: .2rem; }
+.sf-divider { width: 1px; height: 22px; background: var(--border2); margin: 0 .4rem; flex-shrink: 0; }
+.sf-btn { display: flex; align-items: center; gap: .4rem; padding: .32rem 1rem; border-radius: 100px; font-size: .8rem; font-weight: 600; border: 1px solid transparent; background: transparent; color: var(--slate); cursor: pointer; transition: all .15s; font-family: var(--sans); white-space: nowrap; }
+.sf-btn:hover { background: var(--bg2); color: var(--ink); border-color: var(--border2); }
+.sf-btn.sf-agnostic.active { background: #ecfdf5; color: #065f46; border-color: rgba(5,150,105,.4); }
+.sf-btn.sf-specific.active { background: #fffbeb; color: #92400e; border-color: rgba(217,119,6,.4); }
+.sf-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.sf-count { margin-left: auto; font-family: var(--mono); font-size: .7rem; color: var(--slate); white-space: nowrap; }
+.sf-count strong { color: var(--blue); }
+.sf-search { padding: .35rem .8rem; border-radius: var(--r); border: 1px solid var(--border2); background: #fff; font-family: var(--sans); font-size: .78rem; color: var(--ink); outline: none; width: 195px; transition: border-color .15s; }
+.sf-search:focus { border-color: var(--blue); }
+.col-filter { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; background: var(--bg); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--r-lg) var(--r-lg); padding: .55rem 1rem; margin-bottom: 1.6rem; }
+.cf-label { font-family: var(--mono); font-size: .62rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--slate); white-space: nowrap; margin-right: .2rem; }
+.cf-btn { padding: .24rem .75rem; border-radius: 100px; font-size: .72rem; font-weight: 500; border: 1px solid var(--border2); background: white; color: #475569; cursor: pointer; transition: all .14s; font-family: var(--sans); white-space: nowrap; }
+.cf-btn:hover { border-color: rgba(37,99,235,.35); color: var(--blue); }
+.cf-btn.active { background: var(--blue-dim); border-color: rgba(37,99,235,.35); color: #1e40af; font-weight: 600; }
+
+/* TABLE */
+.tbl-wrap { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 2rem; }
+table { width: 100%; border-collapse: collapse; font-size: .78rem; }
+thead tr { background: var(--bg3); }
+th { padding: .65rem 1rem; text-align: left; color: #475569; font-weight: 600; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; border-bottom: 1px solid var(--border2); font-family: var(--mono); }
+td { padding: .65rem 1rem; border-top: 1px solid var(--border); vertical-align: top; line-height: 1.5; color: #334155; }
+tr:hover td { background: rgba(37,99,235,.03); }
+td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
+td.num { text-align: center; font-family: var(--mono); font-size: .65rem; color: #94a3b8; font-weight: 500; width: 32px; padding: .65rem .5rem; white-space: nowrap; }
+th.num-col { width: 32px; text-align: center; }
+td.notes { font-size: .74rem; color: var(--slate); max-width: 240px; }
+.no-rows { padding: 2rem; text-align: center; color: var(--slate); font-size: .82rem; font-family: var(--mono); display: none; }
+
+/* BADGES */
+.b { display: inline-flex; align-items: center; padding: .14rem .48rem; border-radius: 100px; font-size: .62rem; font-weight: 600; font-family: var(--mono); white-space: nowrap; line-height: 1.4; }
+.b-green { background: rgba(5,150,105,.1); color: #065f46; border: 1px solid rgba(5,150,105,.25); }
+.b-amber { background: rgba(217,119,6,.1); color: #92400e; border: 1px solid rgba(217,119,6,.25); }
+.b-blue { background: rgba(37,99,235,.09); color: #1e40af; border: 1px solid rgba(37,99,235,.2); }
+.b-cyan { background: rgba(8,145,178,.1); color: #164e63; border: 1px solid rgba(8,145,178,.2); }
+.b-slate { background: rgba(100,116,139,.1); color: #334155; border: 1px solid rgba(100,116,139,.2); }
+.b-red { background: rgba(220,38,38,.09); color: #991b1b; border: 1px solid rgba(220,38,38,.2); }
+.b-violet { background: rgba(124,58,237,.1); color: #4c1d95; border: 1px solid rgba(124,58,237,.2); }
+a.lnk { display: inline-flex; align-items: center; color: #1e40af; text-decoration: none; font-size: .72rem; font-family: var(--mono); padding: .14rem .45rem; border-radius: 4px; background: var(--blue-dim); border: 1px solid rgba(37,99,235,.18); transition: all .15s; white-space: nowrap; }
+a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3); }
+.lp { font-family: var(--mono); font-size: .6rem; padding: .1rem .4rem; border-radius: 3px; background: rgba(124,58,237,.08); color: #4c1d95; border: 1px solid rgba(124,58,237,.18); white-space: nowrap; display: inline-block; margin-top: .15rem; }
+
+/* MATRIX */
+.cmp-controls { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+.cmp-search { padding: .35rem .8rem; border-radius: var(--r); border: 1px solid var(--border2); background: #fff; font-family: var(--sans); font-size: .78rem; color: var(--ink); outline: none; width: 220px; transition: border-color .15s; }
+.cmp-search:focus { border-color: var(--blue); }
+.cmp-toggle { display: flex; align-items: center; gap: .35rem; font-size: .75rem; color: var(--slate); cursor: pointer; }
+.cmp-toggle input { accent-color: var(--blue); }
+.cmp-legend { display: flex; align-items: center; gap: .85rem; margin-left: auto; font-size: .7rem; color: var(--slate); flex-wrap: wrap; }
+.cml-item { display: flex; align-items: center; gap: .3rem; }
+.matrix-wrap { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.matrix-table { border-collapse: collapse; font-size: .72rem; width: 100%; }
+.matrix-table th, .matrix-table td { border: 1px solid var(--border); }
+.frow-label { padding: .5rem .85rem; background: var(--bg1); font-weight: 600; color: var(--ink); white-space: nowrap; min-width: 210px; position: sticky; left: 0; z-index: 3; border-right: 2px solid var(--border2); }
+.fcat-header { padding: .38rem .85rem; background: var(--bg3); font-weight: 700; color: #1e293b; font-size: .64rem; letter-spacing: .09em; text-transform: uppercase; font-family: var(--mono); position: sticky; left: 0; z-index: 3; border-right: 2px solid var(--border2); }
+.prov-head { padding: .4rem .3rem; text-align: center; background: var(--bg2); font-weight: 600; color: #1e293b; font-size: .62rem; writing-mode: vertical-lr; transform: rotate(180deg); min-width: 44px; max-width: 56px; position: sticky; top: 0; z-index: 2; white-space: nowrap; }
+.prov-head.agnostic { border-top: 3px solid var(--green); }
+.prov-head.specific { border-top: 3px solid var(--amber); }
+.cell { padding: .38rem; text-align: center; vertical-align: middle; }
+.cell-yes { background: rgba(5,150,105,.07); }
+.cell-no { background: rgba(0,0,0,.015); }
+.cell-partial { background: rgba(217,119,6,.07); }
+.icon-yes { color: #059669; font-size: .85rem; }
+.icon-no { color: #d1d5db; font-size: .85rem; }
+.icon-partial { color: #d97706; font-size: .82rem; }
+.matrix-corner { background: var(--bg2); position: sticky; left: 0; top: 0; z-index: 6; border-right: 2px solid var(--border2); padding: .5rem .85rem; font-size: .62rem; font-weight: 700; color: var(--slate); font-family: var(--mono); text-transform: uppercase; letter-spacing: .07em; }
+
+@media (max-width: 1024px) { .dash-grid { grid-template-columns: 1fr 1fr; } .dash-two { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .dash-grid { grid-template-columns: 1fr; } .shell { padding: 0 1rem 3rem; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">SSI//Map</div>
+  <div class="topbar-meta">
+    <span>Self-Sovereign Identity &mdash; Market Reference</span>
+    <span class="topbar-badge">&#9679; Live from Supabase</span>
+  </div>
+</div>
+
+<div id="app">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading SSI data&hellip;</div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://rospuqlphctokcgpxanb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvc3B1cWxwaGN0b2tjZ3B4YW5iIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNDc1MzYsImV4cCI6MjA5NDkyMzUzNn0.tqVd_zsANjjhRdOjuFv2FB84VKg5hyU68zAIeEsXnR0';
+
+// ── API ───────────────────────────────────────────────────────────────────────
+const headers = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Content-Type': 'application/json'
+};
+
+async function query(table, params = '') {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers });
+  if (!res.ok) throw new Error(`${table}: ${res.status} ${res.statusText}`);
+  return res.json();
+}
+
+// ── LOAD ALL DATA ─────────────────────────────────────────────────────────────
+async function loadData() {
+  const [providers, features, matrix] = await Promise.all([
+    query('providers', 'select=*&order=sort_order&active=eq.true'),
+    query('features',  'select=*&order=sort_order'),
+    query('feature_matrix', 'select=provider_id,feature_id,support')
+  ]);
+  return { providers, features, matrix };
+}
+
+// ── RENDER HELPERS ────────────────────────────────────────────────────────────
+function badge(text, cls) {
+  return `<span class="b ${cls}">${text}</span>`;
+}
+
+function ledgerBadge(model) {
+  return model === 'agnostic'
+    ? badge('Agnostic', 'b-green')
+    : badge('Specific', 'b-amber');
+}
+
+function categoryBadge(cat) {
+  return cat === 'product'
+    ? badge('Product', 'b-blue')
+    : badge('Dev Tool', 'b-cyan');
+}
+
+function lnk(url, label) {
+  if (!url) return '&mdash;';
+  return `<a class="lnk" href="${url}" target="_blank">${label} &#8599;</a>`;
+}
+
+function lp(text) {
+  return text ? `<span class="lp">${text}</span>` : '&mdash;';
+}
+
+function supportIcon(s) {
+  if (s === 'yes')     return '<span class="icon-yes">&#9989;</span>';
+  if (s === 'partial') return '<span class="icon-partial">&#9675;</span>';
+  return '<span class="icon-no">&mdash;</span>';
+}
+
+function supportCell(s) {
+  const cls = s === 'yes' ? 'cell-yes' : s === 'partial' ? 'cell-partial' : 'cell-no';
+  return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
+}
+
+// ── FILTER ENGINE ─────────────────────────────────────────────────────────────
+const state = {
+  summary:  { ledger: 'agnostic', col: 'all', q: '' },
+  products: { ledger: 'agnostic', col: 'all', q: '' },
+  devtools: { ledger: 'agnostic', col: 'all', q: '' },
+};
+
+function runFilter(section) {
+  const s = state[section];
+  const tableId = section === 'summary' ? 'summary-table'
+                : section === 'products' ? 'products-table' : 'devtools-table';
+  const table = document.getElementById(tableId);
+  if (!table) return;
+
+  let vis = 0, total = 0, rowNum = 0;
+  table.querySelectorAll('tbody tr').forEach(tr => {
+    const ledger    = tr.dataset.ledger || '';
+    const col       = (tr.dataset.col  || '').toLowerCase();
+    const name      = (tr.dataset.name || '').toLowerCase();
+    const cat       = tr.dataset.cat   || '';
+
+    // For summary, col chips 'type-product'/'type-devtool' map to cat filter
+    const catFilter = section === 'summary'
+      ? (s.col === 'type-product' ? 'product' : s.col === 'type-devtool' ? 'devtool' : null)
+      : null;
+
+    const ledOk = ledger === s.ledger;
+    const catOk = !catFilter || cat === catFilter;
+    const colOk = s.col === 'all' || s.col === 'type-product' || s.col === 'type-devtool' || col.includes(s.col);
+    const qOk   = !s.q || name.includes(s.q);
+
+    const show = ledOk && catOk && colOk && qOk;
+    tr.style.display = show ? '' : 'none';
+
+    if (ledOk) total++;
+    if (show) {
+      vis++;
+      rowNum++;
+      // JS-based numbering — works for dynamically rendered rows
+      const numCell = tr.querySelector('td.num');
+      if (numCell) numCell.textContent = rowNum;
+    } else {
+      // Clear number on hidden rows so they don't show stale numbers if re-shown
+      const numCell = tr.querySelector('td.num');
+      if (numCell) numCell.textContent = '';
+    }
+  });
+
+  const countEl = document.getElementById(`sf-${section}-count`);
+  if (countEl) countEl.innerHTML = `Showing <strong>${vis}</strong> of ${total}`;
+}
+
+function setLedger(section, val, btn) {
+  state[section].ledger = val;
+  state[section].col = 'all';
+  document.querySelectorAll(`#sf-${section} .sf-btn`).forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  swapColGroup(section, val === 'agnostic');
+  resetChips(section);
+  runFilter(section);
+}
+
+function setCol(section, val, btn) {
+  state[section].col = val;
+  const colId = section === 'summary' ? 'cf-summary' : section === 'products' ? 'cf-products' : 'cf-devtools';
+  document.querySelectorAll(`#${colId} .cf-btn`).forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  runFilter(section);
+}
+
+function setSearch(section, val) {
+  state[section].q = val.toLowerCase().trim();
+  runFilter(section);
+}
+
+function swapColGroup(section, showAg) {
+  const prefix = section === 'summary' ? 'cfs' : section === 'products' ? 'cfp' : 'cfd';
+  const ag = document.getElementById(`${prefix}-ag`);
+  const sp = document.getElementById(`${prefix}-sp`);
+  if (ag) ag.style.display = showAg ? '' : 'none';
+  if (sp) sp.style.display = showAg ? 'none' : '';
+}
+
+function resetChips(section) {
+  const colId = section === 'summary' ? 'cf-summary' : section === 'products' ? 'cf-products' : 'cf-devtools';
+  document.querySelectorAll(`#${colId} .cf-btn`).forEach(b => b.classList.remove('active'));
+  const first = document.querySelector(`#${colId} .cf-btn`);
+  if (first) first.classList.add('active');
+}
+
+function activate(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+// ── MATRIX FILTER ─────────────────────────────────────────────────────────────
+function filterMatrix(val) {
+  const q = val.toLowerCase().trim();
+  document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
+    if (tr.querySelector('.fcat-header')) { tr.style.display = ''; return; }
+    const text = (tr.dataset.feature || '') + ' ' + ((tr.querySelector('.frow-label') || {}).textContent || '');
+    tr.style.display = (!q || text.toLowerCase().includes(q)) ? '' : 'none';
+  });
+}
+
+function toggleHideUnsupported() {
+  const hide = document.getElementById('hide-unsupported').checked;
+  document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
+    if (tr.querySelector('.fcat-header')) return;
+    if (!hide) { tr.style.display = ''; return; }
+    tr.style.display = tr.querySelectorAll('.icon-yes').length === 0 ? 'none' : '';
+  });
+}
+
+// ── PRIMARY NAV ───────────────────────────────────────────────────────────────
+function switchPrimary(idx, btn) {
+  document.querySelectorAll('.pnav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.primary-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + idx).classList.add('active');
+}
+
+// ── RENDER APP ────────────────────────────────────────────────────────────────
+function renderApp({ providers, features, matrix }) {
+
+  // Index matrix by provider_id
+  const matrixMap = {};
+  matrix.forEach(m => {
+    if (!matrixMap[m.provider_id]) matrixMap[m.provider_id] = {};
+    matrixMap[m.provider_id][m.feature_id] = m.support;
+  });
+
+  // Split providers
+  const products  = providers.filter(p => p.category === 'product');
+  const devtools  = providers.filter(p => p.category === 'devtool');
+  const agnostic  = providers.filter(p => p.ledger_model === 'agnostic');
+  const specific  = providers.filter(p => p.ledger_model === 'specific');
+  const prodAg    = products.filter(p => p.ledger_model === 'agnostic');
+  const prodSp    = products.filter(p => p.ledger_model === 'specific');
+  const devAg     = devtools.filter(p => p.ledger_model === 'agnostic');
+  const devSp     = devtools.filter(p => p.ledger_model === 'specific');
+
+  // Count stats
+  const freeCount  = providers.filter(p => (p.pricing||'').toLowerCase().includes('free') || (p.pricing||'').toLowerCase().includes('oss')).length;
+  const quoteCount = providers.filter(p => (p.pricing||'').toLowerCase().includes('quote')).length;
+
+  // ── SUMMARY TABLE ROWS ────────────────────────────────────────
+  const summaryRows = providers.map((p, i) => `
+    <tr data-ledger="${p.ledger_model}" data-cat="${p.category}" data-col="${p.col_tags||''}" data-name="${p.name.toLowerCase()}">
+      <td class="num">${i + 1}</td>
+      <td>${p.name}</td>
+      <td>${categoryBadge(p.category)}</td>
+      <td>${ledgerBadge(p.ledger_model)}</td>
+      <td>${p.pricing || '&mdash;'}</td>
+      <td>${p.pricing_url ? lnk(p.pricing_url, 'pricing') : '&mdash;'}</td>
+      <td>${lnk(p.website_url, p.website_url ? p.website_url.replace('https://','').split('/')[0] : '')}</td>
+    </tr>`).join('');
+
+  // ── PRODUCTS TABLE ROWS ───────────────────────────────────────
+  const productRows = products.map((p, i) => `
+    <tr data-ledger="${p.ledger_model}" data-cat="product" data-col="${p.col_tags||''}" data-name="${p.name.toLowerCase()}">
+      <td class="num">${i + 1}</td>
+      <td>${p.name}</td>
+      <td>${ledgerBadge(p.ledger_model)}</td>
+      <td>${lp(p.ledger_detail)}</td>
+      <td>${p.description || '&mdash;'}</td>
+      <td>${p.pricing || '&mdash;'}</td>
+      <td>${p.pricing_url ? lnk(p.pricing_url, 'pricing') : '&mdash;'}</td>
+      <td>${lnk(p.website_url, p.website_url ? p.website_url.replace('https://','').split('/')[0] : '')}</td>
+      <td class="notes">${p.notes || '&mdash;'}</td>
+    </tr>`).join('');
+
+  // ── DEVTOOLS TABLE ROWS ───────────────────────────────────────
+  const devtoolRows = devtools.map((p, i) => `
+    <tr data-ledger="${p.ledger_model}" data-cat="devtool" data-col="${p.col_tags||''}" data-name="${p.name.toLowerCase()}">
+      <td class="num">${i + 1}</td>
+      <td>${p.name}</td>
+      <td>${ledgerBadge(p.ledger_model)}</td>
+      <td>${lp(p.ledger_detail)}</td>
+      <td>${p.maintained_by || '&mdash;'}</td>
+      <td>${p.tool_type ? `<span class="b b-cyan">${p.tool_type}</span>` : '&mdash;'}</td>
+      <td>${p.description || '&mdash;'}</td>
+      <td>${p.pricing || '&mdash;'}</td>
+      <td>${lnk(p.website_url, p.website_url ? p.website_url.replace('https://','').split('/')[0] : '')}</td>
+    </tr>`).join('');
+
+  // ── MATRIX HEADERS ────────────────────────────────────────────
+  const matrixHeaders = providers.map(p =>
+    `<th class="prov-head ${p.ledger_model}">${p.name}</th>`
+  ).join('');
+
+  // Group features
+  const featureGroups = {};
+  features.forEach(f => {
+    if (!featureGroups[f.group_name]) featureGroups[f.group_name] = [];
+    featureGroups[f.group_name].push(f);
+  });
+
+  // ── MATRIX ROWS ───────────────────────────────────────────────
+  let matrixRows = '';
+  Object.entries(featureGroups).forEach(([group, feats]) => {
+    matrixRows += `<tr class="mrow"><td class="fcat-header" colspan="${providers.length + 1}">${group}</td></tr>`;
+    feats.forEach(f => {
+      const cells = providers.map(p => {
+        const support = (matrixMap[p.id] || {})[f.id] || 'no';
+        return supportCell(support);
+      }).join('');
+      matrixRows += `<tr class="mrow" data-feature="${f.search_tags || ''}">
+        <td class="frow-label">${f.label}</td>
+        ${cells}
+      </tr>`;
+    });
+  });
+
+  // ── FILTER BARS HTML ──────────────────────────────────────────
+  function filterBar(section, agN, spN) {
+    const chipSets = {
+      summary: {
+        ag: [['type-product','&#128230; Products'],['type-devtool','&#128295; Dev Tools'],['oid4vc','OID4VC'],['eidas','eIDAS 2.0'],['anoncreds','AnonCreds'],['didcomm','DIDComm'],['free','Free / OSS'],['quote','Quote Only'],['wallet','Holder Wallet'],['mobile','Mobile SDK']],
+        sp: [['type-product','&#128230; Products'],['type-devtool','&#128295; Dev Tools'],['zkp','ZKP / ZK'],['onchain','On-Chain'],['anoncreds','AnonCreds'],['blockchain','Blockchain'],['eu','EU / EBSI'],['government','Government'],['free','Free / OSS'],['quote','Quote Only']]
+      },
+      products: {
+        ag: [['oid4vc','OID4VC'],['eidas','eIDAS 2.0'],['anoncreds','AnonCreds'],['selfhosted','Self-Hosted'],['free','Free / OSS'],['quote','Quote Only'],['wallet','Holder Wallet'],['mdl','mDL / ISO 18013']],
+        sp: [['zkp','ZKP / ZK'],['onchain','On-Chain Verify'],['monetize','Monetization'],['mdl','mDL / ISO 18013'],['wallet','Holder Wallet'],['free','Free / OSS'],['quote','Quote Only']]
+      },
+      devtools: {
+        ag: [['framework','Framework'],['sdk','SDK / Library'],['protocol','Protocol'],['resolution','Resolution'],['mobile','Mobile / RN'],['oid4vc','OID4VC'],['didcomm','DIDComm'],['python','Python'],['typescript','TypeScript / JS']],
+        sp: [['blockchain','Blockchain'],['ledger-infra','Public Infra'],['zkp','ZKP / ZK'],['anoncreds','AnonCreds'],['ethereum','Ethereum / EVM'],['eu','EU / EBSI'],['government','Government']]
+      }
+    };
+
+    const prefix  = section === 'summary' ? 'cfs' : section === 'products' ? 'cfp' : 'cfd';
+    const colId   = `cf-${section}`;
+    const placeholder = section === 'products' ? 'Search products&hellip;' : section === 'devtools' ? 'Search tools&hellip;' : 'Search by name&hellip;';
+    const chips   = chipSets[section];
+
+    const agChips = chips.ag.map(([v,l]) =>
+      `<button class="cf-btn" onclick="setCol('${section}','${v}',this)">${l}</button>`).join('');
+    const spChips = chips.sp.map(([v,l]) =>
+      `<button class="cf-btn" onclick="setCol('${section}','${v}',this)">${l}</button>`).join('');
+
+    return `
+    <div class="filter-stack">
+      <div class="sub-filter" id="sf-${section}">
+        <span class="sf-label">Ledger</span>
+        <button class="sf-btn sf-agnostic active" id="sf-${section}-ag" onclick="setLedger('${section}','agnostic',this)">
+          <span class="sf-dot" style="background:#059669"></span>Ledger-Agnostic
+          <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">${agN}</span>
+        </button>
+        <button class="sf-btn sf-specific" id="sf-${section}-sp" onclick="setLedger('${section}','specific',this)">
+          <span class="sf-dot" style="background:#d97706"></span>Specific Ledger
+          <span style="font-family:var(--mono);font-size:.6rem;opacity:.6;margin-left:.15rem">${spN}</span>
+        </button>
+        <div class="sf-divider"></div>
+        <input class="sf-search" type="text" placeholder="&#128269;&nbsp; ${placeholder}" oninput="setSearch('${section}',this.value)"/>
+        <span class="sf-count" id="sf-${section}-count">Showing <strong>${agN}</strong> of ${agN}</span>
+      </div>
+      <div class="col-filter" id="${colId}">
+        <span class="cf-label">Filter by</span>
+        <button class="cf-btn active" onclick="setCol('${section}','all',this)">All</button>
+        <span id="${prefix}-ag">${agChips}</span>
+        <span id="${prefix}-sp" style="display:none">${spChips}</span>
+      </div>
+    </div>`;
+  }
+
+  // ── ASSEMBLE HTML ─────────────────────────────────────────────
+  document.getElementById('app').innerHTML = `
+  <div class="primary-nav">
+    <button class="pnav-btn active" onclick="switchPrimary(0,this)">&#9209; Summary <span class="pnav-count">${providers.length}</span></button>
+    <button class="pnav-btn" onclick="switchPrimary(1,this)">&#128230; Products <span class="pnav-count">${products.length}</span></button>
+    <button class="pnav-btn" onclick="switchPrimary(2,this)">&#128295; Dev Tools <span class="pnav-count">${devtools.length}</span></button>
+    <button class="pnav-btn" onclick="switchPrimary(3,this)">&#128269; Feature Comparison</button>
+  </div>
+
+  <div class="shell">
+
+    <!-- PANEL 0: SUMMARY -->
+    <div class="primary-panel active" id="panel-0">
+      <div class="section-header">
+        <div class="eyebrow">Overview</div>
+        <div class="sec-title">SSI Market at a Glance &mdash; 2025</div>
+        <div class="sec-desc">${providers.length} entries across the SSI ecosystem. Data loaded live from Supabase &mdash; always up to date.</div>
+      </div>
+      <div class="dash-grid">
+        <div class="stat-card" style="--accent:#2563eb"><div class="stat-num">${providers.length}</div><div class="stat-label">Total Entries</div><div class="stat-sub">Products + Dev Tools</div></div>
+        <div class="stat-card" style="--accent:#059669"><div class="stat-num">${agnostic.length}</div><div class="stat-label">Ledger-Agnostic</div><div class="stat-sub">No single-chain lock-in</div></div>
+        <div class="stat-card" style="--accent:#d97706"><div class="stat-num">${freeCount}</div><div class="stat-label">Free / Open Source</div><div class="stat-sub">Zero licensing cost</div></div>
+        <div class="stat-card" style="--accent:#7c3aed"><div class="stat-num">${quoteCount}</div><div class="stat-label">Quote-Only</div><div class="stat-sub">Enterprise pricing</div></div>
+      </div>
+      <div class="dash-two">
+        <div class="dash-card">
+          <div class="dash-card-title">Category Breakdown</div>
+          <div class="legend-grid">
+            <div class="legend-row"><span class="legend-dot" style="background:#2563eb"></span>Products &middot; Ledger-Agnostic<span class="legend-count">${prodAg.length}</span></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#d97706"></span>Products &middot; Specific Ledger<span class="legend-count">${prodSp.length}</span></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#059669"></span>Dev Tools &middot; Ledger-Agnostic<span class="legend-count">${devAg.length}</span></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#7c3aed"></span>Dev Tools &middot; Specific Ledger<span class="legend-count">${devSp.length}</span></div>
+          </div>
+          <div style="height:1rem"></div>
+          <div class="dash-card-title">Pricing Distribution</div>
+          <div class="pb-row"><span style="min-width:115px;font-size:.75rem;color:#334155">Free / OSS</span><div class="pb-bar-wrap"><div class="pb-bar" style="width:${Math.round(freeCount/providers.length*100)}%;background:#059669"></div></div><span class="pb-val">${freeCount}</span></div>
+          <div class="pb-row"><span style="min-width:115px;font-size:.75rem;color:#334155">Quote only</span><div class="pb-bar-wrap"><div class="pb-bar" style="width:${Math.round(quoteCount/providers.length*100)}%;background:#d97706"></div></div><span class="pb-val">${quoteCount}</span></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">2024&ndash;2025 Key Moves</div>
+          <ul class="insight-list">
+            <li class="insight-li"><span class="ins-icon">&rarr;</span><span>Polygon ID &rarr; <strong>Privado ID</strong>: spun out from Polygon Labs, now multi-chain EVM (Jun 2024)</span></li>
+            <li class="insight-li"><span class="ins-icon">&rarr;</span><span><strong>Dock Labs + cheqd merged</strong> &mdash; Truvera is the new SaaS brand</span></li>
+            <li class="insight-li"><span class="ins-icon">&rarr;</span><span><strong>Trinsic</strong> divested SSI assets to Dentity; pivoted to identity acceptance network</span></li>
+            <li class="insight-li"><span class="ins-icon">&rarr;</span><span><strong>Atala PRISM</strong> open-sourced as Hyperledger Identus (Dec 2023)</span></li>
+            <li class="insight-li"><span class="ins-icon">&rarr;</span><span><strong>eIDAS 2.0</strong> signed into EU law &mdash; EUDI Wallet mandatory by 2026</span></li>
+            <li class="insight-li"><span class="ins-icon">&rarr;</span><span><strong>IDEMIA + Microsoft Entra Verified ID</strong> launch partnership (Nov 2025)</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="section-header">
+        <div class="eyebrow">All Entries</div>
+        <div class="sec-title">Complete Reference</div>
+      </div>
+      ${filterBar('summary', agnostic.length, specific.length)}
+      <div class="tbl-wrap">
+        <table id="summary-table">
+          <thead><tr><th class="num-col">#</th><th>Company / Tool</th><th>Type</th><th>Ledger Model</th><th>Pricing</th><th>Pricing Page</th><th>Website</th></tr></thead>
+          <tbody>${summaryRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PANEL 1: PRODUCTS -->
+    <div class="primary-panel" id="panel-1">
+      <div class="section-header">
+        <div class="eyebrow">Products</div>
+        <div class="sec-title">SaaS Platforms &amp; Pre-built Solutions</div>
+        <div class="sec-desc">${products.length} commercial and open-source platforms for issuing, verifying, and managing verifiable credentials.</div>
+      </div>
+      ${filterBar('products', prodAg.length, prodSp.length)}
+      <div class="tbl-wrap">
+        <table id="products-table">
+          <thead><tr><th class="num-col">#</th><th>Company / Product</th><th>Ledger Model</th><th>DID Methods / Ledger</th><th>What It Offers</th><th>Pricing</th><th>Pricing Page</th><th>Website</th><th>Notes</th></tr></thead>
+          <tbody>${productRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PANEL 2: DEV TOOLS -->
+    <div class="primary-panel" id="panel-2">
+      <div class="section-header">
+        <div class="eyebrow">Developer Tools</div>
+        <div class="sec-title">SDKs, Frameworks, Protocols &amp; Networks</div>
+        <div class="sec-desc">${devtools.length} open-source tools and infrastructure projects for building SSI applications.</div>
+      </div>
+      ${filterBar('devtools', devAg.length, devSp.length)}
+      <div class="tbl-wrap">
+        <table id="devtools-table">
+          <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Type</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
+          <tbody>${devtoolRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PANEL 3: FEATURE COMPARISON -->
+    <div class="primary-panel" id="panel-3">
+      <div class="section-header">
+        <div class="eyebrow">Feature Comparison</div>
+        <div class="sec-title">All Providers &times; All Features</div>
+        <div class="sec-desc">Features in rows, ${providers.length} providers in columns. Green top = Agnostic &middot; Amber top = Specific. &#9989; Supported &middot; &#9675; Partial &middot; &mdash; Not supported.</div>
+      </div>
+      <div class="cmp-controls">
+        <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Filter features&hellip;" oninput="filterMatrix(this.value)"/>
+        <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide rows with no support</label>
+        <div class="cmp-legend">
+          <span class="cml-item"><span class="icon-yes">&#9989;</span> Supported</span>
+          <span class="cml-item"><span class="icon-partial">&#9675;</span> Partial</span>
+          <span class="cml-item"><span class="icon-no">&mdash;</span> Not supported</span>
+          <span style="width:1px;height:14px;background:rgba(0,0,0,.13)"></span>
+          <span class="cml-item"><span style="display:inline-block;width:8px;height:8px;background:#059669;border-radius:1px"></span> Agnostic</span>
+          <span class="cml-item"><span style="display:inline-block;width:8px;height:8px;background:#d97706;border-radius:1px"></span> Specific</span>
+        </div>
+      </div>
+      <div class="matrix-wrap">
+        <table class="matrix-table">
+          <thead><tr><th class="matrix-corner">Feature / Provider</th>${matrixHeaders}</tr></thead>
+          <tbody id="matrix-body">${matrixRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>`;
+
+  // Init filters
+  ['summary','products','devtools'].forEach(s => {
+    activate(`sf-${s}-ag`);
+    runFilter(s);
+  });
+}
+
+// ── BOOT ─────────────────────────────────────────────────────────────────────
+loadData()
+  .then(renderApp)
+  .catch(err => {
+    document.getElementById('app').innerHTML = `
+      <div class="error-screen">
+        <div class="error-box">
+          <h3>&#9888; Failed to load data</h3>
+          <p>${err.message}</p>
+          <p style="margin-top:.5rem;font-size:.72rem;font-family:var(--mono);color:#94a3b8">Check your Supabase URL and API key.</p>
+        </div>
+      </div>`;
+  });
+</script>
+</body>
+</html>
