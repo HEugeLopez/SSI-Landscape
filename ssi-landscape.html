@@ -188,7 +188,7 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
   border: 5px solid transparent;
   border-top-color: #1e293b;
 }
-.icon-partial { cursor: help; }
+.icon-partial { cursor: help; display: inline-block; padding: 3px 5px; }
 
 .matrix-corner { background: var(--bg2); position: sticky; left: 0; top: 0; z-index: 6; border-right: 2px solid var(--border2); padding: .5rem .85rem; font-size: .62rem; font-weight: 700; color: var(--slate); font-family: var(--mono); text-transform: uppercase; letter-spacing: .07em; }
 
@@ -393,37 +393,33 @@ function filterMatrix(val) {
   el.id = 'ssi-tooltip';
   document.body.appendChild(el);
 
+  let current = null;
+
   document.addEventListener('mouseover', e => {
     const t = e.target.closest('[data-tip]');
-    if (!t) return;
-    el.textContent = t.dataset.tip;
-    el.style.display = 'block';
-    positionTip(e);
+    if (t && t !== current) {
+      current = t;
+      el.textContent = t.dataset.tip;
+      el.style.display = 'block';
+    } else if (!t) {
+      el.style.display = 'none';
+      current = null;
+    }
   });
 
   document.addEventListener('mousemove', e => {
-    if (el.style.display === 'none') return;
-    positionTip(e);
-  });
-
-  document.addEventListener('mouseout', e => {
-    if (!e.target.closest('[data-tip]')) return;
-    el.style.display = 'none';
-  });
-
-  function positionTip(e) {
-    const pad = 12;
-    const tw = el.offsetWidth;
-    const th = el.offsetHeight;
+    if (!current) return;
+    const pad = 14;
+    const tw  = el.offsetWidth;
+    const th  = el.offsetHeight;
     let x = e.clientX - tw / 2;
     let y = e.clientY - th - pad;
-    // Keep within viewport
     if (x < pad) x = pad;
     if (x + tw > window.innerWidth - pad) x = window.innerWidth - tw - pad;
-    if (y < pad) y = e.clientY + pad;
+    if (y < pad) y = e.clientY + pad + 10;
     el.style.left = x + 'px';
     el.style.top  = y + 'px';
-  }
+  });
 })();
 
 function toggleHideUnsupported() {
