@@ -161,29 +161,25 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .icon-yes { color: #059669; font-size: .85rem; }
 .icon-no { color: #d1d5db; font-size: .85rem; }
 .icon-partial { color: #d97706; font-size: .82rem; }
-/* PARTIAL TOOLTIPS */
-.cell-partial { position: relative; }
-.cell-partial .tip {
+/* PARTIAL TOOLTIPS — floating, appended to body to escape overflow:auto */
+#ssi-tooltip {
   display: none;
-  position: absolute;
-  bottom: calc(100% + 6px);
-  left: 50%;
-  transform: translateX(-50%);
+  position: fixed;
   background: #1e293b;
   color: #f1f5f9;
-  font-size: .7rem;
+  font-size: .72rem;
   font-family: var(--sans);
-  line-height: 1.5;
-  padding: .45rem .7rem;
-  border-radius: 6px;
-  width: 220px;
+  line-height: 1.55;
+  padding: .5rem .75rem;
+  border-radius: 7px;
+  width: 240px;
   white-space: normal;
-  z-index: 100;
+  z-index: 9999;
   pointer-events: none;
-  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
   text-align: left;
 }
-.cell-partial .tip::after {
+#ssi-tooltip::after {
   content: '';
   position: absolute;
   top: 100%;
@@ -192,7 +188,6 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
   border: 5px solid transparent;
   border-top-color: #1e293b;
 }
-.cell-partial:hover .tip { display: block; }
 .icon-partial { cursor: help; }
 
 .matrix-corner { background: var(--bg2); position: sticky; left: 0; top: 0; z-index: 6; border-right: 2px solid var(--border2); padding: .5rem .85rem; font-size: .62rem; font-weight: 700; color: var(--slate); font-family: var(--mono); text-transform: uppercase; letter-spacing: .07em; }
@@ -282,7 +277,7 @@ function supportIcon(s) {
 function supportCell(s, tip) {
   const cls = s === 'yes' ? 'cell-yes' : s === 'partial' ? 'cell-partial' : 'cell-no';
   if (s === 'partial' && tip) {
-    return `<td class="cell ${cls}"><span class="icon-partial" title="">&#9675;<span class="tip">${tip}</span></span></td>`;
+    return `<td class="cell ${cls}"><span class="icon-partial" data-tip="${tip}">&#9675;</span></td>`;
   }
   return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
 }
@@ -391,6 +386,45 @@ function filterMatrix(val) {
     tr.style.display = (!q || text.toLowerCase().includes(q)) ? '' : 'none';
   });
 }
+
+// ── FLOATING TOOLTIP ─────────────────────────────────────────────────────────
+(function() {
+  const el = document.createElement('div');
+  el.id = 'ssi-tooltip';
+  document.body.appendChild(el);
+
+  document.addEventListener('mouseover', e => {
+    const t = e.target.closest('[data-tip]');
+    if (!t) return;
+    el.textContent = t.dataset.tip;
+    el.style.display = 'block';
+    positionTip(e);
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (el.style.display === 'none') return;
+    positionTip(e);
+  });
+
+  document.addEventListener('mouseout', e => {
+    if (!e.target.closest('[data-tip]')) return;
+    el.style.display = 'none';
+  });
+
+  function positionTip(e) {
+    const pad = 12;
+    const tw = el.offsetWidth;
+    const th = el.offsetHeight;
+    let x = e.clientX - tw / 2;
+    let y = e.clientY - th - pad;
+    // Keep within viewport
+    if (x < pad) x = pad;
+    if (x + tw > window.innerWidth - pad) x = window.innerWidth - tw - pad;
+    if (y < pad) y = e.clientY + pad;
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+  }
+})();
 
 function toggleHideUnsupported() {
   const hide = document.getElementById('hide-unsupported').checked;
