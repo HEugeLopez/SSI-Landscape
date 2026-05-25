@@ -276,8 +276,11 @@ function supportIcon(s) {
 
 function supportCell(s, tip) {
   const cls = s === 'yes' ? 'cell-yes' : s === 'partial' ? 'cell-partial' : 'cell-no';
-  if (s === 'partial' && tip) {
-    return `<td class="cell ${cls}"><span class="icon-partial" data-tip="${tip}">&#9675;</span></td>`;
+  if (s === 'partial') {
+    const tipText = tip || 'Partial support — hover for details pending';
+    // Use data attribute; escape double quotes in tip text
+    const safe = tipText.replace(/"/g, '&quot;');
+    return `<td class="cell ${cls}"><span class="icon-partial" data-tip="${safe}">&#9675;</span></td>`;
   }
   return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
 }
@@ -446,7 +449,7 @@ function renderApp({ providers, features, matrix }) {
   const matrixMap = {};
   matrix.forEach(m => {
     if (!matrixMap[m.provider_id]) matrixMap[m.provider_id] = {};
-    matrixMap[m.provider_id][m.feature_id] = { support: m.support, tooltip: m.tooltip || '' };
+    matrixMap[m.provider_id][m.feature_id] = { support: m.support, tooltip: (m.tooltip && m.tooltip.trim()) ? m.tooltip : '' };
   });
 
   // Split providers
