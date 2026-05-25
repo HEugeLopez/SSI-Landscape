@@ -138,6 +138,40 @@ a.lnk { display: inline-flex; align-items: center; color: #1e40af; text-decorati
 a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3); }
 .lp { font-family: var(--mono); font-size: .6rem; padding: .1rem .4rem; border-radius: 3px; background: rgba(124,58,237,.08); color: #4c1d95; border: 1px solid rgba(124,58,237,.18); white-space: nowrap; display: inline-block; margin-top: .15rem; }
 
+/* MEGA TITLES */
+.mega-title-row td { padding: 0 !important; }
+.mega-title {
+  padding: .9rem 1.2rem !important;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  border-top: 2px solid;
+}
+.mega-title.tech-mega {
+  background: linear-gradient(90deg, #eff6ff, #f8fafc);
+  color: #1e40af;
+  border-color: #2563eb;
+}
+.mega-title.compliance-mega {
+  background: linear-gradient(90deg, #fef2f2, #f8fafc);
+  color: #991b1b;
+  border-color: #dc2626;
+}
+.mega-icon { font-size: 1rem; }
+.mega-sub {
+  font-size: .68rem;
+  font-weight: 400;
+  opacity: .7;
+  font-family: var(--sans);
+  letter-spacing: 0;
+}
+
 /* MATRIX COLUMN CATEGORY STRIPES */
 /* Agnostic = green top border, Specific = amber top border (already done) */
 /* Feature row group colors */
@@ -475,7 +509,7 @@ function filterMatrix(val) {
 
 function _applyMatrixFilters() {
   const groupMap = {
-    'W3C':     ['W3C DID Standards','W3C VC Standards','DID & Identity Infrastructure','Credential Standards'],
+    'W3C':     ['W3C DID Standards','W3C VC Standards','DID & Identity','DID & Identity Infrastructure','Credential Standards'],
     'DIF':     ['DIF Specifications','Protocols & APIs'],
     'OpenID':  ['OpenID Foundation'],
     'Privacy': ['Privacy & Data Protection','Privacy & Cryptography'],
@@ -487,6 +521,8 @@ function _applyMatrixFilters() {
   let currentGroupVisible = true;
 
   document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
+    // Always show mega-title rows
+    if (tr.classList.contains('mega-title-row')) { tr.style.display = ''; return; }
     const header = tr.querySelector('.fcat-header');
     if (header) {
       const grp = header.textContent.trim();
@@ -542,6 +578,7 @@ function moveTip(e) {
 function toggleHideUnsupported() {
   const hide = document.getElementById('hide-unsupported').checked;
   document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
+    if (tr.classList.contains('mega-title-row')) return;
     if (tr.querySelector('.fcat-header')) return;
     if (!hide) { tr.style.display = ''; return; }
     tr.style.display = tr.querySelectorAll('.icon-yes').length === 0 ? 'none' : '';
@@ -690,41 +727,89 @@ function renderApp({ providers, features, matrix }) {
     `<th class="prov-head ${p.ledger_model}">${p.name}</th>`
   ).join('');
 
-  // Group features
+  // Compliance group names (sort_order 100+)
+  const COMPLIANCE_GROUPS = new Set([
+    'W3C DID Standards', 'W3C VC Standards',
+    'DIF Specifications', 'OpenID Foundation',
+    'Trust Over IP Foundation', 'OpenWallet Foundation',
+    'Privacy & Data Protection', 'Security Certifications',
+    'EU Digital Identity', 'Mobile & Device Security',
+  ]);
+
+  const groupClassMap = {
+    'W3C DID Standards': 'cat-w3c', 'W3C VC Standards': 'cat-w3c',
+    'DIF Specifications': 'cat-dif', 'OpenID Foundation': 'cat-openid',
+    'Trust Over IP Foundation': 'cat-toip', 'OpenWallet Foundation': 'cat-owf',
+    'Privacy & Data Protection': 'cat-privacy', 'Security Certifications': 'cat-security',
+    'EU Digital Identity': 'cat-eidas', 'Mobile & Device Security': 'cat-mobile',
+    'Credential Standards': 'cat-cred', 'DID & Identity': 'cat-w3c',
+    'DID & Identity Infrastructure': 'cat-w3c', 'Protocols & APIs': 'cat-dif',
+    'Privacy & Cryptography': 'cat-privacy', 'Deployment & Operations': 'cat-deploy',
+    'Compliance & Governance': 'cat-comp', 'Wallet & UX': 'cat-wallet',
+  };
+
+  function renderGroupRows(groupName, feats) {
+    const groupCls = groupClassMap[groupName] || '';
+    let rows = `<tr class="mrow"><td class="fcat-header ${groupCls}" colspan="${providers.length + 1}">${groupName}</td></tr>`;
+    feats.forEach(f => {
+      const cells = providers.map(p => {
+        const entry   = (matrixMap[p.id] || {})[f.id] || { support: 'no', tooltip: '' };
+        const support = typeof entry === 'object' ? entry.support : entry;
+        const tip     = typeof entry === 'object' ? entry.tooltip : '';
+        return supportCell(support, tip);
+      }).join('');
+      rows += `<tr class="mrow" data-feature="${f.search_tags || ''}"><td class="frow-label">${f.label}</td>${cells}</tr>`;
+    });
+    return rows;
+  }
+
+  // Group features — sort by sort_order, separate tech vs compliance
   const featureGroups = {};
   features.forEach(f => {
     if (!featureGroups[f.group_name]) featureGroups[f.group_name] = [];
     featureGroups[f.group_name].push(f);
   });
+  // Sort features within each group by sort_order
+  Object.values(featureGroups).forEach(arr => arr.sort((a,b) => a.sort_order - b.sort_order));
+
+  // Separate into tech groups (sort_order < 100) and compliance groups (100+)
+  const techGroups     = {};
+  const complianceGrps = {};
+  Object.entries(featureGroups).forEach(([name, feats]) => {
+    if (COMPLIANCE_GROUPS.has(name)) complianceGrps[name] = feats;
+    else techGroups[name] = feats;
+  });
+
+  // Sort groups by minimum sort_order of their features
+  function sortedGroups(groups) {
+    return Object.entries(groups).sort(([,a],[,b]) => a[0].sort_order - b[0].sort_order);
+  }
 
   // ── MATRIX ROWS ───────────────────────────────────────────────
-  let matrixRows = '';
-  Object.entries(featureGroups).forEach(([group, feats]) => {
-    const groupClassMap = {
-      'W3C DID Standards': 'cat-w3c', 'W3C VC Standards': 'cat-w3c',
-      'DIF Specifications': 'cat-dif', 'OpenID Foundation': 'cat-openid',
-      'Trust Over IP Foundation': 'cat-toip', 'OpenWallet Foundation': 'cat-owf',
-      'Privacy & Data Protection': 'cat-privacy', 'Security Certifications': 'cat-security',
-      'EU Digital Identity': 'cat-eidas', 'Mobile & Device Security': 'cat-mobile',
-      'Credential Standards': 'cat-cred', 'DID & Identity Infrastructure': 'cat-w3c',
-      'Protocols & APIs': 'cat-dif', 'Privacy & Cryptography': 'cat-privacy',
-      'Deployment & Operations': 'cat-deploy', 'Compliance & Governance': 'cat-comp',
-      'Wallet & UX': 'cat-wallet',
-    };
-    const groupCls = groupClassMap[group] || '';
-    matrixRows += `<tr class="mrow"><td class="fcat-header ${groupCls}" colspan="${providers.length + 1}">${group}</td></tr>`;
-    feats.forEach(f => {
-      const cells = providers.map(p => {
-        const entry   = (matrixMap[p.id] || {})[f.id] || { support: 'no', tooltip: '' };
-        const support = typeof entry === 'object' ? entry.support  : entry;
-        const tip     = typeof entry === 'object' ? entry.tooltip  : '';
-        return supportCell(support, tip);
-      }).join('');
-      matrixRows += `<tr class="mrow" data-feature="${f.search_tags || ''}">
-        <td class="frow-label">${f.label}</td>
-        ${cells}
-      </tr>`;
-    });
+  const megaColspan = providers.length + 1;
+
+  // MEGA TITLE: Features
+  let matrixRows = `<tr class="mrow mega-title-row">
+    <td colspan="${megaColspan}" class="mega-title tech-mega">
+      <span class="mega-icon">&#9881;</span> Features
+      <span class="mega-sub">Technology standards, protocols &amp; capabilities</span>
+    </td>
+  </tr>`;
+
+  sortedGroups(techGroups).forEach(([group, feats]) => {
+    matrixRows += renderGroupRows(group, feats);
+  });
+
+  // MEGA TITLE: Compliance & Certifications
+  matrixRows += `<tr class="mrow mega-title-row">
+    <td colspan="${megaColspan}" class="mega-title compliance-mega">
+      <span class="mega-icon">&#9745;</span> Compliance &amp; Certifications
+      <span class="mega-sub">Standards conformance, regulatory &amp; security certifications</span>
+    </td>
+  </tr>`;
+
+  sortedGroups(complianceGrps).forEach(([group, feats]) => {
+    matrixRows += renderGroupRows(group, feats);
   });
 
   // ── FILTER BARS HTML ──────────────────────────────────────────
