@@ -277,10 +277,10 @@ function supportIcon(s) {
 function supportCell(s, tip) {
   const cls = s === 'yes' ? 'cell-yes' : s === 'partial' ? 'cell-partial' : 'cell-no';
   if (s === 'partial') {
-    const tipText = tip || 'Partial support — hover for details pending';
-    // Use data attribute; escape double quotes in tip text
-    const safe = tipText.replace(/"/g, '&quot;');
-    return `<td class="cell ${cls}"><span class="icon-partial" data-tip="${safe}">&#9675;</span></td>`;
+    const tipText = (tip && tip.trim()) ? tip.trim() : '';
+    const safe = tipText.replace(/\\/g, '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    const tipAttr = safe ? ` data-tip="${safe}"` : '';
+    return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr}>&#9675;</span></td>`;
   }
   return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
 }
@@ -391,39 +391,34 @@ function filterMatrix(val) {
 }
 
 // ── FLOATING TOOLTIP ─────────────────────────────────────────────────────────
-(function() {
-  const el = document.createElement('div');
-  el.id = 'ssi-tooltip';
-  document.body.appendChild(el);
+const tipEl = document.createElement('div');
+tipEl.id = 'ssi-tooltip';
+document.body.appendChild(tipEl);
 
-  let current = null;
-
-  document.addEventListener('mouseover', e => {
-    const t = e.target.closest('[data-tip]');
-    if (t && t !== current) {
-      current = t;
-      el.textContent = t.dataset.tip;
-      el.style.display = 'block';
-    } else if (!t) {
-      el.style.display = 'none';
-      current = null;
-    }
+function attachTooltips() {
+  document.querySelectorAll('[data-tip]').forEach(span => {
+    span.addEventListener('mouseenter', function(e) {
+      tipEl.textContent = this.dataset.tip;
+      tipEl.style.display = 'block';
+      moveTip(e);
+    });
+    span.addEventListener('mousemove', moveTip);
+    span.addEventListener('mouseleave', function() {
+      tipEl.style.display = 'none';
+    });
   });
+}
 
-  document.addEventListener('mousemove', e => {
-    if (!current) return;
-    const pad = 14;
-    const tw  = el.offsetWidth;
-    const th  = el.offsetHeight;
-    let x = e.clientX - tw / 2;
-    let y = e.clientY - th - pad;
-    if (x < pad) x = pad;
-    if (x + tw > window.innerWidth - pad) x = window.innerWidth - tw - pad;
-    if (y < pad) y = e.clientY + pad + 10;
-    el.style.left = x + 'px';
-    el.style.top  = y + 'px';
-  });
-})();
+function moveTip(e) {
+  const pad = 14, tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
+  let x = e.clientX - tw / 2;
+  let y = e.clientY - th - pad;
+  if (x < pad) x = pad;
+  if (x + tw > window.innerWidth - pad) x = window.innerWidth - tw - pad;
+  if (y < pad) y = e.clientY + pad + 10;
+  tipEl.style.left = x + 'px';
+  tipEl.style.top  = y + 'px';
+}
 
 function toggleHideUnsupported() {
   const hide = document.getElementById('hide-unsupported').checked;
@@ -493,18 +488,49 @@ function renderApp({ providers, features, matrix }) {
     </tr>`).join('');
 
   // ── DEVTOOLS TABLE ROWS ───────────────────────────────────────
-  const devtoolRows = devtools.map((p, i) => `
-    <tr data-ledger="${p.ledger_model}" data-cat="devtool" data-col="${p.col_tags||''}" data-name="${p.name.toLowerCase()}">
+  // Build provider name lookup for devtools
+  const providerNames = {};
+  providers.forEach(p => { providerNames[p.id] = p.name; });
+
+  const devtoolRows = devtools.map((p, i) => {
+    // Check OID4VC and DIDComm support from matrixMap
+    // OID4VC = feature sort_order 12, DIDComm = feature sort_order 13
+    const oidFeat   = features.find(f => f.sort_order === 12);
+    const didcFeat  = features.find(f => f.sort_order === 13);
+    const oidEntry  = oidFeat  ? (matrixMap[p.id] || {})[oidFeat.id]  : null;
+    const didcEntry = didcFeat ? (matrixMap[p.id] || {})[didcFeat.id] : null;
+    const oidSupport  = oidEntry  ? (typeof oidEntry  === 'object' ? oidEntry.support  : oidEntry)  : 'no';
+    const didcSupport = didcEntry ? (typeof didcEntry === 'object' ? didcEntry.support : didcEntry) : 'no';
+
+    function checkIcon(support) {
+      if (support === 'yes')     return '<span style="color:#059669;font-size:1rem">&#9989;</span>';
+      if (support === 'partial') return '<span style="color:#d97706;font-size:.9rem">&#9675;</span>';
+      return '<span style="color:#d1d5db">&#8212;</span>';
+    }
+
+    // Products that use this devtool (from col_tags or maintained_by hints)
+    const usedBy = providers.filter(pr =>
+      pr.category === 'product' &&
+      pr.col_tags && p.col_tags &&
+      // simple heuristic: same ledger model
+      pr.ledger_model === p.ledger_model
+    ).map(pr => pr.name).slice(0,3).join(', ') || '&mdash;';
+
+        const toolTypeBadge = p.tool_type ? '<span class="b b-cyan">' + p.tool_type + '</span>' : '&mdash;';
+    return `<tr data-ledger="${p.ledger_model}" data-cat="devtool" data-col="${p.col_tags||''}" data-name="${p.name.toLowerCase()}">
       <td class="num">${i + 1}</td>
       <td>${p.name}</td>
       <td>${ledgerBadge(p.ledger_model)}</td>
       <td>${lp(p.ledger_detail)}</td>
       <td>${p.maintained_by || '&mdash;'}</td>
-      <td>${p.tool_type ? `<span class="b b-cyan">${p.tool_type}</span>` : '&mdash;'}</td>
+      <td>${toolTypeBadge}</td>
+      <td style="text-align:center">${checkIcon(oidSupport)}</td>
+      <td style="text-align:center">${checkIcon(didcSupport)}</td>
       <td>${p.description || '&mdash;'}</td>
       <td>${p.pricing || '&mdash;'}</td>
       <td>${lnk(p.website_url, p.website_url ? p.website_url.replace('https://','').split('/')[0] : '')}</td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 
   // ── MATRIX HEADERS ────────────────────────────────────────────
   const matrixHeaders = providers.map(p =>
@@ -672,12 +698,12 @@ function renderApp({ providers, features, matrix }) {
       <div class="section-header">
         <div class="eyebrow">Developer Tools</div>
         <div class="sec-title">SDKs, Frameworks, Protocols &amp; Networks</div>
-        <div class="sec-desc">${devtools.length} open-source tools and infrastructure projects for building SSI applications.</div>
+        <div class="sec-desc">${devtools.length} open-source tools and infrastructure projects. <strong>Framework</strong> = agent you build on top of. <strong>SDK/Library</strong> = importable code module. <strong>Protocol</strong> = specification layer (KERI, Sidetree). <strong>Resolution</strong> = DID resolver/gateway.</div>
       </div>
       ${filterBar('devtools', devAg.length, devSp.length)}
       <div class="tbl-wrap">
         <table id="devtools-table">
-          <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Type</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
+          <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Type</th><th style="text-align:center">OID4VC</th><th style="text-align:center">DIDComm</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
           <tbody>${devtoolRows}</tbody>
         </table>
       </div>
@@ -721,7 +747,11 @@ function renderApp({ providers, features, matrix }) {
 
 // ── BOOT ─────────────────────────────────────────────────────────────────────
 loadData()
-  .then(renderApp)
+  .then(data => {
+    renderApp(data);
+    // Attach tooltip events after render
+    setTimeout(attachTooltips, 100);
+  })
   .catch(err => {
     document.getElementById('app').innerHTML = `
       <div class="error-screen">
