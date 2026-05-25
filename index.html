@@ -405,17 +405,26 @@ tipEl.id = 'ssi-tooltip';
 document.body.appendChild(tipEl);
 
 function attachTooltips() {
-  document.querySelectorAll('[data-tip]').forEach(span => {
-    span.addEventListener('mouseenter', function(e) {
-      tipEl.textContent = this.dataset.tip;
-      tipEl.style.display = 'block';
-      moveTip(e);
-    });
-    span.addEventListener('mousemove', moveTip);
-    span.addEventListener('mouseleave', function() {
-      tipEl.style.display = 'none';
-    });
+  // Use event delegation so it works for all dynamically rendered elements
+  document.addEventListener('mouseenter', function(e) {
+    const t = e.target.closest('[data-tip]');
+    if (!t) return;
+    tipEl.textContent = t.dataset.tip;
+    tipEl.style.display = 'block';
+    moveTip(e);
+  }, true);
+
+  document.addEventListener('mousemove', function(e) {
+    if (tipEl.style.display === 'none') return;
+    if (!e.target.closest('[data-tip]')) return;
+    moveTip(e);
   });
+
+  document.addEventListener('mouseleave', function(e) {
+    const t = e.target.closest('[data-tip]');
+    if (!t) return;
+    tipEl.style.display = 'none';
+  }, true);
 }
 
 function moveTip(e) {
@@ -746,7 +755,7 @@ function renderApp({ providers, features, matrix }) {
       ${filterBar('devtools', devAg.length, devSp.length)}
       <div class="tbl-wrap">
         <table id="devtools-table">
-          <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Type</th><th>Exchange Protocols <span id="ep-tip" style="cursor:help;color:#94a3b8;font-size:.7rem" title="Protocols used in decentralized digital identity systems to manage and exchange Verifiable Credentials">&#9432;</span></th><th>Key Types</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
+          <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Tool Type</th><th>Exchange Protocols <span id="ep-tip" style="cursor:help;color:#94a3b8;font-size:.7rem" title="Protocols used in decentralized digital identity systems to manage and exchange Verifiable Credentials">&#9432;</span></th><th>Key Types</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
           <tbody>${devtoolRows}</tbody>
         </table>
       </div>
