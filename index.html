@@ -517,6 +517,7 @@ function _applyMatrixFilters() {
     'Security':['Security Certifications'],
     'EU':      ['EU Digital Identity','Compliance & Governance'],
     'Mobile':  ['Mobile & Device Security','Wallet & UX','Deployment & Operations'],
+    'Trust':   ['Trust Over IP Foundation','OpenWallet Foundation'],
   };
   const allowedGroups = _matrixGroupFilter === 'all' ? null : (groupMap[_matrixGroupFilter] || []);
   let currentGroupVisible = true;
@@ -1027,12 +1028,13 @@ function renderApp({ providers, features, matrix }) {
         <div class="sf-divider"></div>
         <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
         <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
         <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
         <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
         <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
         <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
         <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile & Wallets</button>
         <div class="sf-divider"></div>
         <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
       </div>
