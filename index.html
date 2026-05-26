@@ -335,10 +335,29 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-async function query(table, params = '') {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers });
+async function query(table, params = '', rangeEnd = 999) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
+    headers: { ...headers, 'Range': `0-${rangeEnd}` }
+  });
   if (!res.ok) throw new Error(`${table}: ${res.status} ${res.statusText}`);
   return res.json();
+}
+
+async function queryAll(table, params = '') {
+  const results = [];
+  let start = 0;
+  const pageSize = 1000;
+  while (true) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
+      headers: { ...headers, 'Range': `${start}-${start + pageSize - 1}` }
+    });
+    if (!res.ok) throw new Error(`${table}: ${res.status} ${res.statusText}`);
+    const page = await res.json();
+    results.push(...page);
+    if (page.length < pageSize) break;
+    start += pageSize;
+  }
+  return results;
 }
 
 // ── LOAD ALL DATA ─────────────────────────────────────────────────────────────
@@ -346,7 +365,7 @@ async function loadData() {
   const [providers, features, matrix] = await Promise.all([
     query('providers', 'select=*&order=sort_order&active=eq.true'),
     query('features',  'select=*&order=sort_order'),
-    query('feature_matrix', 'select=provider_id,feature_id,support,tooltip&limit=10000')
+    queryAll('feature_matrix', 'select=provider_id,feature_id,support,tooltip')
   ]);
   return { providers, features, matrix };
 }
