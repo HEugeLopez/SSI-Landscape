@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SSI Landscape — Interactive Reference 2025</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%232563eb'/><text x='16' y='22' font-size='18' text-anchor='middle' font-family='monospace' fill='white' font-weight='bold'>S</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -139,109 +138,7 @@ a.lnk { display: inline-flex; align-items: center; color: #1e40af; text-decorati
 a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3); }
 .lp { font-family: var(--mono); font-size: .6rem; padding: .1rem .4rem; border-radius: 3px; background: rgba(124,58,237,.08); color: #4c1d95; border: 1px solid rgba(124,58,237,.18); white-space: nowrap; display: inline-block; margin-top: .15rem; }
 
-/* MEGA TITLES */
-.mega-title-row td { padding: 0 !important; }
-.mega-title-row { width: 100%; }
-.mega-title {
-  padding: 1rem 1.4rem !important;
-  font-size: .85rem;
-  font-weight: 700;
-  letter-spacing: .01em;
-  z-index: 4;
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  border-top: 3px solid;
-  width: 100%;
-}
-.mega-title.tech-mega {
-  background: linear-gradient(90deg, #eff6ff, #f8fafc);
-  color: #1e40af;
-  border-color: #2563eb;
-}
-.mega-title.compliance-mega {
-  background: linear-gradient(90deg, #fef2f2, #f8fafc);
-  color: #991b1b;
-  border-color: #dc2626;
-}
-.mega-icon { font-size: 1rem; }
-.mega-sub {
-  font-size: .68rem;
-  font-weight: 400;
-  opacity: .7;
-  font-family: var(--sans);
-  letter-spacing: 0;
-}
-
-/* MATRIX COLUMN CATEGORY STRIPES */
-/* Agnostic = green top border, Specific = amber top border (already done) */
-/* Feature row group colors */
-.fcat-header.cat-w3c     { border-left: 4px solid #2563eb; }
-.fcat-header.cat-dif     { border-left: 4px solid #059669; }
-.fcat-header.cat-openid  { border-left: 4px solid #7c3aed; }
-.fcat-header.cat-toip    { border-left: 4px solid #0891b2; }
-.fcat-header.cat-owf     { border-left: 4px solid #d97706; }
-.fcat-header.cat-privacy { border-left: 4px solid #dc2626; }
-.fcat-header.cat-security{ border-left: 4px solid #475569; }
-.fcat-header.cat-eidas   { border-left: 4px solid #1d4ed8; }
-.fcat-header.cat-mobile  { border-left: 4px solid #9333ea; }
-.fcat-header.cat-cred    { border-left: 4px solid #0891b2; }
-.fcat-header.cat-deploy  { border-left: 4px solid #059669; }
-.fcat-header.cat-wallet  { border-left: 4px solid #d97706; }
-.fcat-header.cat-comp    { border-left: 4px solid #dc2626; }
-
-/* Legend pills */
-.legend-pill {
-  display: inline-flex; align-items: center; gap: .35rem;
-  padding: .2rem .6rem; border-radius: 100px;
-  font-size: .65rem; font-weight: 600; font-family: var(--mono);
-  border: 1px solid currentColor; opacity: .85;
-}
-
-/* Feature Comparison search + filter bar */
-.matrix-filter-bar {
-  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
-  background: var(--bg1); border: 1px solid var(--border);
-  border-radius: var(--r-lg); padding: .7rem 1rem; margin-bottom: 1rem;
-}
-.matrix-filter-bar .sf-label {
-  font-family: var(--mono); font-size: .65rem; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--slate);
-}
-.mf-btn {
-  padding: .28rem .75rem; border-radius: 100px; font-size: .72rem;
-  font-weight: 500; border: 1px solid var(--border2);
-  background: white; color: #475569; cursor: pointer;
-  transition: all .14s; font-family: var(--sans); white-space: nowrap;
-}
-.mf-btn:hover { border-color: rgba(37,99,235,.35); color: var(--blue); }
-.mf-btn.active { background: var(--blue-dim); border-color: rgba(37,99,235,.35); color: #1e40af; font-weight: 600; }
-
-/* References table in DevTools */
-.ref-section { margin-top: 2.5rem; }
-.ref-section-title {
-  font-family: var(--mono); font-size: .65rem; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--slate);
-  margin-bottom: 1rem; display: flex; align-items: center; gap: .5rem;
-  padding-bottom: .5rem; border-bottom: 1px solid var(--border);
-}
-.ref-section-title::before { content: ''; width: 3px; height: 14px; background: var(--blue); border-radius: 2px; }
-.ref-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: .75rem;
-}
-.ref-card {
-  background: var(--bg1); border: 1px solid var(--border);
-  border-radius: var(--r-lg); padding: 1rem 1.1rem;
-  display: flex; flex-direction: column; gap: .3rem;
-}
-.ref-card-title { font-size: .8rem; font-weight: 600; color: var(--ink); }
-.ref-card-sub { font-size: .72rem; color: var(--slate); line-height: 1.5; }
-.ref-card-link { font-size: .7rem; font-family: var(--mono); }
-.ref-card-tags { display: flex; gap: .25rem; flex-wrap: wrap; margin-top: .25rem; }
-
 /* MATRIX */
-
 .cmp-controls { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
 .cmp-search { padding: .35rem .8rem; border-radius: var(--r); border: 1px solid var(--border2); background: #fff; font-family: var(--sans); font-size: .78rem; color: var(--ink); outline: none; width: 220px; transition: border-color .15s; }
 .cmp-search:focus { border-color: var(--blue); }
@@ -404,28 +301,19 @@ function runFilter(section) {
 
   let vis = 0, total = 0, rowNum = 0;
   table.querySelectorAll('tbody tr').forEach(tr => {
-    const ledger    = tr.dataset.ledger    || '';
-    const col       = (tr.dataset.col      || '').toLowerCase();
-    const name      = (tr.dataset.name     || '').toLowerCase();
-    const cat       = tr.dataset.cat       || '';
-    const keyTypes  = (tr.dataset.keytypes || '').toLowerCase();
+    const ledger    = tr.dataset.ledger || '';
+    const col       = (tr.dataset.col  || '').toLowerCase();
+    const name      = (tr.dataset.name || '').toLowerCase();
+    const cat       = tr.dataset.cat   || '';
 
     // For summary, col chips 'type-product'/'type-devtool' map to cat filter
     const catFilter = section === 'summary'
       ? (s.col === 'type-product' ? 'product' : s.col === 'type-devtool' ? 'devtool' : null)
       : null;
 
-    const keyTypeChips = ['ed25519','secp256k1','p-256','bls12-381','rsa'];
-    const isKeyChip = keyTypeChips.includes(s.col);
     const ledOk = ledger === s.ledger;
     const catOk = !catFilter || cat === catFilter;
-    const epChips = ['oid4vci','oid4vp','didcomm','vc-api','chapi'];
-    const isEpChip = epChips.includes(s.col);
-    const exchProto = (tr.dataset.exchproto || '').toLowerCase();
-    const colOk = s.col === 'all' || s.col === 'type-product' || s.col === 'type-devtool'
-      || (isKeyChip ? keyTypes.includes(s.col)
-        : isEpChip  ? exchProto.includes(s.col)
-        : col.includes(s.col));
+    const colOk = s.col === 'all' || s.col === 'type-product' || s.col === 'type-devtool' || col.includes(s.col);
     const qOk   = !s.q || name.includes(s.q);
 
     const show = ledOk && catOk && colOk && qOk;
@@ -493,48 +381,12 @@ function activate(id) {
 }
 
 // ── MATRIX FILTER ─────────────────────────────────────────────────────────────
-let _matrixGroupFilter = 'all';
-let _matrixSearchFilter = '';
-
-function filterMatrixGroup(group, btn) {
-  _matrixGroupFilter = group;
-  document.querySelectorAll('.mf-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  _applyMatrixFilters();
-}
-
 function filterMatrix(val) {
-  _matrixSearchFilter = val.toLowerCase().trim();
-  _applyMatrixFilters();
-}
-
-function _applyMatrixFilters() {
-  const groupMap = {
-    'W3C':     ['W3C DID Standards','W3C VC Standards','DID & Identity','DID & Identity Infrastructure','Credential Standards'],
-    'DIF':     ['DIF Specifications','Protocols & APIs'],
-    'OpenID':  ['OpenID Foundation'],
-    'Privacy': ['Privacy & Data Protection','Privacy & Cryptography'],
-    'Security':['Security Certifications'],
-    'EU':      ['EU Digital Identity','Compliance & Governance'],
-    'Mobile':  ['Mobile & Device Security','Wallet & UX','Deployment & Operations'],
-    'Trust':   ['Trust Over IP Foundation','OpenWallet Foundation'],
-  };
-  const allowedGroups = _matrixGroupFilter === 'all' ? null : (groupMap[_matrixGroupFilter] || []);
-  let currentGroupVisible = true;
-
+  const q = val.toLowerCase().trim();
   document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
-    // Always show mega-title rows
-    if (tr.classList.contains('mega-title-row')) { tr.style.display = ''; return; }
-    const header = tr.querySelector('.fcat-header');
-    if (header) {
-      const grp = header.textContent.trim();
-      currentGroupVisible = !allowedGroups || allowedGroups.includes(grp);
-      tr.style.display = currentGroupVisible ? '' : 'none';
-      return;
-    }
-    if (!currentGroupVisible) { tr.style.display = 'none'; return; }
+    if (tr.querySelector('.fcat-header')) { tr.style.display = ''; return; }
     const text = (tr.dataset.feature || '') + ' ' + ((tr.querySelector('.frow-label') || {}).textContent || '');
-    tr.style.display = (!_matrixSearchFilter || text.toLowerCase().includes(_matrixSearchFilter)) ? '' : 'none';
+    tr.style.display = (!q || text.toLowerCase().includes(q)) ? '' : 'none';
   });
 }
 
@@ -544,26 +396,17 @@ tipEl.id = 'ssi-tooltip';
 document.body.appendChild(tipEl);
 
 function attachTooltips() {
-  // Use event delegation so it works for all dynamically rendered elements
-  document.addEventListener('mouseenter', function(e) {
-    const t = e.target.closest('[data-tip]');
-    if (!t) return;
-    tipEl.textContent = t.dataset.tip;
-    tipEl.style.display = 'block';
-    moveTip(e);
-  }, true);
-
-  document.addEventListener('mousemove', function(e) {
-    if (tipEl.style.display === 'none') return;
-    if (!e.target.closest('[data-tip]')) return;
-    moveTip(e);
+  document.querySelectorAll('[data-tip]').forEach(span => {
+    span.addEventListener('mouseenter', function(e) {
+      tipEl.textContent = this.dataset.tip;
+      tipEl.style.display = 'block';
+      moveTip(e);
+    });
+    span.addEventListener('mousemove', moveTip);
+    span.addEventListener('mouseleave', function() {
+      tipEl.style.display = 'none';
+    });
   });
-
-  document.addEventListener('mouseleave', function(e) {
-    const t = e.target.closest('[data-tip]');
-    if (!t) return;
-    tipEl.style.display = 'none';
-  }, true);
 }
 
 function moveTip(e) {
@@ -580,7 +423,6 @@ function moveTip(e) {
 function toggleHideUnsupported() {
   const hide = document.getElementById('hide-unsupported').checked;
   document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
-    if (tr.classList.contains('mega-title-row')) return;
     if (tr.querySelector('.fcat-header')) return;
     if (!hide) { tr.style.display = ''; return; }
     tr.style.display = tr.querySelectorAll('.icon-yes').length === 0 ? 'none' : '';
@@ -660,41 +502,7 @@ function renderApp({ providers, features, matrix }) {
     const oidSupport  = oidEntry  ? (typeof oidEntry  === 'object' ? oidEntry.support  : oidEntry)  : 'no';
     const didcSupport = didcEntry ? (typeof didcEntry === 'object' ? didcEntry.support : didcEntry) : 'no';
 
-    function exchangeProtocolBadges(protocols) {
-    if (!protocols) return '&mdash;';
-    const TOOLTIP = 'Protocols used in decentralized digital identity systems to manage and exchange Verifiable Credentials';
-    const colors = {
-      'OID4VCI':     { bg: 'rgba(37,99,235,.09)',  color: '#1e40af', border: 'rgba(37,99,235,.2)'  },
-      'OID4VP':      { bg: 'rgba(37,99,235,.09)',  color: '#1e40af', border: 'rgba(37,99,235,.2)'  },
-      'DIDComm v1':  { bg: 'rgba(5,150,105,.1)',   color: '#065f46', border: 'rgba(5,150,105,.25)' },
-      'DIDComm v2':  { bg: 'rgba(5,150,105,.15)',  color: '#064e3b', border: 'rgba(5,150,105,.35)' },
-      'VC-API':      { bg: 'rgba(124,58,237,.1)',  color: '#4c1d95', border: 'rgba(124,58,237,.2)' },
-      'CHAPI':       { bg: 'rgba(217,119,6,.1)',   color: '#92400e', border: 'rgba(217,119,6,.25)' },
-    };
-    return protocols.split(',').map(p => {
-      const key = p.trim();
-      const c = colors[key] || { bg: 'rgba(100,116,139,.1)', color: '#334155', border: 'rgba(100,116,139,.2)' };
-      return `<span data-tip="${TOOLTIP}" style="display:inline-block;margin:.1rem .15rem;padding:.12rem .4rem;border-radius:100px;font-size:.6rem;font-weight:600;font-family:var(--mono);background:${c.bg};color:${c.color};border:1px solid ${c.border};cursor:help">${key}</span>`;
-    }).join('');
-  }
-
-  function keyTypesBadges(keyTypes) {
-    if (!keyTypes) return '&mdash;';
-    const colors = {
-      'Ed25519':    { bg: 'rgba(5,150,105,.1)',   color: '#065f46', border: 'rgba(5,150,105,.25)' },
-      'secp256k1':  { bg: 'rgba(37,99,235,.09)',  color: '#1e40af', border: 'rgba(37,99,235,.2)'  },
-      'P-256':      { bg: 'rgba(124,58,237,.1)',  color: '#4c1d95', border: 'rgba(124,58,237,.2)' },
-      'BLS12-381':  { bg: 'rgba(217,119,6,.1)',   color: '#92400e', border: 'rgba(217,119,6,.25)' },
-      'RSA':        { bg: 'rgba(100,116,139,.1)', color: '#334155', border: 'rgba(100,116,139,.2)'},
-    };
-    return keyTypes.split(',').map(k => {
-      const key = k.trim();
-      const c = colors[key] || { bg: 'rgba(100,116,139,.1)', color: '#334155', border: 'rgba(100,116,139,.2)' };
-      return `<span style="display:inline-block;margin:.1rem .15rem;padding:.12rem .4rem;border-radius:100px;font-size:.6rem;font-weight:600;font-family:var(--mono);background:${c.bg};color:${c.color};border:1px solid ${c.border}">${key}</span>`;
-    }).join('');
-  }
-
-  function checkIcon(support) {
+    function checkIcon(support) {
       if (support === 'yes')     return '<span style="color:#059669;font-size:1rem">&#9989;</span>';
       if (support === 'partial') return '<span style="color:#d97706;font-size:.9rem">&#9675;</span>';
       return '<span style="color:#d1d5db">&#8212;</span>';
@@ -709,15 +517,15 @@ function renderApp({ providers, features, matrix }) {
     ).map(pr => pr.name).slice(0,3).join(', ') || '&mdash;';
 
         const toolTypeBadge = p.tool_type ? '<span class="b b-cyan">' + p.tool_type + '</span>' : '&mdash;';
-    return `<tr data-ledger="${p.ledger_model}" data-cat="devtool" data-col="${p.col_tags||''}" data-name="${p.name.toLowerCase()}" data-keytypes="${(p.key_types||''). toLowerCase()}" data-exchproto="${(p.exchange_protocols||'').toLowerCase()}">
+    return `<tr data-ledger="${p.ledger_model}" data-cat="devtool" data-col="${p.col_tags||''}" data-name="${p.name.toLowerCase()}">
       <td class="num">${i + 1}</td>
       <td>${p.name}</td>
       <td>${ledgerBadge(p.ledger_model)}</td>
       <td>${lp(p.ledger_detail)}</td>
       <td>${p.maintained_by || '&mdash;'}</td>
       <td>${toolTypeBadge}</td>
-      <td>${exchangeProtocolBadges(p.exchange_protocols)}</td>
-      <td>${keyTypesBadges(p.key_types)}</td>
+      <td style="text-align:center">${checkIcon(oidSupport)}</td>
+      <td style="text-align:center">${checkIcon(didcSupport)}</td>
       <td>${p.description || '&mdash;'}</td>
       <td>${p.pricing || '&mdash;'}</td>
       <td>${lnk(p.website_url, p.website_url ? p.website_url.replace('https://','').split('/')[0] : '')}</td>
@@ -729,89 +537,29 @@ function renderApp({ providers, features, matrix }) {
     `<th class="prov-head ${p.ledger_model}">${p.name}</th>`
   ).join('');
 
-  // Compliance group names (sort_order 100+)
-  const COMPLIANCE_GROUPS = new Set([
-    'W3C DID Standards', 'W3C VC Standards',
-    'DIF Specifications', 'OpenID Foundation',
-    'Trust Over IP Foundation', 'OpenWallet Foundation',
-    'Privacy & Data Protection', 'Security Certifications',
-    'EU Digital Identity', 'Mobile & Device Security',
-  ]);
-
-  const groupClassMap = {
-    'W3C DID Standards': 'cat-w3c', 'W3C VC Standards': 'cat-w3c',
-    'DIF Specifications': 'cat-dif', 'OpenID Foundation': 'cat-openid',
-    'Trust Over IP Foundation': 'cat-toip', 'OpenWallet Foundation': 'cat-owf',
-    'Privacy & Data Protection': 'cat-privacy', 'Security Certifications': 'cat-security',
-    'EU Digital Identity': 'cat-eidas', 'Mobile & Device Security': 'cat-mobile',
-    'Credential Standards': 'cat-cred', 'DID & Identity': 'cat-w3c',
-    'DID & Identity Infrastructure': 'cat-w3c', 'Protocols & APIs': 'cat-dif',
-    'Privacy & Cryptography': 'cat-privacy', 'Deployment & Operations': 'cat-deploy',
-    'Compliance & Governance': 'cat-comp', 'Wallet & UX': 'cat-wallet',
-  };
-
-  function renderGroupRows(groupName, feats) {
-    const groupCls = groupClassMap[groupName] || '';
-    let rows = `<tr class="mrow"><td class="fcat-header ${groupCls}" colspan="${providers.length + 1}">${groupName}</td></tr>`;
-    feats.forEach(f => {
-      const cells = providers.map(p => {
-        const entry   = (matrixMap[p.id] || {})[f.id] || { support: 'no', tooltip: '' };
-        const support = typeof entry === 'object' ? entry.support : entry;
-        const tip     = typeof entry === 'object' ? entry.tooltip : '';
-        return supportCell(support, tip);
-      }).join('');
-      rows += `<tr class="mrow" data-feature="${f.search_tags || ''}"><td class="frow-label">${f.label}</td>${cells}</tr>`;
-    });
-    return rows;
-  }
-
-  // Group features — sort by sort_order, separate tech vs compliance
+  // Group features
   const featureGroups = {};
   features.forEach(f => {
     if (!featureGroups[f.group_name]) featureGroups[f.group_name] = [];
     featureGroups[f.group_name].push(f);
   });
-  // Sort features within each group by sort_order
-  Object.values(featureGroups).forEach(arr => arr.sort((a,b) => a.sort_order - b.sort_order));
-
-  // Separate into tech groups (sort_order < 100) and compliance groups (100+)
-  const techGroups     = {};
-  const complianceGrps = {};
-  Object.entries(featureGroups).forEach(([name, feats]) => {
-    if (COMPLIANCE_GROUPS.has(name)) complianceGrps[name] = feats;
-    else techGroups[name] = feats;
-  });
-
-  // Sort groups by minimum sort_order of their features
-  function sortedGroups(groups) {
-    return Object.entries(groups).sort(([,a],[,b]) => a[0].sort_order - b[0].sort_order);
-  }
 
   // ── MATRIX ROWS ───────────────────────────────────────────────
-  const megaColspan = providers.length + 1;
-
-  // MEGA TITLE: Features
-  let matrixRows = `<tr class="mrow mega-title-row">
-    <td colspan="${megaColspan}" class="mega-title tech-mega">
-      <span class="mega-icon">&#9881;</span> Features
-      <span class="mega-sub">Technology standards, protocols &amp; capabilities</span>
-    </td>
-  </tr>`;
-
-  sortedGroups(techGroups).forEach(([group, feats]) => {
-    matrixRows += renderGroupRows(group, feats);
-  });
-
-  // MEGA TITLE: Compliance & Certifications
-  matrixRows += `<tr class="mrow mega-title-row">
-    <td colspan="${megaColspan}" class="mega-title compliance-mega">
-      <span class="mega-icon">&#9745;</span> Compliance &amp; Certifications
-      <span class="mega-sub">Standards conformance, regulatory &amp; security certifications</span>
-    </td>
-  </tr>`;
-
-  sortedGroups(complianceGrps).forEach(([group, feats]) => {
-    matrixRows += renderGroupRows(group, feats);
+  let matrixRows = '';
+  Object.entries(featureGroups).forEach(([group, feats]) => {
+    matrixRows += `<tr class="mrow"><td class="fcat-header" colspan="${providers.length + 1}">${group}</td></tr>`;
+    feats.forEach(f => {
+      const cells = providers.map(p => {
+        const entry   = (matrixMap[p.id] || {})[f.id] || { support: 'no', tooltip: '' };
+        const support = typeof entry === 'object' ? entry.support  : entry;
+        const tip     = typeof entry === 'object' ? entry.tooltip  : '';
+        return supportCell(support, tip);
+      }).join('');
+      matrixRows += `<tr class="mrow" data-feature="${f.search_tags || ''}">
+        <td class="frow-label">${f.label}</td>
+        ${cells}
+      </tr>`;
+    });
   });
 
   // ── FILTER BARS HTML ──────────────────────────────────────────
@@ -826,8 +574,8 @@ function renderApp({ providers, features, matrix }) {
         sp: [['zkp','ZKP / ZK'],['onchain','On-Chain Verify'],['monetize','Monetization'],['mdl','mDL / ISO 18013'],['wallet','Holder Wallet'],['free','Free / OSS'],['quote','Quote Only']]
       },
       devtools: {
-        ag: [['framework','Framework'],['sdk','SDK / Library'],['mobile','Mobile / RN'],['python','Python'],['typescript','TypeScript / JS'],['oid4vci','OID4VCI'],['oid4vp','OID4VP'],['didcomm','DIDComm'],['vc-api','VC-API'],['ed25519','Ed25519'],['secp256k1','secp256k1'],['p-256','P-256'],['bls12-381','BLS12-381']],
-        sp: [['blockchain','Blockchain'],['ledger-infra','Public Infra'],['zkp','ZKP / ZK'],['anoncreds','AnonCreds'],['ethereum','Ethereum / EVM'],['eu','EU / EBSI'],['government','Government'],['oid4vci','OID4VCI'],['oid4vp','OID4VP'],['didcomm','DIDComm'],['ed25519','Ed25519'],['secp256k1','secp256k1'],['p-256','P-256']]
+        ag: [['framework','Framework'],['sdk','SDK / Library'],['protocol','Protocol'],['resolution','Resolution'],['mobile','Mobile / RN'],['oid4vc','OID4VC'],['didcomm','DIDComm'],['python','Python'],['typescript','TypeScript / JS']],
+        sp: [['blockchain','Blockchain'],['ledger-infra','Public Infra'],['zkp','ZKP / ZK'],['anoncreds','AnonCreds'],['ethereum','Ethereum / EVM'],['eu','EU / EBSI'],['government','Government']]
       }
     };
 
@@ -955,64 +703,10 @@ function renderApp({ providers, features, matrix }) {
       ${filterBar('devtools', devAg.length, devSp.length)}
       <div class="tbl-wrap">
         <table id="devtools-table">
-          <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Tool Type</th><th>Exchange Protocols <span id="ep-tip" style="cursor:help;color:#94a3b8;font-size:.7rem" title="Protocols used in decentralized digital identity systems to manage and exchange Verifiable Credentials">&#9432;</span></th><th>Key Types</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
+          <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Type</th><th style="text-align:center">OID4VC</th><th style="text-align:center">DIDComm</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
           <tbody>${devtoolRows}</tbody>
         </table>
       </div>
-
-      <!-- REFERENCES SECTION -->
-      <div class="ref-section">
-        <div class="ref-section-title">Key References &amp; Resources</div>
-
-        <div style="margin-bottom:1.5rem">
-          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563eb;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
-            <span style="display:inline-block;width:10px;height:3px;background:#2563eb;border-radius:1px"></span>Standards &amp; Specifications
-          </div>
-          <div class="ref-grid">
-            <div class="ref-card"><div class="ref-card-title">W3C DID Core</div><div class="ref-card-sub">Foundational specification for Decentralized Identifiers.</div><a class="lnk ref-card-link" href="https://www.w3.org/TR/did-core/" target="_blank">w3.org/TR/did-core ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">W3C Verifiable Credentials 2.0</div><div class="ref-card-sub">Cryptographically secure, privacy-respecting credential format.</div><a class="lnk ref-card-link" href="https://www.w3.org/TR/vc-data-model-2.0/" target="_blank">w3.org/TR/vc-data-model-2.0 ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">OpenID4VC Suite (OID4VCI + OID4VP)</div><div class="ref-card-sub">Issuance and presentation of VCs over OpenID Connect protocols.</div><a class="lnk ref-card-link" href="https://openid.net/sg/openid4vc/" target="_blank">openid.net/sg/openid4vc ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">DIF Presentation Exchange</div><div class="ref-card-sub">Standardized VC request/response between wallets and verifiers.</div><a class="lnk ref-card-link" href="https://identity.foundation/presentation-exchange/" target="_blank">identity.foundation/pe ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">DIF DIDComm Messaging</div><div class="ref-card-sub">Secure, private agent-to-agent communication over DIDs.</div><a class="lnk ref-card-link" href="https://identity.foundation/didcomm-messaging/spec/" target="_blank">identity.foundation/didcomm ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">AnonCreds Specification</div><div class="ref-card-sub">Privacy-preserving credentials using CL signatures and ZK predicates.</div><a class="lnk ref-card-link" href="https://hyperledger.github.io/anoncreds-spec/" target="_blank">hyperledger.github.io/anoncreds-spec ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">SD-JWT Verifiable Credentials</div><div class="ref-card-sub">IETF spec for selective disclosure using JWT format.</div><a class="lnk ref-card-link" href="https://www.ietf.org/archive/id/draft-ietf-oauth-sd-jwt-vc-08.txt" target="_blank">ietf.org SD-JWT VC ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">KERI — Key Event Receipt Infrastructure</div><div class="ref-card-sub">Ledger-less key management. Powers GLEIF vLEI globally.</div><a class="lnk ref-card-link" href="https://keri.one" target="_blank">keri.one ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">Sidetree Protocol</div><div class="ref-card-sub">Scalable DID anchoring on any DLT. Powers did:ion + did:orb.</div><a class="lnk ref-card-link" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation/sidetree ↗</a></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:1.5rem">
-          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#dc2626;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
-            <span style="display:inline-block;width:10px;height:3px;background:#dc2626;border-radius:1px"></span>Compliance &amp; Regulatory
-          </div>
-          <div class="ref-grid">
-            <div class="ref-card"><div class="ref-card-title">EU eIDAS 2.0 Regulation</div><div class="ref-card-sub">Mandates EUDI Wallet across EU member states by 2026.</div><a class="lnk ref-card-link" href="https://digital-strategy.ec.europa.eu/en/policies/eidas-regulation" target="_blank">digital-strategy.ec.europa.eu ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">EBSI &amp; Architecture Reference Framework</div><div class="ref-card-sub">Technical implementation guidance for EU Digital Identity Wallet.</div><a class="lnk ref-card-link" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu/EBSI ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">GDPR (EU Data Protection Regulation)</div><div class="ref-card-sub">Data minimization, right to erasure, and privacy by design.</div><a class="lnk ref-card-link" href="https://gdpr.eu" target="_blank">gdpr.eu ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">NIST SP 800-63 Digital Identity</div><div class="ref-card-sub">US federal standard for identity proofing, authentication, federation.</div><a class="lnk ref-card-link" href="https://pages.nist.gov/800-63-4/" target="_blank">pages.nist.gov/800-63-4 ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">Trust Over IP Foundation</div><div class="ref-card-sub">Governance + technical interoperability stack for decentralized trust.</div><a class="lnk ref-card-link" href="https://trustoverip.org" target="_blank">trustoverip.org ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">OpenWallet Foundation</div><div class="ref-card-sub">Open source engine for interoperable digital wallets.</div><a class="lnk ref-card-link" href="https://openwallet.foundation" target="_blank">openwallet.foundation ↗</a></div>
-          </div>
-        </div>
-
-        <div>
-          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
-            <span style="display:inline-block;width:10px;height:3px;background:#475569;border-radius:1px"></span>Color Reference
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:.5rem;font-size:.72rem;color:#334155">
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:10px;height:3px;background:#059669;border-radius:1px"></span>Ledger-Agnostic providers</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:10px;height:3px;background:#d97706;border-radius:1px"></span>Specific Ledger providers</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#2563eb;border-radius:1px"></span>W3C &amp; Technology standards</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#059669;border-radius:1px"></span>DIF specifications</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#7c3aed;border-radius:1px"></span>OpenID Foundation</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#dc2626;border-radius:1px"></span>Privacy &amp; Compliance</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#475569;border-radius:1px"></span>Security Certifications</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#1d4ed8;border-radius:1px"></span>EU Digital Identity</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#9333ea;border-radius:1px"></span>Mobile &amp; Device Security</span>
-          </div>
-        </div>
-      </div>
-
     </div>
 
     <!-- PANEL 3: FEATURE COMPARISON -->
@@ -1022,36 +716,17 @@ function renderApp({ providers, features, matrix }) {
         <div class="sec-title">All Providers &times; All Features</div>
         <div class="sec-desc">Features in rows, ${providers.length} providers in columns. Green top = Agnostic &middot; Amber top = Specific. &#9989; Supported &middot; &#9675; Partial &middot; &mdash; Not supported.</div>
       </div>
-      <div class="matrix-filter-bar">
-        <span class="sf-label">Filter</span>
-        <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Search features&hellip;" oninput="filterMatrix(this.value)" style="width:200px"/>
-        <div class="sf-divider"></div>
-        <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile & Wallets</button>
-        <div class="sf-divider"></div>
-        <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
-      </div>
-      <div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.72rem;color:var(--slate)">
-        <span style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Legend</span>
-        <span class="cml-item"><span class="icon-yes">&#9989;</span> Supported</span>
-        <span class="cml-item"><span class="icon-partial">&#9675;</span> Partial</span>
-        <span class="cml-item"><span class="icon-no">&mdash;</span> Not supported</span>
-        <span style="width:1px;height:14px;background:rgba(0,0,0,.13)"></span>
-        <span class="cml-item"><span style="display:inline-block;width:10px;height:3px;background:#059669;border-radius:1px"></span> Agnostic providers</span>
-        <span class="cml-item"><span style="display:inline-block;width:10px;height:3px;background:#d97706;border-radius:1px"></span> Specific Ledger providers</span>
-        <span style="width:1px;height:14px;background:rgba(0,0,0,.13)"></span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#2563eb;border-radius:1px"></span> W3C / Tech</span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#dc2626;border-radius:1px"></span> Privacy</span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#475569;border-radius:1px"></span> Security</span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#1d4ed8;border-radius:1px"></span> EU Identity</span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#9333ea;border-radius:1px"></span> Mobile</span>
+      <div class="cmp-controls">
+        <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Filter features&hellip;" oninput="filterMatrix(this.value)"/>
+        <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide rows with no support</label>
+        <div class="cmp-legend">
+          <span class="cml-item"><span class="icon-yes">&#9989;</span> Supported</span>
+          <span class="cml-item"><span class="icon-partial">&#9675;</span> Partial</span>
+          <span class="cml-item"><span class="icon-no">&mdash;</span> Not supported</span>
+          <span style="width:1px;height:14px;background:rgba(0,0,0,.13)"></span>
+          <span class="cml-item"><span style="display:inline-block;width:8px;height:8px;background:#059669;border-radius:1px"></span> Agnostic</span>
+          <span class="cml-item"><span style="display:inline-block;width:8px;height:8px;background:#d97706;border-radius:1px"></span> Specific</span>
+        </div>
       </div>
       <div class="matrix-wrap">
         <table class="matrix-table">
