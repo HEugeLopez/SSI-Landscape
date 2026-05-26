@@ -118,7 +118,17 @@ tr:hover td { background: rgba(37,99,235,.03); }
 }
 .matrix-table .fcat-header {
   background: var(--bg3);
-  z-index: 3;
+  position: relative;
+}
+.fcat-header::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 10000px;
+  height: 100%;
+  background: var(--bg3);
+  z-index: -1;
+  pointer-events: none;
 }
 td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
 td.num { text-align: center; font-family: var(--mono); font-size: .65rem; color: #94a3b8; font-weight: 500; width: 32px; padding: .65rem .5rem; white-space: nowrap; }
@@ -140,31 +150,48 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .lp { font-family: var(--mono); font-size: .6rem; padding: .1rem .4rem; border-radius: 3px; background: rgba(124,58,237,.08); color: #4c1d95; border: 1px solid rgba(124,58,237,.18); white-space: nowrap; display: inline-block; margin-top: .15rem; }
 
 /* MEGA TITLES */
+.mega-title-row { background: transparent !important; }
 .mega-title-row td {
   padding: 0 !important;
-  width: 100%;
-  max-width: none !important;
+  border: none !important;
+  position: relative;
 }
 .mega-title {
   padding: 1rem 1.4rem !important;
   font-size: .85rem;
   font-weight: 700;
   letter-spacing: .01em;
-  z-index: 4;
   display: flex;
   align-items: center;
   gap: .6rem;
   border-top: 3px solid;
+  /* Use box-shadow to extend background behind all columns */
+  position: relative;
+}
+.mega-title::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 10000px; /* bleed far right */
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
 }
 .mega-title.tech-mega {
-  background: linear-gradient(90deg, #eff6ff, #f8fafc);
+  background: linear-gradient(90deg, #eff6ff 0%, #f0f7ff 60%, #f8fafc 100%);
   color: #1e40af;
   border-color: #2563eb;
 }
+.mega-title.tech-mega::after {
+  background: linear-gradient(90deg, #f0f7ff 0%, #f8fafc 100%);
+}
 .mega-title.compliance-mega {
-  background: linear-gradient(90deg, #fef2f2, #f8fafc);
+  background: linear-gradient(90deg, #fef2f2 0%, #fff0f0 60%, #f8fafc 100%);
   color: #991b1b;
   border-color: #dc2626;
+}
+.mega-title.compliance-mega::after {
+  background: linear-gradient(90deg, #fff0f0 0%, #f8fafc 100%);
 }
 .mega-icon { font-size: 1rem; }
 .mega-sub {
