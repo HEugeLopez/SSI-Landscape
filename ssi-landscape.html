@@ -118,17 +118,6 @@ tr:hover td { background: rgba(37,99,235,.03); }
 }
 .matrix-table .fcat-header {
   background: var(--bg3);
-  position: relative;
-}
-.fcat-header::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 10000px;
-  height: 100%;
-  background: var(--bg3);
-  z-index: -1;
-  pointer-events: none;
 }
 td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
 td.num { text-align: center; font-family: var(--mono); font-size: .65rem; color: #94a3b8; font-weight: 500; width: 32px; padding: .65rem .5rem; white-space: nowrap; }
@@ -150,48 +139,33 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .lp { font-family: var(--mono); font-size: .6rem; padding: .1rem .4rem; border-radius: 3px; background: rgba(124,58,237,.08); color: #4c1d95; border: 1px solid rgba(124,58,237,.18); white-space: nowrap; display: inline-block; margin-top: .15rem; }
 
 /* MEGA TITLES */
-.mega-title-row { background: transparent !important; }
 .mega-title-row td {
-  padding: 0 !important;
-  border: none !important;
-  position: relative;
-}
-.mega-title {
-  padding: 1rem 1.4rem !important;
+  padding: .9rem 1.4rem !important;
   font-size: .85rem;
   font-weight: 700;
   letter-spacing: .01em;
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  border-top: 3px solid;
-  /* Use box-shadow to extend background behind all columns */
-  position: relative;
+  border-left: none !important;
+  border-right: none !important;
 }
-.mega-title::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 10000px; /* bleed far right */
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-}
-.mega-title.tech-mega {
-  background: linear-gradient(90deg, #eff6ff 0%, #f0f7ff 60%, #f8fafc 100%);
+.mega-title-row.tech-mega-row td {
+  background: #dbeafe;
   color: #1e40af;
-  border-color: #2563eb;
+  border-top: 3px solid #2563eb !important;
+  border-bottom: 1px solid #bfdbfe !important;
 }
-.mega-title.tech-mega::after {
-  background: linear-gradient(90deg, #f0f7ff 0%, #f8fafc 100%);
-}
-.mega-title.compliance-mega {
-  background: linear-gradient(90deg, #fef2f2 0%, #fff0f0 60%, #f8fafc 100%);
+.mega-title-row.compliance-mega-row td {
+  background: #fee2e2;
   color: #991b1b;
-  border-color: #dc2626;
+  border-top: 3px solid #dc2626 !important;
+  border-bottom: 1px solid #fecaca !important;
 }
-.mega-title.compliance-mega::after {
-  background: linear-gradient(90deg, #fff0f0 0%, #f8fafc 100%);
+.mega-icon { font-size: 1rem; margin-right: .4rem; }
+.mega-sub {
+  font-size: .68rem;
+  font-weight: 400;
+  opacity: .6;
+  font-family: var(--sans);
+  margin-left: .5rem;
 }
 .mega-icon { font-size: 1rem; }
 .mega-sub {
@@ -278,8 +252,8 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .cmp-toggle input { accent-color: var(--blue); }
 .cmp-legend { display: flex; align-items: center; gap: .85rem; margin-left: auto; font-size: .7rem; color: var(--slate); flex-wrap: wrap; }
 .cml-item { display: flex; align-items: center; gap: .3rem; }
-.matrix-wrap { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-.matrix-table { border-collapse: collapse; font-size: .72rem; width: 100%; }
+.matrix-wrap { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); max-width: 100%; }
+.matrix-table { border-collapse: collapse; font-size: .72rem; width: max-content; min-width: 100%; }
 .matrix-table th, .matrix-table td { border: 1px solid var(--border); }
 .frow-label { padding: .5rem .85rem; background: var(--bg1); font-weight: 600; color: var(--ink); white-space: nowrap; min-width: 210px; position: sticky; left: 0; z-index: 3; border-right: 2px solid var(--border2); }
 .fcat-header { padding: .38rem .85rem; background: var(--bg3); font-weight: 700; color: #1e293b; font-size: .64rem; letter-spacing: .09em; text-transform: uppercase; font-family: var(--mono); }
@@ -820,8 +794,8 @@ function renderApp({ providers, features, matrix }) {
   const megaColspan = providers.length + 1;
 
   // MEGA TITLE: Features
-  let matrixRows = `<tr class="mrow mega-title-row">
-    <td colspan="${megaColspan}" class="mega-title tech-mega">
+  let matrixRows = `<tr class="mrow mega-title-row tech-mega-row">
+    <td colspan="${megaColspan}">
       <span class="mega-icon">&#9881;</span> Features
       <span class="mega-sub">Technology standards, protocols &amp; capabilities</span>
     </td>
@@ -832,8 +806,8 @@ function renderApp({ providers, features, matrix }) {
   });
 
   // MEGA TITLE: Compliance & Certifications
-  matrixRows += `<tr class="mrow mega-title-row">
-    <td colspan="${megaColspan}" class="mega-title compliance-mega">
+  matrixRows += `<tr class="mrow mega-title-row compliance-mega-row">
+    <td colspan="${megaColspan}">
       <span class="mega-icon">&#9745;</span> Compliance &amp; Certifications
       <span class="mega-sub">Standards conformance, regulatory &amp; security certifications</span>
     </td>
