@@ -207,10 +207,14 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 
 /* Feature Comparison search + filter bar */
 .matrix-filter-bar {
-  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
   background: var(--bg1); border: 1px solid var(--border);
-  border-radius: var(--r-lg); padding: .7rem 1rem; margin-bottom: 1rem;
+  border-radius: var(--r-lg); padding: .5rem 1rem; margin-bottom: 1rem;
 }
+.mf-row {
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  padding: .3rem 0;
+}
+.mf-row + .mf-row { border-top: 1px solid var(--border); padding-top: .4rem; }
 .matrix-filter-bar .sf-label {
   font-family: var(--mono); font-size: .65rem; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: var(--slate);
@@ -519,9 +523,10 @@ function activate(id) {
 }
 
 // ── MATRIX FILTER ─────────────────────────────────────────────────────────────
-let _matrixGroupFilter = 'all';
-let _matrixSearchFilter = '';
+let _matrixGroupFilter='all', _matrixSearchFilter='', _matrixLedgerFilter='all', _matrixSectionFilter='all';
 
+function filterMatrixLedger(val,btn){_matrixLedgerFilter=val;document.querySelectorAll('#mf-ledger-all,#mf-ledger-ag,#mf-ledger-sp').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');_applyMatrixFilters();}
+function filterMatrixSection(val,btn){_matrixSectionFilter=val;document.querySelectorAll('#mf-section-all,#mf-section-feat,#mf-section-comp').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');_applyMatrixFilters();}
 function filterMatrixGroup(group, btn) {
   _matrixGroupFilter = group;
   document.querySelectorAll('.mf-btn').forEach(b => b.classList.remove('active'));
@@ -535,32 +540,37 @@ function filterMatrix(val) {
 }
 
 function _applyMatrixFilters() {
-  const groupMap = {
-    'W3C':     ['W3C DID Standards','W3C VC Standards','DID & Identity','DID & Identity Infrastructure','Credential Standards'],
-    'DIF':     ['DIF Specifications','Protocols & APIs'],
-    'OpenID':  ['OpenID Foundation'],
-    'Privacy': ['Privacy & Data Protection','Privacy & Cryptography'],
-    'Security':['Security Certifications'],
-    'EU':      ['EU Digital Identity','Compliance & Governance'],
-    'Mobile':  ['Mobile & Device Security','Wallet & UX','Deployment & Operations'],
-    'Trust':   ['Trust Over IP Foundation','OpenWallet Foundation'],
-  };
-  const allowedGroups = _matrixGroupFilter === 'all' ? null : (groupMap[_matrixGroupFilter] || []);
-  let currentGroupVisible = true;
-
-  document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
-    // Always show mega-title rows
-    if (tr.classList.contains('mega-title-row')) { tr.style.display = ''; return; }
-    const header = tr.querySelector('.fcat-header');
-    if (header) {
-      const grp = header.textContent.trim();
-      currentGroupVisible = !allowedGroups || allowedGroups.includes(grp);
-      tr.style.display = currentGroupVisible ? '' : 'none';
-      return;
+  const groupMap={'W3C':['W3C DID Standards','W3C VC Standards','DID & Identity','DID & Identity Infrastructure','Credential Standards'],'DIF':['DIF Specifications','Protocols & APIs'],'OpenID':['OpenID Foundation'],'Privacy':['Privacy & Data Protection','Privacy & Cryptography'],'Security':['Security Certifications'],'EU':['EU Digital Identity','Compliance & Governance'],'Mobile':['Mobile & Device Security','Wallet & UX','Deployment & Operations'],'Trust':['Trust Over IP Foundation','OpenWallet Foundation']};
+  const allowedGroups=_matrixGroupFilter==='all'?null:(groupMap[_matrixGroupFilter]||[]);
+  const showFeat=_matrixSectionFilter==='all'||_matrixSectionFilter==='features';
+  const showComp=_matrixSectionFilter==='all'||_matrixSectionFilter==='compliance';
+  const table=document.querySelector('.matrix-table');
+  if(table){
+    const ths=Array.from(table.querySelectorAll('thead th.prov-head'));
+    ths.forEach((th,i)=>{
+      const show=_matrixLedgerFilter==='all'||(_matrixLedgerFilter==='agnostic'&&th.classList.contains('agnostic'))||(_matrixLedgerFilter==='specific'&&!th.classList.contains('agnostic'));
+      th.style.display=show?'':'none';
+      const col=i+2;
+      table.querySelectorAll('tbody tr').forEach(tr=>{
+        const td=tr.querySelectorAll('td')[i+1];
+        if(td&&!td.classList.contains('frow-label')&&!td.hasAttribute('colspan'))td.style.display=show?'':'none';
+      });
+    });
+  }
+  let curSec='features',curGrpVis=true;
+  document.querySelectorAll('#matrix-body .mrow').forEach(tr=>{
+    if(tr.classList.contains('mega-title-row')){
+      curSec=tr.classList.contains('tech-mega-row')?'features':'compliance';
+      tr.style.display=(curSec==='features'?showFeat:showComp)?'':'none';
+      curGrpVis=true;return;
     }
-    if (!currentGroupVisible) { tr.style.display = 'none'; return; }
-    const text = (tr.dataset.feature || '') + ' ' + ((tr.querySelector('.frow-label') || {}).textContent || '');
-    tr.style.display = (!_matrixSearchFilter || text.toLowerCase().includes(_matrixSearchFilter)) ? '' : 'none';
+    const secOk=curSec==='features'?showFeat:showComp;
+    if(!secOk){tr.style.display='none';return;}
+    const hdr=tr.querySelector('.fcat-header');
+    if(hdr){curGrpVis=!allowedGroups||allowedGroups.includes(hdr.textContent.trim());tr.style.display=curGrpVis?'':'none';return;}
+    if(!curGrpVis){tr.style.display='none';return;}
+    const txt=(tr.dataset.feature||'')+' '+((tr.querySelector('.frow-label')||{}).textContent||'');
+    tr.style.display=(!_matrixSearchFilter||txt.toLowerCase().includes(_matrixSearchFilter))?'':'none';
   });
 }
 
@@ -1049,20 +1059,32 @@ function renderApp({ providers, features, matrix }) {
         <div class="sec-desc">Features in rows, ${providers.length} providers in columns. Green top = Agnostic &middot; Amber top = Specific. &#9989; Supported &middot; &#9675; Partial &middot; &mdash; Not supported.</div>
       </div>
       <div class="matrix-filter-bar">
-        <span class="sf-label">Filter</span>
-        <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Search features&hellip;" oninput="filterMatrix(this.value)" style="width:200px"/>
-        <div class="sf-divider"></div>
-        <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile & Wallets</button>
-        <div class="sf-divider"></div>
-        <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
+        <div class="mf-row">
+          <span class="sf-label">Providers</span>
+          <button class="mf-btn active" id="mf-ledger-all"  onclick="filterMatrixLedger('all',this)">All</button>
+          <button class="mf-btn" id="mf-ledger-ag"  onclick="filterMatrixLedger('agnostic',this)">Ledger-Agnostic</button>
+          <button class="mf-btn" id="mf-ledger-sp"  onclick="filterMatrixLedger('specific',this)">Ledger-Specific</button>
+          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
+          <span class="sf-label">Section</span>
+          <button class="mf-btn active" id="mf-section-all"  onclick="filterMatrixSection('all',this)">All</button>
+          <button class="mf-btn" id="mf-section-feat" onclick="filterMatrixSection('features',this)">&#9881; Features</button>
+          <button class="mf-btn" id="mf-section-comp" onclick="filterMatrixSection('compliance',this)">&#9745; Compliance</button>
+        </div>
+        <div class="mf-row">
+          <span class="sf-label">Group</span>
+          <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile &amp; Wallets</button>
+          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
+          <input class="cmp-search" type="text" placeholder="Search features..." oninput="filterMatrix(this.value)" style="width:180px"/>
+          <label class="cmp-toggle" style="margin-left:auto"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.72rem;color:var(--slate)">
         <span style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Legend</span>
