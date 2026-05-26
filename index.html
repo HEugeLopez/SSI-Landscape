@@ -114,10 +114,14 @@ tr:hover td { background: rgba(37,99,235,.03); }
 }
 .matrix-table .frow-label {
   background: var(--bg1);
+  position: sticky;
+  left: 0;
   z-index: 3;
 }
 .matrix-table .fcat-header {
   background: var(--bg3);
+  position: sticky;
+  left: 0;
 }
 td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; }
 td.num { text-align: center; font-family: var(--mono); font-size: .65rem; color: #94a3b8; font-weight: 500; width: 32px; padding: .65rem .5rem; white-space: nowrap; }
@@ -252,12 +256,12 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .cmp-toggle input { accent-color: var(--blue); }
 .cmp-legend { display: flex; align-items: center; gap: .85rem; margin-left: auto; font-size: .7rem; color: var(--slate); flex-wrap: wrap; }
 .cml-item { display: flex; align-items: center; gap: .3rem; }
-.matrix-wrap { overflow-x: auto; border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); max-width: 100%; }
+.matrix-wrap { overflow-x: auto; overflow-y: auto; max-height: 75vh; border-radius: var(--r-lg); border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); max-width: 100%; }
 .matrix-table { border-collapse: collapse; font-size: .72rem; width: max-content; min-width: 100%; }
 .matrix-table th, .matrix-table td { border: 1px solid var(--border); }
 .frow-label { padding: .5rem .85rem; background: var(--bg1); font-weight: 600; color: var(--ink); white-space: nowrap; min-width: 210px; position: sticky; left: 0; z-index: 3; border-right: 2px solid var(--border2); }
 .fcat-header { padding: .38rem .85rem; background: var(--bg3); font-weight: 700; color: #1e293b; font-size: .64rem; letter-spacing: .09em; text-transform: uppercase; font-family: var(--mono); }
-.prov-head { padding: .4rem .3rem; text-align: center; background: var(--bg2); font-weight: 600; color: #1e293b; font-size: .62rem; writing-mode: vertical-lr; transform: rotate(180deg); min-width: 44px; max-width: 56px; position: sticky; top: 0; z-index: 2; white-space: nowrap; }
+.prov-head { padding: .4rem .3rem; text-align: center; background: var(--bg2); font-weight: 600; color: #1e293b; font-size: .62rem; writing-mode: vertical-lr; transform: rotate(180deg); min-width: 44px; max-width: 56px; position: sticky; top: 0; z-index: 5; white-space: nowrap; }
 .prov-head.agnostic { border-top: 3px solid var(--green); }
 .prov-head.specific { border-top: 3px solid var(--amber); }
 .cell { padding: .38rem; text-align: center; vertical-align: middle; }
