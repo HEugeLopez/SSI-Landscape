@@ -346,7 +346,7 @@ async function loadData() {
   const [providers, features, matrix] = await Promise.all([
     query('providers', 'select=*&order=sort_order&active=eq.true'),
     query('features',  'select=*&order=sort_order'),
-    query('feature_matrix', 'select=provider_id,feature_id,support,tooltip')
+    query('feature_matrix', 'select=provider_id,feature_id,support,tooltip&limit=10000')
   ]);
   return { providers, features, matrix };
 }
