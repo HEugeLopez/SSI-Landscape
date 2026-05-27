@@ -107,16 +107,18 @@ table { width: 100%; border-collapse: collapse; font-size: .78rem; }
 thead tr { background: var(--bg3); }
 th { padding: .65rem 1rem; text-align: left; color: #475569; font-weight: 600; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; border-bottom: 1px solid var(--border2); font-family: var(--mono); }
 td { padding: .65rem 1rem; border-top: 1px solid var(--border); vertical-align: top; line-height: 1.5; color: #334155; }
-tr:hover td { background: rgba(37,99,235,.03); }
-/* Fix sticky label cell overlap on hover */
-.matrix-table tr:hover .frow-label {
-  background: #eef2fb;
-}
+/* Row hover removed — only partial cells with tooltips show hover */
 .matrix-table .frow-label {
   background: var(--bg1);
   position: sticky;
   left: 0;
   z-index: 3;
+}
+/* Only highlight partial cells with tooltips on hover */
+.cell-partial [data-tip]:hover {
+  background: rgba(251,191,36,.25);
+  border-radius: 100px;
+  cursor: help;
 }
 .matrix-table .fcat-header {
   background: var(--bg3);
@@ -209,12 +211,16 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .matrix-filter-bar {
   background: var(--bg1); border: 1px solid var(--border);
   border-radius: var(--r-lg); padding: .5rem 1rem; margin-bottom: 1rem;
+  display: flex; flex-direction: column; gap: .4rem;
 }
 .mf-row {
   display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
   padding: .3rem 0;
 }
-.mf-row + .mf-row { border-top: 1px solid var(--border); padding-top: .4rem; }
+.mf-row + .mf-row {
+  border-top: 1px solid var(--border);
+  padding-top: .4rem;
+}
 .matrix-filter-bar .sf-label {
   font-family: var(--mono); font-size: .65rem; font-weight: 700;
   letter-spacing: .12em; text-transform: uppercase; color: var(--slate);
@@ -275,6 +281,8 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .icon-yes { color: #059669; font-size: .85rem; }
 .icon-no { color: #d1d5db; font-size: .85rem; }
 .icon-partial { color: #d97706; font-size: .82rem; }
+.icon-partial[data-tip] { cursor: help; }
+.icon-partial[data-tip]:hover { background: rgba(251,191,36,.2); border-radius: 100px; }
 /* PARTIAL TOOLTIPS — floating, appended to body to escape overflow:auto */
 #ssi-tooltip {
   display: none;
@@ -348,6 +356,7 @@ async function query(table, params = '', rangeEnd = 999) {
 }
 
 async function queryAll(table, params = '') {
+  // Fetch all rows in pages of 1000 using Range header
   const results = [];
   let start = 0;
   const pageSize = 1000;
@@ -413,7 +422,7 @@ function supportCell(s, tip) {
     const tipText = (tip && tip.trim()) ? tip.trim() : '';
     const safe = tipText.replace(/\\/g, '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     const tipAttr = safe ? ` data-tip="${safe}"` : '';
-    return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr}>&#9675;</span></td>`;
+    return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr} style="pointer-events:${tipAttr?'auto':'none'}">&#9675;</span></td>`;
   }
   return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
 }
@@ -523,10 +532,31 @@ function activate(id) {
 }
 
 // ── MATRIX FILTER ─────────────────────────────────────────────────────────────
-let _matrixGroupFilter='all', _matrixSearchFilter='', _matrixLedgerFilter='all', _matrixSectionFilter='all';
+let _matrixGroupFilter   = 'all';
+let _matrixSearchFilter  = '';
+let _matrixLedgerFilter  = 'all';  // 'all' | 'agnostic' | 'specific'
+let _matrixSectionFilter = 'all';  // 'all' | 'features' | 'compliance'
 
-function filterMatrixLedger(val,btn){_matrixLedgerFilter=val;document.querySelectorAll('#mf-ledger-all,#mf-ledger-ag,#mf-ledger-sp').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');_applyMatrixFilters();}
-function filterMatrixSection(val,btn){_matrixSectionFilter=val;document.querySelectorAll('#mf-section-all,#mf-section-feat,#mf-section-comp').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');_applyMatrixFilters();}
+function filterMatrixLedger(val, btn) {
+  _matrixLedgerFilter = val;
+  document.querySelectorAll('#mf-ledger-all, #mf-ledger-ag, #mf-ledger-sp').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  _applyMatrixFilters();
+}
+
+function filterMatrixSection(val, btn) {
+  _matrixSectionFilter = val;
+  document.querySelectorAll('#mf-section-all, #mf-section-feat, #mf-section-comp').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // Also reset group filter when switching sections
+  _matrixGroupFilter = 'all';
+  document.querySelectorAll('.mf-btn').forEach(b => {
+    if (b.textContent.trim() === 'All' && !b.id) b.classList.add('active');
+    else if (!b.id) b.classList.remove('active');
+  });
+  _applyMatrixFilters();
+}
+
 function filterMatrixGroup(group, btn) {
   _matrixGroupFilter = group;
   document.querySelectorAll('.mf-btn').forEach(b => b.classList.remove('active'));
@@ -540,37 +570,77 @@ function filterMatrix(val) {
 }
 
 function _applyMatrixFilters() {
-  const groupMap={'W3C':['W3C DID Standards','W3C VC Standards','DID & Identity','DID & Identity Infrastructure','Credential Standards'],'DIF':['DIF Specifications','Protocols & APIs'],'OpenID':['OpenID Foundation'],'Privacy':['Privacy & Data Protection','Privacy & Cryptography'],'Security':['Security Certifications'],'EU':['EU Digital Identity','Compliance & Governance'],'Mobile':['Mobile & Device Security','Wallet & UX','Deployment & Operations'],'Trust':['Trust Over IP Foundation','OpenWallet Foundation']};
-  const allowedGroups=_matrixGroupFilter==='all'?null:(groupMap[_matrixGroupFilter]||[]);
-  const showFeat=_matrixSectionFilter==='all'||_matrixSectionFilter==='features';
-  const showComp=_matrixSectionFilter==='all'||_matrixSectionFilter==='compliance';
-  const table=document.querySelector('.matrix-table');
-  if(table){
-    const ths=Array.from(table.querySelectorAll('thead th.prov-head'));
-    ths.forEach((th,i)=>{
-      const show=_matrixLedgerFilter==='all'||(_matrixLedgerFilter==='agnostic'&&th.classList.contains('agnostic'))||(_matrixLedgerFilter==='specific'&&!th.classList.contains('agnostic'));
-      th.style.display=show?'':'none';
-      const col=i+2;
-      table.querySelectorAll('tbody tr').forEach(tr=>{
-        const td=tr.querySelectorAll('td')[i+1];
-        if(td&&!td.classList.contains('frow-label')&&!td.hasAttribute('colspan'))td.style.display=show?'':'none';
+  const groupMap = {
+    'W3C':     ['W3C DID Standards','W3C VC Standards','DID & Identity','DID & Identity Infrastructure','Credential Standards'],
+    'DIF':     ['DIF Specifications','Protocols & APIs'],
+    'OpenID':  ['OpenID Foundation'],
+    'Privacy': ['Privacy & Data Protection','Privacy & Cryptography'],
+    'Security':['Security Certifications'],
+    'EU':      ['EU Digital Identity','Compliance & Governance'],
+    'Mobile':  ['Mobile & Device Security','Wallet & UX','Deployment & Operations'],
+    'Trust':   ['Trust Over IP Foundation','OpenWallet Foundation'],
+  };
+  const allowedGroups = _matrixGroupFilter === 'all' ? null : (groupMap[_matrixGroupFilter] || []);
+
+  // Section filter: which mega-rows to show
+  const showFeatures   = _matrixSectionFilter === 'all' || _matrixSectionFilter === 'features';
+  const showCompliance = _matrixSectionFilter === 'all' || _matrixSectionFilter === 'compliance';
+
+  // Ledger filter: hide/show provider columns
+  const table = document.querySelector('.matrix-table');
+  if (table && _matrixLedgerFilter !== 'all') {
+    const ths = table.querySelectorAll('thead th.prov-head');
+    ths.forEach((th, i) => {
+      const colIdx = i + 2; // +1 for label col, +1 for 1-based
+      const isAgnostic = th.classList.contains('agnostic');
+      const show = _matrixLedgerFilter === 'agnostic' ? isAgnostic : !isAgnostic;
+      th.style.display = show ? '' : 'none';
+      // Hide same column in all rows
+      table.querySelectorAll(`td:nth-child(${colIdx})`).forEach(td => {
+        if (!td.classList.contains('frow-label') && !td.hasAttribute('colspan')) {
+          td.style.display = show ? '' : 'none';
+        }
       });
     });
+  } else if (table) {
+    // Show all columns
+    table.querySelectorAll('th.prov-head, td').forEach(el => el.style.display = '');
   }
-  let curSec='features',curGrpVis=true;
-  document.querySelectorAll('#matrix-body .mrow').forEach(tr=>{
-    if(tr.classList.contains('mega-title-row')){
-      curSec=tr.classList.contains('tech-mega-row')?'features':'compliance';
-      tr.style.display=(curSec==='features'?showFeat:showComp)?'':'none';
-      curGrpVis=true;return;
+
+  let currentSection = 'features'; // track which mega-section we're in
+  let currentGroupVisible = true;
+
+  document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
+    // Mega-title rows: show/hide based on section filter
+    if (tr.classList.contains('mega-title-row')) {
+      if (tr.classList.contains('tech-mega-row')) {
+        currentSection = 'features';
+        tr.style.display = showFeatures ? '' : 'none';
+      } else if (tr.classList.contains('compliance-mega-row')) {
+        currentSection = 'compliance';
+        tr.style.display = showCompliance ? '' : 'none';
+      }
+      currentGroupVisible = true;
+      return;
     }
-    const secOk=curSec==='features'?showFeat:showComp;
-    if(!secOk){tr.style.display='none';return;}
-    const hdr=tr.querySelector('.fcat-header');
-    if(hdr){curGrpVis=!allowedGroups||allowedGroups.includes(hdr.textContent.trim());tr.style.display=curGrpVis?'':'none';return;}
-    if(!curGrpVis){tr.style.display='none';return;}
-    const txt=(tr.dataset.feature||'')+' '+((tr.querySelector('.frow-label')||{}).textContent||'');
-    tr.style.display=(!_matrixSearchFilter||txt.toLowerCase().includes(_matrixSearchFilter))?'':'none';
+
+    // Section visibility
+    const sectionVisible = currentSection === 'features' ? showFeatures : showCompliance;
+    if (!sectionVisible) { tr.style.display = 'none'; return; }
+
+    // Group header rows
+    const header = tr.querySelector('.fcat-header');
+    if (header) {
+      const grp = header.textContent.trim();
+      currentGroupVisible = !allowedGroups || allowedGroups.includes(grp);
+      tr.style.display = currentGroupVisible ? '' : 'none';
+      return;
+    }
+
+    // Data rows
+    if (!currentGroupVisible) { tr.style.display = 'none'; return; }
+    const text = (tr.dataset.feature || '') + ' ' + ((tr.querySelector('.frow-label') || {}).textContent || '');
+    tr.style.display = (!_matrixSearchFilter || text.toLowerCase().includes(_matrixSearchFilter)) ? '' : 'none';
   });
 }
 
@@ -710,8 +780,8 @@ function renderApp({ providers, features, matrix }) {
     return protocols.split(',').map(p => {
       const key = p.trim();
       const c = colors[key] || { bg: 'rgba(100,116,139,.1)', color: '#334155', border: 'rgba(100,116,139,.2)' };
-      return `<span data-tip="${TOOLTIP}" style="display:inline-block;margin:.1rem .15rem;padding:.12rem .4rem;border-radius:100px;font-size:.6rem;font-weight:600;font-family:var(--mono);background:${c.bg};color:${c.color};border:1px solid ${c.border};cursor:help">${key}</span>`;
-    }).join('');
+      return `<span style="display:inline-block;margin:.1rem .15rem;padding:.12rem .4rem;border-radius:100px;font-size:.6rem;font-weight:600;font-family:var(--mono);background:${c.bg};color:${c.color};border:1px solid ${c.border}">${key}</span>`;
+    }).join('') + `<span data-tip="${TOOLTIP}" style="cursor:help;color:#94a3b8;font-size:.8rem;line-height:1;margin-left:.2rem">&#9432;</span>`;
   }
 
   function keyTypesBadges(keyTypes) {
@@ -789,14 +859,21 @@ function renderApp({ providers, features, matrix }) {
   function renderGroupRows(groupName, feats) {
     const groupCls = groupClassMap[groupName] || '';
     let rows = `<tr class="mrow"><td class="fcat-header ${groupCls}" colspan="${providers.length + 1}">${groupName}</td></tr>`;
-    feats.forEach(f => {
+    const _FTIPS = {
+    "AnonCreds": "Anonymous Credentials — privacy-preserving format using CL signatures. Enables ZK predicate proofs (e.g. prove age ≥18 without revealing birthdate). Developed by Hyperledger.",
+    "Trust Registry / Governance": "A trust registry defines which issuers and verifiers are authorized within a trust ecosystem. Governance sets the rules, policies and legal frameworks for credential usage.",
+    "Governance + Technical Interoperability": "Alignment with the Trust over IP (ToIP) governance stack — covering both the legal/policy layer and technical interoperability between SSI implementations.",
+    "Wallet Interoperability Guidelines": "OpenWallet Foundation guidelines enabling wallets to exchange credentials across different platforms and ecosystems regardless of underlying technology stack.",
+  };
+  feats.forEach(f => {
       const cells = providers.map(p => {
         const entry   = (matrixMap[p.id] || {})[f.id] || { support: 'no', tooltip: '' };
         const support = typeof entry === 'object' ? entry.support : entry;
         const tip     = typeof entry === 'object' ? entry.tooltip : '';
         return supportCell(support, tip);
       }).join('');
-      rows += `<tr class="mrow" data-feature="${f.search_tags || ''}"><td class="frow-label">${f.label}</td>${cells}</tr>`;
+      const _ficon = _FTIPS[f.label] ? ` <span data-tip="${_FTIPS[f.label]}" style="cursor:help;color:#94a3b8;font-size:.72rem;line-height:1">&#9432;</span>` : '';
+      rows += `<tr class="mrow" data-feature="${f.search_tags || ''}"><td class="frow-label">${f.label}${_ficon}</td>${cells}</tr>`;
     });
     return rows;
   }
@@ -1059,32 +1136,20 @@ function renderApp({ providers, features, matrix }) {
         <div class="sec-desc">Features in rows, ${providers.length} providers in columns. Green top = Agnostic &middot; Amber top = Specific. &#9989; Supported &middot; &#9675; Partial &middot; &mdash; Not supported.</div>
       </div>
       <div class="matrix-filter-bar">
-        <div class="mf-row">
-          <span class="sf-label">Providers</span>
-          <button class="mf-btn active" id="mf-ledger-all"  onclick="filterMatrixLedger('all',this)">All</button>
-          <button class="mf-btn" id="mf-ledger-ag"  onclick="filterMatrixLedger('agnostic',this)">Ledger-Agnostic</button>
-          <button class="mf-btn" id="mf-ledger-sp"  onclick="filterMatrixLedger('specific',this)">Ledger-Specific</button>
-          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
-          <span class="sf-label">Section</span>
-          <button class="mf-btn active" id="mf-section-all"  onclick="filterMatrixSection('all',this)">All</button>
-          <button class="mf-btn" id="mf-section-feat" onclick="filterMatrixSection('features',this)">&#9881; Features</button>
-          <button class="mf-btn" id="mf-section-comp" onclick="filterMatrixSection('compliance',this)">&#9745; Compliance</button>
-        </div>
-        <div class="mf-row">
-          <span class="sf-label">Group</span>
-          <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
-          <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile &amp; Wallets</button>
-          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
-          <input class="cmp-search" type="text" placeholder="Search features..." oninput="filterMatrix(this.value)" style="width:180px"/>
-          <label class="cmp-toggle" style="margin-left:auto"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
-        </div>
+        <span class="sf-label">Filter</span>
+        <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Search features&hellip;" oninput="filterMatrix(this.value)" style="width:200px"/>
+        <div class="sf-divider"></div>
+        <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
+        <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile & Wallets</button>
+        <div class="sf-divider"></div>
+        <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
       </div>
       <div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.72rem;color:var(--slate)">
         <span style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Legend</span>
