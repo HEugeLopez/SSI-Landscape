@@ -107,16 +107,18 @@ table { width: 100%; border-collapse: collapse; font-size: .78rem; }
 thead tr { background: var(--bg3); }
 th { padding: .65rem 1rem; text-align: left; color: #475569; font-weight: 600; font-size: .64rem; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; border-bottom: 1px solid var(--border2); font-family: var(--mono); }
 td { padding: .65rem 1rem; border-top: 1px solid var(--border); vertical-align: top; line-height: 1.5; color: #334155; }
-tr:hover td { background: rgba(37,99,235,.03); }
-/* Fix sticky label cell overlap on hover */
-.matrix-table tr:hover .frow-label {
-  background: #eef2fb;
-}
+/* Row hover removed — only partial cells with tooltips show hover */
 .matrix-table .frow-label {
   background: var(--bg1);
   position: sticky;
   left: 0;
   z-index: 3;
+}
+/* Only highlight partial cells with tooltips on hover */
+.cell-partial [data-tip]:hover {
+  background: rgba(251,191,36,.25);
+  border-radius: 100px;
+  cursor: help;
 }
 .matrix-table .fcat-header {
   background: var(--bg3);
@@ -207,9 +209,17 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 
 /* Feature Comparison search + filter bar */
 .matrix-filter-bar {
-  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
   background: var(--bg1); border: 1px solid var(--border);
-  border-radius: var(--r-lg); padding: .7rem 1rem; margin-bottom: 1rem;
+  border-radius: var(--r-lg); padding: .5rem 1rem; margin-bottom: 1rem;
+  display: flex; flex-direction: column; gap: .4rem;
+}
+.mf-row {
+  display: flex; align-items: center; gap: .5rem; flex-wrap: wrap;
+  padding: .3rem 0;
+}
+.mf-row + .mf-row {
+  border-top: 1px solid var(--border);
+  padding-top: .4rem;
 }
 .matrix-filter-bar .sf-label {
   font-family: var(--mono); font-size: .65rem; font-weight: 700;
@@ -271,6 +281,8 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .icon-yes { color: #059669; font-size: .85rem; }
 .icon-no { color: #d1d5db; font-size: .85rem; }
 .icon-partial { color: #d97706; font-size: .82rem; }
+.icon-partial[data-tip] { cursor: help; }
+.icon-partial[data-tip]:hover { background: rgba(251,191,36,.2); border-radius: 100px; }
 /* PARTIAL TOOLTIPS — floating, appended to body to escape overflow:auto */
 #ssi-tooltip {
   display: none;
@@ -335,10 +347,30 @@ const headers = {
   'Content-Type': 'application/json'
 };
 
-async function query(table, params = '') {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers });
+async function query(table, params = '', rangeEnd = 999) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
+    headers: { ...headers, 'Range': `0-${rangeEnd}` }
+  });
   if (!res.ok) throw new Error(`${table}: ${res.status} ${res.statusText}`);
   return res.json();
+}
+
+async function queryAll(table, params = '') {
+  // Fetch all rows in pages of 1000 using Range header
+  const results = [];
+  let start = 0;
+  const pageSize = 1000;
+  while (true) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
+      headers: { ...headers, 'Range': `${start}-${start + pageSize - 1}` }
+    });
+    if (!res.ok) throw new Error(`${table}: ${res.status} ${res.statusText}`);
+    const page = await res.json();
+    results.push(...page);
+    if (page.length < pageSize) break;
+    start += pageSize;
+  }
+  return results;
 }
 
 // ── LOAD ALL DATA ─────────────────────────────────────────────────────────────
@@ -346,7 +378,7 @@ async function loadData() {
   const [providers, features, matrix] = await Promise.all([
     query('providers', 'select=*&order=sort_order&active=eq.true'),
     query('features',  'select=*&order=sort_order'),
-    query('feature_matrix', 'select=provider_id,feature_id,support,tooltip')
+    queryAll('feature_matrix', 'select=provider_id,feature_id,support,tooltip')
   ]);
   return { providers, features, matrix };
 }
@@ -390,7 +422,7 @@ function supportCell(s, tip) {
     const tipText = (tip && tip.trim()) ? tip.trim() : '';
     const safe = tipText.replace(/\\/g, '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     const tipAttr = safe ? ` data-tip="${safe}"` : '';
-    return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr}>&#9675;</span></td>`;
+    return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr} style="pointer-events:${tipAttr?'auto':'none'}">&#9675;</span></td>`;
   }
   return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
 }
@@ -500,8 +532,30 @@ function activate(id) {
 }
 
 // ── MATRIX FILTER ─────────────────────────────────────────────────────────────
-let _matrixGroupFilter = 'all';
-let _matrixSearchFilter = '';
+let _matrixGroupFilter   = 'all';
+let _matrixSearchFilter  = '';
+let _matrixLedgerFilter  = 'all';  // 'all' | 'agnostic' | 'specific'
+let _matrixSectionFilter = 'all';  // 'all' | 'features' | 'compliance'
+
+function filterMatrixLedger(val, btn) {
+  _matrixLedgerFilter = val;
+  document.querySelectorAll('#mf-ledger-all, #mf-ledger-ag, #mf-ledger-sp').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  _applyMatrixFilters();
+}
+
+function filterMatrixSection(val, btn) {
+  _matrixSectionFilter = val;
+  document.querySelectorAll('#mf-section-all, #mf-section-feat, #mf-section-comp').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  // Also reset group filter when switching sections
+  _matrixGroupFilter = 'all';
+  document.querySelectorAll('.mf-btn').forEach(b => {
+    if (b.textContent.trim() === 'All' && !b.id) b.classList.add('active');
+    else if (!b.id) b.classList.remove('active');
+  });
+  _applyMatrixFilters();
+}
 
 function filterMatrixGroup(group, btn) {
   _matrixGroupFilter = group;
@@ -527,11 +581,54 @@ function _applyMatrixFilters() {
     'Trust':   ['Trust Over IP Foundation','OpenWallet Foundation'],
   };
   const allowedGroups = _matrixGroupFilter === 'all' ? null : (groupMap[_matrixGroupFilter] || []);
+
+  // Section filter: which mega-rows to show
+  const showFeatures   = _matrixSectionFilter === 'all' || _matrixSectionFilter === 'features';
+  const showCompliance = _matrixSectionFilter === 'all' || _matrixSectionFilter === 'compliance';
+
+  // Ledger filter: hide/show provider columns
+  const table = document.querySelector('.matrix-table');
+  if (table && _matrixLedgerFilter !== 'all') {
+    const ths = table.querySelectorAll('thead th.prov-head');
+    ths.forEach((th, i) => {
+      const colIdx = i + 2; // +1 for label col, +1 for 1-based
+      const isAgnostic = th.classList.contains('agnostic');
+      const show = _matrixLedgerFilter === 'agnostic' ? isAgnostic : !isAgnostic;
+      th.style.display = show ? '' : 'none';
+      // Hide same column in all rows
+      table.querySelectorAll(`td:nth-child(${colIdx})`).forEach(td => {
+        if (!td.classList.contains('frow-label') && !td.hasAttribute('colspan')) {
+          td.style.display = show ? '' : 'none';
+        }
+      });
+    });
+  } else if (table) {
+    // Show all columns
+    table.querySelectorAll('th.prov-head, td').forEach(el => el.style.display = '');
+  }
+
+  let currentSection = 'features'; // track which mega-section we're in
   let currentGroupVisible = true;
 
   document.querySelectorAll('#matrix-body .mrow').forEach(tr => {
-    // Always show mega-title rows
-    if (tr.classList.contains('mega-title-row')) { tr.style.display = ''; return; }
+    // Mega-title rows: show/hide based on section filter
+    if (tr.classList.contains('mega-title-row')) {
+      if (tr.classList.contains('tech-mega-row')) {
+        currentSection = 'features';
+        tr.style.display = showFeatures ? '' : 'none';
+      } else if (tr.classList.contains('compliance-mega-row')) {
+        currentSection = 'compliance';
+        tr.style.display = showCompliance ? '' : 'none';
+      }
+      currentGroupVisible = true;
+      return;
+    }
+
+    // Section visibility
+    const sectionVisible = currentSection === 'features' ? showFeatures : showCompliance;
+    if (!sectionVisible) { tr.style.display = 'none'; return; }
+
+    // Group header rows
     const header = tr.querySelector('.fcat-header');
     if (header) {
       const grp = header.textContent.trim();
@@ -539,6 +636,8 @@ function _applyMatrixFilters() {
       tr.style.display = currentGroupVisible ? '' : 'none';
       return;
     }
+
+    // Data rows
     if (!currentGroupVisible) { tr.style.display = 'none'; return; }
     const text = (tr.dataset.feature || '') + ' ' + ((tr.querySelector('.frow-label') || {}).textContent || '');
     tr.style.display = (!_matrixSearchFilter || text.toLowerCase().includes(_matrixSearchFilter)) ? '' : 'none';
@@ -681,8 +780,8 @@ function renderApp({ providers, features, matrix }) {
     return protocols.split(',').map(p => {
       const key = p.trim();
       const c = colors[key] || { bg: 'rgba(100,116,139,.1)', color: '#334155', border: 'rgba(100,116,139,.2)' };
-      return `<span data-tip="${TOOLTIP}" style="display:inline-block;margin:.1rem .15rem;padding:.12rem .4rem;border-radius:100px;font-size:.6rem;font-weight:600;font-family:var(--mono);background:${c.bg};color:${c.color};border:1px solid ${c.border};cursor:help">${key}</span>`;
-    }).join('');
+      return `<span style="display:inline-block;margin:.1rem .15rem;padding:.12rem .4rem;border-radius:100px;font-size:.6rem;font-weight:600;font-family:var(--mono);background:${c.bg};color:${c.color};border:1px solid ${c.border}">${key}</span>`;
+    }).join('') + `<span data-tip="${TOOLTIP}" style="cursor:help;color:#94a3b8;font-size:.8rem;line-height:1;margin-left:.2rem">&#9432;</span>`;
   }
 
   function keyTypesBadges(keyTypes) {
@@ -760,14 +859,21 @@ function renderApp({ providers, features, matrix }) {
   function renderGroupRows(groupName, feats) {
     const groupCls = groupClassMap[groupName] || '';
     let rows = `<tr class="mrow"><td class="fcat-header ${groupCls}" colspan="${providers.length + 1}">${groupName}</td></tr>`;
-    feats.forEach(f => {
+    const _FTIPS = {
+    "AnonCreds": "Anonymous Credentials — privacy-preserving format using CL signatures. Enables ZK predicate proofs (e.g. prove age ≥18 without revealing birthdate). Developed by Hyperledger.",
+    "Trust Registry / Governance": "A trust registry defines which issuers and verifiers are authorized within a trust ecosystem. Governance sets the rules, policies and legal frameworks for credential usage.",
+    "Governance + Technical Interoperability": "Alignment with the Trust over IP (ToIP) governance stack — covering both the legal/policy layer and technical interoperability between SSI implementations.",
+    "Wallet Interoperability Guidelines": "OpenWallet Foundation guidelines enabling wallets to exchange credentials across different platforms and ecosystems regardless of underlying technology stack.",
+  };
+  feats.forEach(f => {
       const cells = providers.map(p => {
         const entry   = (matrixMap[p.id] || {})[f.id] || { support: 'no', tooltip: '' };
         const support = typeof entry === 'object' ? entry.support : entry;
         const tip     = typeof entry === 'object' ? entry.tooltip : '';
         return supportCell(support, tip);
       }).join('');
-      rows += `<tr class="mrow" data-feature="${f.search_tags || ''}"><td class="frow-label">${f.label}</td>${cells}</tr>`;
+      const _ficon = _FTIPS[f.label] ? ` <span data-tip="${_FTIPS[f.label]}" style="cursor:help;color:#94a3b8;font-size:.72rem;line-height:1">&#9432;</span>` : '';
+      rows += `<tr class="mrow" data-feature="${f.search_tags || ''}"><td class="frow-label">${f.label}${_ficon}</td>${cells}</tr>`;
     });
     return rows;
   }
