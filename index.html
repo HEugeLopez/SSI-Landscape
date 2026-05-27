@@ -1136,20 +1136,32 @@ function renderApp({ providers, features, matrix }) {
         <div class="sec-desc">Features in rows, ${providers.length} providers in columns. Green top = Agnostic &middot; Amber top = Specific. &#9989; Supported &middot; &#9675; Partial &middot; &mdash; Not supported.</div>
       </div>
       <div class="matrix-filter-bar">
-        <span class="sf-label">Filter</span>
-        <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Search features&hellip;" oninput="filterMatrix(this.value)" style="width:200px"/>
-        <div class="sf-divider"></div>
-        <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile & Wallets</button>
-        <div class="sf-divider"></div>
-        <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
+        <div class="mf-row">
+          <span class="sf-label">Providers</span>
+          <button class="mf-btn active" id="mf-ledger-all" onclick="filterMatrixLedger('all',this)">All</button>
+          <button class="mf-btn" id="mf-ledger-ag" onclick="filterMatrixLedger('agnostic',this)">Ledger-Agnostic</button>
+          <button class="mf-btn" id="mf-ledger-sp" onclick="filterMatrixLedger('specific',this)">Ledger-Specific</button>
+          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
+          <span class="sf-label">Section</span>
+          <button class="mf-btn active" id="mf-section-all" onclick="filterMatrixSection('all',this)">All</button>
+          <button class="mf-btn" id="mf-section-feat" onclick="filterMatrixSection('features',this)">&#9881; Features</button>
+          <button class="mf-btn" id="mf-section-comp" onclick="filterMatrixSection('compliance',this)">&#9745; Compliance</button>
+        </div>
+        <div class="mf-row">
+          <span class="sf-label">Group</span>
+          <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile &amp; Wallets</button>
+          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
+          <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Search features&hellip;" oninput="filterMatrix(this.value)" style="width:180px"/>
+          <label class="cmp-toggle" style="margin-left:auto"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.72rem;color:var(--slate)">
         <span style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Legend</span>
