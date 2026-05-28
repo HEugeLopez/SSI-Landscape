@@ -1243,5 +1243,29 @@ loadData()
       </div>`;
   });
 </script>
+<script>
+window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){
+  var tipEl=document.getElementById('ssi-tooltip');if(!tipEl)return;
+  document.addEventListener('click',function(e){
+    if(e.target.classList.contains('tip-close')){tipEl.style.display='none';tipEl._srcEl=null;return;}
+    if(e.target.closest('#ssi-tooltip'))return;
+    var t=e.target.closest('[data-tip]');
+    if(t){
+      var tip=t.dataset.tip;if(!tip||!tip.trim())return;
+      if(tipEl.style.display==='block'&&tipEl._srcEl===t){tipEl.style.display='none';tipEl._srcEl=null;return;}
+      tipEl.innerHTML='';
+      var txt=document.createElement('span');txt.textContent=tip;
+      var x=document.createElement('span');x.className='tip-close';x.textContent='×';
+      tipEl.appendChild(txt);tipEl.appendChild(x);
+      tipEl.style.display='block';tipEl._srcEl=t;
+      var rect=t.getBoundingClientRect(),tw=280,th=120;
+      var left=Math.min(rect.left,window.innerWidth-tw-12),top=rect.bottom+8;
+      if(top+th>window.innerHeight-8)top=rect.top-th-4;if(left<8)left=8;
+      tipEl.style.left=left+'px';tipEl.style.top=top+'px';return;
+    }
+    tipEl.style.display='none';tipEl._srcEl=null;
+  });
+},600);});
+</script>
 </body>
 </html>
