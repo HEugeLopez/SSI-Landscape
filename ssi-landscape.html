@@ -292,15 +292,23 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
   font-size: .72rem;
   font-family: var(--sans);
   line-height: 1.55;
-  padding: .5rem .75rem;
-  border-radius: 7px;
-  width: 240px;
-  white-space: normal;
+  padding: .6rem .85rem .6rem .75rem;
+  border-radius: var(--r);
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+  max-width: 280px;
   z-index: 9999;
-  pointer-events: none;
-  box-shadow: 0 4px 20px rgba(0,0,0,.3);
-  text-align: left;
+  pointer-events: auto;
+  cursor: default;
+  border: 1px solid rgba(255,255,255,.08);
 }
+#ssi-tooltip .tip-close {
+  position: absolute;
+  top: .25rem; right: .35rem;
+  font-size: .65rem; color: rgba(255,255,255,.4);
+  cursor: pointer; line-height: 1;
+  padding: .1rem .2rem;
+}
+#ssi-tooltip .tip-close:hover { color: #fff; }
 #ssi-tooltip::after {
   content: '';
   position: absolute;
@@ -650,38 +658,42 @@ tipEl.id = 'ssi-tooltip';
 document.body.appendChild(tipEl);
 
 function attachTooltips() {
-  // Use event delegation so it works for all dynamically rendered elements
-  document.addEventListener('mouseenter', function(e) {
+  // Click-based tooltips — click [data-tip] element to open, click anywhere else to close
+  document.addEventListener('click', function(e) {
     const t = e.target.closest('[data-tip]');
-    if (!t) return;
-    tipEl.textContent = t.dataset.tip;
-    tipEl.style.display = 'block';
-    moveTip(e);
-  }, true);
-
-  document.addEventListener('mousemove', function(e) {
-    if (tipEl.style.display === 'none') return;
-    if (!e.target.closest('[data-tip]')) return;
-    moveTip(e);
-  });
-
-  document.addEventListener('mouseleave', function(e) {
-    const t = e.target.closest('[data-tip]');
-    if (!t) return;
-    tipEl.style.display = 'none';
+    if (t) {
+      e.stopPropagation();
+      const tip = t.dataset.tip;
+      if (!tip) return;
+      // If same element clicked again, toggle off
+      if (tipEl.style.display === 'block' && tipEl._srcEl === t) {
+        tipEl.style.display = 'none';
+        tipEl._srcEl = null;
+        return;
+      }
+      tipEl.innerHTML = tip + '<span class="tip-close" onclick="this.parentElement.style.display=\'none\'">&#10005;</span>';
+      tipEl.style.display = 'block';
+      tipEl._srcEl = t;
+      // Position near the element
+      const rect = t.getBoundingClientRect();
+      const tw = 280;
+      let left = rect.left;
+      let top = rect.bottom + 8;
+      if (left + tw > window.innerWidth - 16) left = window.innerWidth - tw - 16;
+      if (top + 100 > window.innerHeight) top = rect.top - 108;
+      tipEl.style.left = left + 'px';
+      tipEl.style.top = top + 'px';
+      return;
+    }
+    // Click outside closes tooltip
+    if (!e.target.closest('#ssi-tooltip')) {
+      tipEl.style.display = 'none';
+      tipEl._srcEl = null;
+    }
   }, true);
 }
 
-function moveTip(e) {
-  const pad = 14, tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
-  let x = e.clientX - tw / 2;
-  let y = e.clientY - th - pad;
-  if (x < pad) x = pad;
-  if (x + tw > window.innerWidth - pad) x = window.innerWidth - tw - pad;
-  if (y < pad) y = e.clientY + pad + 10;
-  tipEl.style.left = x + 'px';
-  tipEl.style.top  = y + 'px';
-}
+
 
 function toggleHideUnsupported() {
   const hide = document.getElementById('hide-unsupported').checked;
@@ -1133,38 +1145,53 @@ function renderApp({ providers, features, matrix }) {
       <div class="section-header">
         <div class="eyebrow">Feature Comparison</div>
         <div class="sec-title">All Providers &times; All Features</div>
-        <div class="sec-desc">Features in rows, ${providers.length} providers in columns. Green top = Agnostic &middot; Amber top = Specific. &#9989; Supported &middot; &#9675; Partial &middot; &mdash; Not supported.</div>
+        
       </div>
       <div class="matrix-filter-bar">
-        <span class="sf-label">Filter</span>
-        <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Search features&hellip;" oninput="filterMatrix(this.value)" style="width:200px"/>
-        <div class="sf-divider"></div>
-        <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
-        <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile & Wallets</button>
-        <div class="sf-divider"></div>
-        <label class="cmp-toggle"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
+        <div class="mf-row">
+          <span class="sf-label">Providers</span>
+          <button class="mf-btn active" id="mf-ledger-all" onclick="filterMatrixLedger('all',this)">All</button>
+          <button class="mf-btn" id="mf-ledger-ag" onclick="filterMatrixLedger('agnostic',this)">Ledger-Agnostic</button>
+          <button class="mf-btn" id="mf-ledger-sp" onclick="filterMatrixLedger('specific',this)">Ledger-Specific</button>
+          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
+          <span class="sf-label">Section</span>
+          <button class="mf-btn active" id="mf-section-all" onclick="filterMatrixSection('all',this)">All</button>
+          <button class="mf-btn" id="mf-section-feat" onclick="filterMatrixSection('features',this)">&#9881; Features</button>
+          <button class="mf-btn" id="mf-section-comp" onclick="filterMatrixSection('compliance',this)">&#9745; Compliance</button>
+        </div>
+        <div class="mf-row">
+          <span class="sf-label">Group</span>
+          <button class="mf-btn active" onclick="filterMatrixGroup('all',this)">All</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('W3C',this)">W3C</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Trust',this)">Trust Frameworks</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('DIF',this)">DIF</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('OpenID',this)">OpenID</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Privacy',this)">Privacy</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Security',this)">Security</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('EU',this)">EU Digital ID</button>
+          <button class="mf-btn" onclick="filterMatrixGroup('Mobile',this)">Mobile &amp; Wallets</button>
+          <div style="width:1px;height:18px;background:var(--border2);margin:0 .25rem"></div>
+          <input class="cmp-search" type="text" placeholder="&#128269;&nbsp; Search features&hellip;" oninput="filterMatrix(this.value)" style="width:180px"/>
+          <label class="cmp-toggle" style="margin-left:auto"><input type="checkbox" id="hide-unsupported" onchange="toggleHideUnsupported()"/> Hide unsupported</label>
+        </div>
       </div>
-      <div style="display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.72rem;color:var(--slate)">
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.72rem;color:var(--slate)">
         <span style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Legend</span>
         <span class="cml-item"><span class="icon-yes">&#9989;</span> Supported</span>
-        <span class="cml-item"><span class="icon-partial">&#9675;</span> Partial</span>
+        <span class="cml-item" style="cursor:default"><span class="icon-partial">&#9675;</span> Partial</span>
         <span class="cml-item"><span class="icon-no">&mdash;</span> Not supported</span>
         <span style="width:1px;height:14px;background:rgba(0,0,0,.13)"></span>
-        <span class="cml-item"><span style="display:inline-block;width:10px;height:3px;background:#059669;border-radius:1px"></span> Agnostic providers</span>
-        <span class="cml-item"><span style="display:inline-block;width:10px;height:3px;background:#d97706;border-radius:1px"></span> Specific Ledger providers</span>
+        <span class="cml-item"><span style="display:inline-block;width:10px;height:3px;background:#059669;border-radius:1px"></span> Agnostic</span>
+        <span class="cml-item"><span style="display:inline-block;width:10px;height:3px;background:#d97706;border-radius:1px"></span> Specific Ledger</span>
         <span style="width:1px;height:14px;background:rgba(0,0,0,.13)"></span>
         <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#2563eb;border-radius:1px"></span> W3C / Tech</span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#dc2626;border-radius:1px"></span> Privacy</span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#475569;border-radius:1px"></span> Security</span>
+        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#dc2626;border-radius:1px"></span> Compliance</span>
         <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#1d4ed8;border-radius:1px"></span> EU Identity</span>
-        <span class="cml-item"><span style="display:inline-block;width:3px;height:14px;background:#9333ea;border-radius:1px"></span> Mobile</span>
+        <span style="width:1px;height:14px;background:rgba(0,0,0,.13)"></span>
+        <span style="display:inline-flex;align-items:center;gap:.35rem;padding:.25rem .65rem;border-radius:var(--r);background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#92400e;font-size:.68rem;font-weight:500">
+          <span style="font-size:.8rem">&#9675;</span>
+          Click <strong style="margin:0 .15rem">partial</strong> cells &amp; <strong style="margin:0 .15rem">&#9432;</strong> icons to see details
+        </span>
       </div>
       <div class="matrix-wrap">
         <table class="matrix-table">
