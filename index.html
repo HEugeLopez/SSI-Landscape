@@ -280,9 +280,10 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 .cell-partial { background: rgba(217,119,6,.07); }
 .icon-yes { color: #059669; font-size: .85rem; }
 .icon-no { color: #d1d5db; font-size: .85rem; }
-.icon-partial { color: #d97706; font-size: .82rem; }
-.icon-partial[data-tip] { cursor: help; }
-.icon-partial[data-tip]:hover { background: rgba(251,191,36,.2); border-radius: 100px; }
+.icon-partial { color: #d97706; font-size: .82rem; cursor: default; }
+.icon-partial[data-tip] { cursor: pointer; }
+.icon-partial[data-tip]:hover { background: rgba(251,191,36,.25); border-radius: 100px; }
+.icon-partial[data-tip]:active { background: rgba(251,191,36,.4); }
 /* PARTIAL TOOLTIPS — floating, appended to body to escape overflow:auto */
 #ssi-tooltip {
   display: none;
@@ -430,7 +431,7 @@ function supportCell(s, tip) {
     const tipText = (tip && tip.trim()) ? tip.trim() : '';
     const safe = tipText.replace(/\\/g, '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     const tipAttr = safe ? ` data-tip="${safe}"` : '';
-    return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr} style="pointer-events:${tipAttr?'auto':'none'}">&#9675;</span></td>`;
+    return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr}>&#9675;</span></td>`;
   }
   return `<td class="cell ${cls}">${supportIcon(s)}</td>`;
 }
@@ -658,39 +659,53 @@ tipEl.id = 'ssi-tooltip';
 document.body.appendChild(tipEl);
 
 function attachTooltips() {
-  // Click-based tooltips — click [data-tip] element to open, click anywhere else to close
+  // Click-based tooltips — bubble phase, no stopPropagation
   document.addEventListener('click', function(e) {
+    // Close button inside tooltip
+    if (e.target.classList.contains('tip-close')) {
+      tipEl.style.display = 'none';
+      tipEl._srcEl = null;
+      return;
+    }
+    // Click inside tooltip — do nothing
+    if (e.target.closest('#ssi-tooltip')) return;
+
     const t = e.target.closest('[data-tip]');
     if (t) {
-      e.stopPropagation();
       const tip = t.dataset.tip;
-      if (!tip) return;
-      // If same element clicked again, toggle off
+      if (!tip || !tip.trim()) return;
+      // Toggle off if same element clicked again
       if (tipEl.style.display === 'block' && tipEl._srcEl === t) {
         tipEl.style.display = 'none';
         tipEl._srcEl = null;
         return;
       }
-      tipEl.innerHTML = tip + '<span class="tip-close" onclick="this.parentElement.style.display=\'none\'">&#10005;</span>';
+      // Build tooltip safely using textContent
+      tipEl.innerHTML = '';
+      const textNode = document.createElement('span');
+      textNode.textContent = tip;
+      const closeBtn = document.createElement('span');
+      closeBtn.className = 'tip-close';
+      closeBtn.textContent = '×';
+      tipEl.appendChild(textNode);
+      tipEl.appendChild(closeBtn);
       tipEl.style.display = 'block';
       tipEl._srcEl = t;
-      // Position near the element
+      // Position near the clicked element, stays in viewport
       const rect = t.getBoundingClientRect();
-      const tw = 280;
-      let left = rect.left;
+      const tw = 280, th = 110;
+      let left = Math.min(rect.left, window.innerWidth - tw - 12);
       let top = rect.bottom + 8;
-      if (left + tw > window.innerWidth - 16) left = window.innerWidth - tw - 16;
-      if (top + 100 > window.innerHeight) top = rect.top - 108;
+      if (top + th > window.innerHeight - 8) top = rect.top - th - 4;
+      if (left < 8) left = 8;
       tipEl.style.left = left + 'px';
       tipEl.style.top = top + 'px';
       return;
     }
-    // Click outside closes tooltip
-    if (!e.target.closest('#ssi-tooltip')) {
-      tipEl.style.display = 'none';
-      tipEl._srcEl = null;
-    }
-  }, true);
+    // Click outside — close
+    tipEl.style.display = 'none';
+    tipEl._srcEl = null;
+  });
 }
 
 
