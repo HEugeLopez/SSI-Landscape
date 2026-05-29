@@ -144,6 +144,61 @@ a.lnk { display: inline-flex; align-items: center; color: #1e40af; text-decorati
 a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3); }
 .lp { font-family: var(--mono); font-size: .6rem; padding: .1rem .4rem; border-radius: 3px; background: rgba(124,58,237,.08); color: #4c1d95; border: 1px solid rgba(124,58,237,.18); white-space: nowrap; display: inline-block; margin-top: .15rem; }
 
+/* REFERENCES MODAL */
+.ref-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,.55);
+  backdrop-filter: blur(3px);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+}
+.ref-modal-overlay.open { display: flex; }
+.ref-modal {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.22);
+  width: min(920px, 94vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 2rem 2rem 1.5rem;
+  position: relative;
+  animation: modalIn .18s ease;
+}
+@keyframes modalIn {
+  from { opacity:0; transform: translateY(12px) scale(.98); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+.ref-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: .75rem;
+  border-bottom: 1px solid var(--border);
+}
+.ref-modal-title {
+  font-size: 1rem; font-weight: 700; color: var(--ink);
+  display: flex; align-items: center; gap: .5rem;
+}
+.ref-modal-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: none; background: var(--bg2); color: var(--slate);
+  font-size: .85rem; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  transition: background .12s;
+}
+.ref-modal-close:hover { background: var(--bg3); color: var(--ink); }
+.ref-modal-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .85rem; border-radius: 100px;
+  font-size: .72rem; font-weight: 600; font-family: var(--sans);
+  border: 1px solid rgba(37,99,235,.3);
+  background: var(--blue-dim); color: #1e40af;
+  cursor: pointer; transition: all .14s; white-space: nowrap;
+}
+.ref-modal-btn:hover { background: rgba(37,99,235,.15); border-color: rgba(37,99,235,.5); }
+
 /* MEGA TITLES */
 .mega-title-row td {
   padding: .9rem 1.4rem !important;
@@ -185,19 +240,26 @@ a.lnk:hover { background: rgba(37,99,235,.14); border-color: rgba(37,99,235,.3);
 /* MATRIX COLUMN CATEGORY STRIPES */
 /* Agnostic = green top border, Specific = amber top border (already done) */
 /* Feature row group colors */
-.fcat-header.cat-w3c     { border-left: 4px solid #2563eb; }
-.fcat-header.cat-dif     { border-left: 4px solid #059669; }
-.fcat-header.cat-openid  { border-left: 4px solid #7c3aed; }
-.fcat-header.cat-toip    { border-left: 4px solid #0891b2; }
-.fcat-header.cat-owf     { border-left: 4px solid #d97706; }
-.fcat-header.cat-privacy { border-left: 4px solid #dc2626; }
-.fcat-header.cat-security{ border-left: 4px solid #475569; }
-.fcat-header.cat-eidas   { border-left: 4px solid #1d4ed8; }
-.fcat-header.cat-mobile  { border-left: 4px solid #9333ea; }
-.fcat-header.cat-cred    { border-left: 4px solid #0891b2; }
-.fcat-header.cat-deploy  { border-left: 4px solid #059669; }
-.fcat-header.cat-wallet  { border-left: 4px solid #d97706; }
-.fcat-header.cat-comp    { border-left: 4px solid #dc2626; }
+.fcat-header { position: relative; }
+.fcat-header::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.fcat-header.cat-w3c::before     { background: #2563eb; }
+.fcat-header.cat-dif::before     { background: #059669; }
+.fcat-header.cat-openid::before  { background: #7c3aed; }
+.fcat-header.cat-toip::before    { background: #0891b2; }
+.fcat-header.cat-owf::before     { background: #d97706; }
+.fcat-header.cat-privacy::before { background: #dc2626; }
+.fcat-header.cat-security::before{ background: #475569; }
+.fcat-header.cat-eidas::before   { background: #1d4ed8; }
+.fcat-header.cat-mobile::before  { background: #9333ea; }
+.fcat-header.cat-cred::before    { background: #0891b2; }
+.fcat-header.cat-deploy::before  { background: #059669; }
+.fcat-header.cat-wallet::before  { background: #d97706; }
+.fcat-header.cat-comp::before    { background: #dc2626; }
 
 /* Legend pills */
 .legend-pill {
@@ -1093,7 +1155,12 @@ function renderApp({ providers, features, matrix }) {
         <div class="sec-title">SDKs, Frameworks, Protocols &amp; Networks</div>
         <div class="sec-desc">${devtools.length} open-source tools and infrastructure projects. <strong>Framework</strong> = agent you build on top of. <strong>SDK/Library</strong> = importable code module. <strong>Protocol</strong> = specification layer (KERI, Sidetree). <strong>Resolution</strong> = DID resolver/gateway.</div>
       </div>
-      ${filterBar('devtools', devAg.length, devSp.length)}
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem">
+        ${filterBar('devtools', devAg.length, devSp.length)}
+        <button class="ref-modal-btn" onclick="openRefModal()">
+          &#128218; Key References &amp; Resources
+        </button>
+      </div>
       <div class="tbl-wrap">
         <table id="devtools-table">
           <thead><tr><th class="num-col">#</th><th>Tool</th><th>Ledger Model</th><th>Specific Ledger / DIDs</th><th>Maintained By</th><th>Tool Type</th><th>Exchange Protocols <span id="ep-tip" style="cursor:help;color:#94a3b8;font-size:.7rem" title="Protocols used in decentralized digital identity systems to manage and exchange Verifiable Credentials">&#9432;</span></th><th>Key Types</th><th>What It Offers</th><th>Pricing</th><th>Repo / Website</th></tr></thead>
@@ -1101,59 +1168,7 @@ function renderApp({ providers, features, matrix }) {
         </table>
       </div>
 
-      <!-- REFERENCES SECTION -->
-      <div class="ref-section">
-        <div class="ref-section-title">Key References &amp; Resources</div>
-
-        <div style="margin-bottom:1.5rem">
-          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563eb;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
-            <span style="display:inline-block;width:10px;height:3px;background:#2563eb;border-radius:1px"></span>Standards &amp; Specifications
-          </div>
-          <div class="ref-grid">
-            <div class="ref-card"><div class="ref-card-title">W3C DID Core</div><div class="ref-card-sub">Foundational specification for Decentralized Identifiers.</div><a class="lnk ref-card-link" href="https://www.w3.org/TR/did-core/" target="_blank">w3.org/TR/did-core ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">W3C Verifiable Credentials 2.0</div><div class="ref-card-sub">Cryptographically secure, privacy-respecting credential format.</div><a class="lnk ref-card-link" href="https://www.w3.org/TR/vc-data-model-2.0/" target="_blank">w3.org/TR/vc-data-model-2.0 ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">OpenID4VC Suite (OID4VCI + OID4VP)</div><div class="ref-card-sub">Issuance and presentation of VCs over OpenID Connect protocols.</div><a class="lnk ref-card-link" href="https://openid.net/sg/openid4vc/" target="_blank">openid.net/sg/openid4vc ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">DIF Presentation Exchange</div><div class="ref-card-sub">Standardized VC request/response between wallets and verifiers.</div><a class="lnk ref-card-link" href="https://identity.foundation/presentation-exchange/" target="_blank">identity.foundation/pe ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">DIF DIDComm Messaging</div><div class="ref-card-sub">Secure, private agent-to-agent communication over DIDs.</div><a class="lnk ref-card-link" href="https://identity.foundation/didcomm-messaging/spec/" target="_blank">identity.foundation/didcomm ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">AnonCreds Specification</div><div class="ref-card-sub">Privacy-preserving credentials using CL signatures and ZK predicates.</div><a class="lnk ref-card-link" href="https://hyperledger.github.io/anoncreds-spec/" target="_blank">hyperledger.github.io/anoncreds-spec ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">SD-JWT Verifiable Credentials</div><div class="ref-card-sub">IETF spec for selective disclosure using JWT format.</div><a class="lnk ref-card-link" href="https://www.ietf.org/archive/id/draft-ietf-oauth-sd-jwt-vc-08.txt" target="_blank">ietf.org SD-JWT VC ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">KERI — Key Event Receipt Infrastructure</div><div class="ref-card-sub">Ledger-less key management. Powers GLEIF vLEI globally.</div><a class="lnk ref-card-link" href="https://keri.one" target="_blank">keri.one ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">Sidetree Protocol</div><div class="ref-card-sub">Scalable DID anchoring on any DLT. Powers did:ion + did:orb.</div><a class="lnk ref-card-link" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation/sidetree ↗</a></div>
-          </div>
-        </div>
-
-        <div style="margin-bottom:1.5rem">
-          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#dc2626;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
-            <span style="display:inline-block;width:10px;height:3px;background:#dc2626;border-radius:1px"></span>Compliance &amp; Regulatory
-          </div>
-          <div class="ref-grid">
-            <div class="ref-card"><div class="ref-card-title">EU eIDAS 2.0 Regulation</div><div class="ref-card-sub">Mandates EUDI Wallet across EU member states by 2026.</div><a class="lnk ref-card-link" href="https://digital-strategy.ec.europa.eu/en/policies/eidas-regulation" target="_blank">digital-strategy.ec.europa.eu ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">EBSI &amp; Architecture Reference Framework</div><div class="ref-card-sub">Technical implementation guidance for EU Digital Identity Wallet.</div><a class="lnk ref-card-link" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu/EBSI ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">GDPR (EU Data Protection Regulation)</div><div class="ref-card-sub">Data minimization, right to erasure, and privacy by design.</div><a class="lnk ref-card-link" href="https://gdpr.eu" target="_blank">gdpr.eu ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">NIST SP 800-63 Digital Identity</div><div class="ref-card-sub">US federal standard for identity proofing, authentication, federation.</div><a class="lnk ref-card-link" href="https://pages.nist.gov/800-63-4/" target="_blank">pages.nist.gov/800-63-4 ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">Trust Over IP Foundation</div><div class="ref-card-sub">Governance + technical interoperability stack for decentralized trust.</div><a class="lnk ref-card-link" href="https://trustoverip.org" target="_blank">trustoverip.org ↗</a></div>
-            <div class="ref-card"><div class="ref-card-title">OpenWallet Foundation</div><div class="ref-card-sub">Open source engine for interoperable digital wallets.</div><a class="lnk ref-card-link" href="https://openwallet.foundation" target="_blank">openwallet.foundation ↗</a></div>
-          </div>
-        </div>
-
-        <div>
-          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
-            <span style="display:inline-block;width:10px;height:3px;background:#475569;border-radius:1px"></span>Color Reference
-          </div>
-          <div style="display:flex;flex-wrap:wrap;gap:.5rem;font-size:.72rem;color:#334155">
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:10px;height:3px;background:#059669;border-radius:1px"></span>Ledger-Agnostic providers</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:10px;height:3px;background:#d97706;border-radius:1px"></span>Specific Ledger providers</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#2563eb;border-radius:1px"></span>W3C &amp; Technology standards</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#059669;border-radius:1px"></span>DIF specifications</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#7c3aed;border-radius:1px"></span>OpenID Foundation</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#dc2626;border-radius:1px"></span>Privacy &amp; Compliance</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#475569;border-radius:1px"></span>Security Certifications</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#1d4ed8;border-radius:1px"></span>EU Digital Identity</span>
-            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#9333ea;border-radius:1px"></span>Mobile &amp; Device Security</span>
-          </div>
-        </div>
-      </div>
-
+      
     </div>
 
     <!-- PANEL 3: FEATURE COMPARISON -->
@@ -1299,6 +1314,84 @@ window.addEventListener('DOMContentLoaded', function() {
     }).observe(document.body, { childList: true, subtree: true });
     
   }, 500);
+});
+</script>
+
+<!-- REFERENCES MODAL -->
+<div class="ref-modal-overlay" id="ref-modal-overlay" onclick="if(event.target===this)closeRefModal()">
+  <div class="ref-modal" id="ref-modal">
+    <div class="ref-modal-header">
+      <div class="ref-modal-title">
+        <span style="font-size:1.1rem">&#128218;</span>
+        Key References &amp; Resources
+      </div>
+      <button class="ref-modal-close" onclick="closeRefModal()">&#10005;</button>
+    </div>
+
+
+        <div class="ref-section-title">Key References &amp; Resources</div>
+
+        <div style="margin-bottom:1.5rem">
+          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563eb;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
+            <span style="display:inline-block;width:10px;height:3px;background:#2563eb;border-radius:1px"></span>Standards &amp; Specifications
+          </div>
+          <div class="ref-grid">
+            <div class="ref-card"><div class="ref-card-title">W3C DID Core</div><div class="ref-card-sub">Foundational specification for Decentralized Identifiers.</div><a class="lnk ref-card-link" href="https://www.w3.org/TR/did-core/" target="_blank">w3.org/TR/did-core ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">W3C Verifiable Credentials 2.0</div><div class="ref-card-sub">Cryptographically secure, privacy-respecting credential format.</div><a class="lnk ref-card-link" href="https://www.w3.org/TR/vc-data-model-2.0/" target="_blank">w3.org/TR/vc-data-model-2.0 ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">OpenID4VC Suite (OID4VCI + OID4VP)</div><div class="ref-card-sub">Issuance and presentation of VCs over OpenID Connect protocols.</div><a class="lnk ref-card-link" href="https://openid.net/sg/openid4vc/" target="_blank">openid.net/sg/openid4vc ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">DIF Presentation Exchange</div><div class="ref-card-sub">Standardized VC request/response between wallets and verifiers.</div><a class="lnk ref-card-link" href="https://identity.foundation/presentation-exchange/" target="_blank">identity.foundation/pe ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">DIF DIDComm Messaging</div><div class="ref-card-sub">Secure, private agent-to-agent communication over DIDs.</div><a class="lnk ref-card-link" href="https://identity.foundation/didcomm-messaging/spec/" target="_blank">identity.foundation/didcomm ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">AnonCreds Specification</div><div class="ref-card-sub">Privacy-preserving credentials using CL signatures and ZK predicates.</div><a class="lnk ref-card-link" href="https://hyperledger.github.io/anoncreds-spec/" target="_blank">hyperledger.github.io/anoncreds-spec ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">SD-JWT Verifiable Credentials</div><div class="ref-card-sub">IETF spec for selective disclosure using JWT format.</div><a class="lnk ref-card-link" href="https://www.ietf.org/archive/id/draft-ietf-oauth-sd-jwt-vc-08.txt" target="_blank">ietf.org SD-JWT VC ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">KERI — Key Event Receipt Infrastructure</div><div class="ref-card-sub">Ledger-less key management. Powers GLEIF vLEI globally.</div><a class="lnk ref-card-link" href="https://keri.one" target="_blank">keri.one ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">Sidetree Protocol</div><div class="ref-card-sub">Scalable DID anchoring on any DLT. Powers did:ion + did:orb.</div><a class="lnk ref-card-link" href="https://identity.foundation/sidetree/spec/" target="_blank">identity.foundation/sidetree ↗</a></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:1.5rem">
+          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#dc2626;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
+            <span style="display:inline-block;width:10px;height:3px;background:#dc2626;border-radius:1px"></span>Compliance &amp; Regulatory
+          </div>
+          <div class="ref-grid">
+            <div class="ref-card"><div class="ref-card-title">EU eIDAS 2.0 Regulation</div><div class="ref-card-sub">Mandates EUDI Wallet across EU member states by 2026.</div><a class="lnk ref-card-link" href="https://digital-strategy.ec.europa.eu/en/policies/eidas-regulation" target="_blank">digital-strategy.ec.europa.eu ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">EBSI &amp; Architecture Reference Framework</div><div class="ref-card-sub">Technical implementation guidance for EU Digital Identity Wallet.</div><a class="lnk ref-card-link" href="https://ec.europa.eu/digital-building-blocks/sites/display/EBSI" target="_blank">ec.europa.eu/EBSI ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">GDPR (EU Data Protection Regulation)</div><div class="ref-card-sub">Data minimization, right to erasure, and privacy by design.</div><a class="lnk ref-card-link" href="https://gdpr.eu" target="_blank">gdpr.eu ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">NIST SP 800-63 Digital Identity</div><div class="ref-card-sub">US federal standard for identity proofing, authentication, federation.</div><a class="lnk ref-card-link" href="https://pages.nist.gov/800-63-4/" target="_blank">pages.nist.gov/800-63-4 ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">Trust Over IP Foundation</div><div class="ref-card-sub">Governance + technical interoperability stack for decentralized trust.</div><a class="lnk ref-card-link" href="https://trustoverip.org" target="_blank">trustoverip.org ↗</a></div>
+            <div class="ref-card"><div class="ref-card-title">OpenWallet Foundation</div><div class="ref-card-sub">Open source engine for interoperable digital wallets.</div><a class="lnk ref-card-link" href="https://openwallet.foundation" target="_blank">openwallet.foundation ↗</a></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-family:var(--mono);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin-bottom:.75rem;display:flex;align-items:center;gap:.4rem">
+            <span style="display:inline-block;width:10px;height:3px;background:#475569;border-radius:1px"></span>Color Reference
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;font-size:.72rem;color:#334155">
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:10px;height:3px;background:#059669;border-radius:1px"></span>Ledger-Agnostic providers</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:10px;height:3px;background:#d97706;border-radius:1px"></span>Specific Ledger providers</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#2563eb;border-radius:1px"></span>W3C &amp; Technology standards</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#059669;border-radius:1px"></span>DIF specifications</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#7c3aed;border-radius:1px"></span>OpenID Foundation</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#dc2626;border-radius:1px"></span>Privacy &amp; Compliance</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#475569;border-radius:1px"></span>Security Certifications</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#1d4ed8;border-radius:1px"></span>EU Digital Identity</span>
+            <span style="display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:var(--r);background:var(--bg1);border:1px solid var(--border)"><span style="display:inline-block;width:3px;height:14px;background:#9333ea;border-radius:1px"></span>Mobile &amp; Device Security</span>
+          </div>
+        </div>
+
+  </div>
+</div>
+<script>
+function openRefModal() {
+  document.getElementById('ref-modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeRefModal() {
+  document.getElementById('ref-modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeRefModal();
 });
 </script>
 </body>
