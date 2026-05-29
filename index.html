@@ -429,7 +429,7 @@ function supportCell(s, tip) {
   const cls = s === 'yes' ? 'cell-yes' : s === 'partial' ? 'cell-partial' : 'cell-no';
   if (s === 'partial') {
     const tipText = (tip && tip.trim()) ? tip.trim() : '';
-    const safe = tipText.replace(/\\/g, '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    const safe = tipText.replace(/[\r\n\t]/g, ' ').replace(/\\/g, '').replace(/"/g, '&quot;').replace(/'/g, '&#39;').trim();
     const tipAttr = safe ? ` data-tip="${safe}"` : '';
     return `<td class="cell ${cls}"><span class="icon-partial"${tipAttr}>&#9675;</span></td>`;
   }
@@ -661,6 +661,7 @@ document.body.appendChild(tipEl);
 function attachTooltips() {
   // Click-based tooltips — bubble phase, no stopPropagation
   document.addEventListener('click', function(e) {
+    if (!tipEl) return;
     // Close button inside tooltip
     if (e.target.classList.contains('tip-close')) {
       tipEl.style.display = 'none';
@@ -899,7 +900,7 @@ function renderApp({ providers, features, matrix }) {
         const tip     = typeof entry === 'object' ? entry.tooltip : '';
         return supportCell(support, tip);
       }).join('');
-      const _ficon = _FTIPS[f.label] ? ` <span data-tip="${_FTIPS[f.label]}" style="cursor:help;color:#94a3b8;font-size:.72rem;line-height:1">&#9432;</span>` : '';
+      const _ftipSafe = _FTIPS[f.label] ? _FTIPS[f.label].replace(/"/g,'&quot;').replace(/[\r\n]/g,' ') : ''; const _ficon = _ftipSafe ? ` <span data-tip="${_ftipSafe}" style="cursor:help;color:#94a3b8;font-size:.72rem;line-height:1">&#9432;</span>` : '';
       rows += `<tr class="mrow" data-feature="${f.search_tags || ''}"><td class="frow-label">${f.label}${_ficon}</td>${cells}</tr>`;
     });
     return rows;
@@ -1243,29 +1244,62 @@ loadData()
       </div>`;
   });
 </script>
+
 <script>
-window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){
-  var tipEl=document.getElementById('ssi-tooltip');if(!tipEl)return;
-  document.addEventListener('click',function(e){
-    if(e.target.classList.contains('tip-close')){tipEl.style.display='none';tipEl._srcEl=null;return;}
-    if(e.target.closest('#ssi-tooltip'))return;
-    var t=e.target.closest('[data-tip]');
-    if(t){
-      var tip=t.dataset.tip;if(!tip||!tip.trim())return;
-      if(tipEl.style.display==='block'&&tipEl._srcEl===t){tipEl.style.display='none';tipEl._srcEl=null;return;}
-      tipEl.innerHTML='';
-      var txt=document.createElement('span');txt.textContent=tip;
-      var x=document.createElement('span');x.className='tip-close';x.textContent='×';
-      tipEl.appendChild(txt);tipEl.appendChild(x);
-      tipEl.style.display='block';tipEl._srcEl=t;
-      var rect=t.getBoundingClientRect(),tw=280,th=120;
-      var left=Math.min(rect.left,window.innerWidth-tw-12),top=rect.bottom+8;
-      if(top+th>window.innerHeight-8)top=rect.top-th-4;if(left<8)left=8;
-      tipEl.style.left=left+'px';tipEl.style.top=top+'px';return;
-    }
-    tipEl.style.display='none';tipEl._srcEl=null;
-  });
-},600);});
+// Tooltip fix: override with correct click-based implementation
+window.addEventListener('DOMContentLoaded', function() {
+  // Wait for app to render
+  setTimeout(function() {
+    const tipEl = document.getElementById('ssi-tooltip');
+    if (!tipEl) return;
+    
+    // Remove all existing click listeners by replacing the element
+    // Add fresh listener
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('tip-close')) {
+        tipEl.style.display = 'none'; tipEl._srcEl = null; return;
+      }
+      if (e.target.closest('#ssi-tooltip')) return;
+      const t = e.target.closest('[data-tip]');
+      if (t) {
+        const tip = t.dataset.tip;
+        if (!tip || !tip.trim()) return;
+        if (tipEl.style.display === 'block' && tipEl._srcEl === t) {
+          tipEl.style.display = 'none'; tipEl._srcEl = null; return;
+        }
+        tipEl.innerHTML = '';
+        const txt = document.createElement('span');
+        txt.textContent = tip;
+        const x = document.createElement('span');
+        x.className = 'tip-close'; x.textContent = '×';
+        tipEl.appendChild(txt); tipEl.appendChild(x);
+        tipEl.style.display = 'block'; tipEl._srcEl = t;
+        const rect = t.getBoundingClientRect();
+        const tw = 280, th = 120;
+        let left = Math.min(rect.left, window.innerWidth - tw - 12);
+        let top = rect.bottom + 8;
+        if (top + th > window.innerHeight - 8) top = rect.top - th - 4;
+        if (left < 8) left = 8;
+        tipEl.style.left = left + 'px'; tipEl.style.top = top + 'px';
+        return;
+      }
+      tipEl.style.display = 'none'; tipEl._srcEl = null;
+    });
+    
+    // Make pointer-events auto on all partial spans with data-tip
+    document.querySelectorAll('.icon-partial[data-tip]').forEach(function(el) {
+      el.style.cursor = 'pointer';
+    });
+    
+    // Re-observe for dynamically added partials
+    new MutationObserver(function() {
+      document.querySelectorAll('.icon-partial[data-tip]').forEach(function(el) {
+        el.style.cursor = 'pointer';
+      });
+    }).observe(document.body, { childList: true, subtree: true });
+    
+  }, 500);
+});
 </script>
 </body>
 </html>
